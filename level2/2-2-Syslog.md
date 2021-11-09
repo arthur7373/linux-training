@@ -63,9 +63,14 @@ installed by default._
 
 We can enable rsyslog daemon to start automatically on every reboot
 and start it now with following commands:
-```bash
+```
 systemctl enable rsyslog
 systemctl start rsyslog
+```
+or
+```
+chkconfig rsyslog on
+service rsyslog start
 ```
 The main configuration file for rsyslog is `/etc/rsyslog.conf`. 
 It consists of modules, global directives, rules or comments.
