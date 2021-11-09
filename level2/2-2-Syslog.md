@@ -107,10 +107,10 @@ authpriv.*                                    /var/log/secure
 mail.*                                        -/var/log/maillog
 ```
 
->  _Prepending dash in `destination` means to not synchronize the log file to disk
->  every time there is a write, if synchronization behavior is on by default.
->  In `rsyslog v3 and higher` default behavior is **not sync**, and it's possible 
->  to change this by specifying "$ActionFileEnableSync on/off"._
+>>  _Prepending dash in `destination` means to not synchronize the log file to disk
+>>  every time there is a write, if synchronization behavior is on by default.
+>>  In `rsyslog v3 and higher` default behavior is **not sync**, and it's possible 
+>>  to change this by specifying "$ActionFileEnableSync on/off"._
 
 Realtime logs examining can be done like: 
 ```bash
