@@ -1,5 +1,8 @@
 # Linux Administration and Networking Basics (level 2) Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
+1. Managing (#Managing-Periodic-processes-(cron))
+
+
 ## Managing Periodic processes (cron)
 You can configure Linux to automatically run some scheduled processes (also named tasks or jobs).
 **Cron** is a service that enables you to schedule periodically running a task/job. A cron job is only executed if the system is running on the scheduled time.
