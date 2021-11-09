@@ -26,40 +26,55 @@ $ crontab -e
 $ mkdir /tmp/task1
 ```
 2. Create files of different sizes in directory /tmp/task1
-
+   (_to create example files of desired sizes we use different ways just for fun_)
 ```bash
 fallocate -l 10K /tmp/task1/f1
-head -c 10K /dev/zero > /tmp/task1/f2
+fallocate -l 10K /tmp/task1/f2
 fallocate -l 101M /tmp/task1/f3
 fallocate -l 122M /tmp/task1/f4
-fallocate -l 122M /tmp/task1/a1
 truncate -s 15K /tmp/task1/a2
+head -c 10K /dev/zero > /tmp/task1/a1
 ```
-3. Now write command to find files larger than 10k size and remove them
+3. Now write command to find files
+   1. larger than 10k size 
+   2. and starting with "f" 
+   
+   and remove them
+
+
 4. Create cronjob to run once per 2 minutes to do that job
 
 ## Managing System Logs (rsyslog)
 
-**Log files** contain system messages (kernel, services, applications). Different log files can exist for different information. For example, there is can be a log file for security messages, a log file for cron tasks, etc. Log files can be very useful when trying to troubleshoot a problem with the system such as trying to load a kernel driver or when looking for unauthorized login attempts to the system. 
-Some log files are controlled by a daemon called `rsyslogd` (reliable syslog).
+**Log files** contain event messages from the kernel, services, applications. 
 
-Installing rsyslog can be done with the command:
+Log files can be very useful when trying to troubleshoot a problem 
+with the system or some process such as status of some service 
+or when looking for unauthorized login attempts to the system. 
+
+There are many applications that manage their own logging for themselves
+(such as Apache, Nginx, MySQL, etc).
+
+But Linux operating system itself (kernel) and basic processes use single  
+logging solution called **syslog**. **Syslog** is general name of soltion
+implemented in most Linux versions by means of package called `rsyslog` (reliable syslog).
+> _There are alternatives to `rsyslog`, like `syslog-ng`, but they are rarely
+installed by default._
+
+We can enable rsyslog daemon to start automatically on every reboot
+and start it now with following commands:
 ```bash
-# yum install rsyslog*
-```
-Once installed we can start rsyslog daemon and make it to start automatically on every reboot.
-```bash
-# service rsyslog start
-# chkconfig rsyslog on
+systemctl enable rsyslog
+systemctl start rsyslog
 ```
 The main configuration file for rsyslog is `/etc/rsyslog.conf`. 
 It consists of modules, global directives, rules or comments.
 (read more at: https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-Viewing_and_Managing_Log_Files.html)
 
-**rsyslog** offers various ways how to filter syslog messages according to various properties. 
+**Rsyslog** offers various ways how to filter syslog messages according to various properties. 
 The most used and well-known way to filter syslog messages is to use the facility/priority-based filters which filter syslog messages based on two conditions: facility and priority.
 
-**rsyslog** can be configured to log different events to different places. Events can be selected based on 
+**Rsyslog** can be configured to log different events to different places. Events can be selected based on 
 the service that encountered the event (‘facility’) and/or severity (‘priority’). Messages can go to files, to the system console, or to a centralised rsyslog server running on another machine.
 
 Basic rsyslog configuration in `/etc/rsyslog.conf` looks like:
