@@ -1,6 +1,6 @@
 # Linux Administration and Networking Basics (level 2) Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
-1. Managing (#Managing-Periodic-processes-(cron))
+1. [Managing Periodic processes (cron)](#managing-periodic-processes-cron)
 
 
 ## Managing Periodic processes (cron)
