@@ -1,7 +1,7 @@
 # Linux Administration and Networking Basics (level 2) Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
 1. [Managing Periodic processes (cron)](#managing-periodic-processes-cron)
-
+2. [Managing System Logs (rsyslog)](#managing-system-logs-rsyslog)
 
 ## Managing Periodic processes (cron)
 You can configure Linux to automatically run some scheduled processes (also named tasks or jobs).
