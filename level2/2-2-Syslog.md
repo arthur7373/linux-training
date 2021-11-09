@@ -108,9 +108,9 @@ mail.*                                        -/var/log/maillog
 ```
 
 
-Realtime examining logs can be done this way: 
+Realtime logs examining can be done like: 
 ```bash
-tail -f
+tail -f /var/log/secure
 ```
 
 Although main config file for **rsyslog** is `/etc/rsyslog.conf`, it also includes `*.conf` files from `/etc/rsyslog.d/` directory.
