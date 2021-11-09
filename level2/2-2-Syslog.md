@@ -1,0 +1,208 @@
+# Linux Administration and Networking Basics (level 2) Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
+
+## Managing Periodic processes (cron)
+You can configure Linux to automatically run some scheduled processes (also named tasks or jobs).
+**Cron** is a service that enables you to schedule periodically running a task/job. A cron job is only executed if the system is running on the scheduled time.
+
+There are also other similiar tools: 
+- at is used to schedule a one-time job, to run once at a specific time.
+- anacron differs from cron mainly in that:
+
+1. if the system is not running at the scheduled time, job is postponed until the system is running 
+2. anacron job can run once per day at most.
+
+![image](https://user-images.githubusercontent.com/47590109/140989293-7046ccb1-c607-4978-ae02-b78d24ed0bf2.png)
+
+
+```bash
+$ crontab -l 
+$ crontab -e 
+```
+~~crontab -r~~
+
+### PRACTICE
+
+1. Create directory /tmp/task1
+```bash
+$ mkdir /tmp/task1
+```
+2. Create files of different sizes in directory /tmp/task1
+
+```bash
+fallocate -l 10K /tmp/task1/f1
+head -c 10K /dev/zero > /tmp/task1/f2
+fallocate -l 101M /tmp/task1/f3
+fallocate -l 122M /tmp/task1/f4
+fallocate -l 122M /tmp/task1/a1
+truncate -s 15K /tmp/task1/a2
+```
+3. Now write command to find files larger than 10k size and remove them
+4. Create cronjob to run once per 2 minutes to do that job
+
+## Managing System Logs (rsyslog)
+
+**Log files** contain system messages (kernel, services, applications). Different log files can exist for different information. For example, there is can be a log file for security messages, a log file for cron tasks, etc. Log files can be very useful when trying to troubleshoot a problem with the system such as trying to load a kernel driver or when looking for unauthorized login attempts to the system. 
+Some log files are controlled by a daemon called `rsyslogd` (reliable syslog).
+
+Installing rsyslog can be done with the command:
+```bash
+# yum install rsyslog*
+```
+Once installed we can start rsyslog daemon and make it to start automatically on every reboot.
+```bash
+# service rsyslog start
+# chkconfig rsyslog on
+```
+The main configuration file for rsyslog is `/etc/rsyslog.conf`. 
+It consists of modules, global directives, rules or comments.
+(read more at: https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Deployment_Guide/ch-Viewing_and_Managing_Log_Files.html)
+
+**rsyslog** offers various ways how to filter syslog messages according to various properties. 
+The most used and well-known way to filter syslog messages is to use the facility/priority-based filters which filter syslog messages based on two conditions: facility and priority.
+
+**rsyslog** can be configured to log different events to different places. Events can be selected based on 
+the service that encountered the event (‘facility’) and/or severity (‘priority’). Messages can go to files, to the system console, or to a centralised rsyslog server running on another machine.
+
+Basic rsyslog configuration in `/etc/rsyslog.conf` looks like:
+
+```
+facility.priority           destination
+```
+
+The **facility** specifies the subsystem that produces a specific syslog message- one of 
+`auth`, `uthpriv`, `cron`, `daemon`, `kern`, `lpr`, `mail`, `news`, `syslog`, `user`, `uucp`, `local0 - local7`. 
+
+The **priority** specifies a priority of a syslog messag, i.e a severity threshold beyond which messages will be logged - one of (from lowest to highest): 
+`debug`, `info`, `notice`, `warning`, `err`, `crit`, `alert`, `emerg`.
+
+The **destination** indicates where messages selected by the facility and level will be sent: 
+normally the name of a **log file** (under /var/log), /dev/console to send messages to the **system console or DNS name of the another server**, where to send the log (that server must have also syslogd process running).
+
+```bash
+# Log anything of level info or higher.
+# Don't log private authentication messages, mail and cron
+*.info;mail.none;authpriv.none;cron.none      /var/log/messages
+# Log all the private authentication messages here
+authpriv.*                                    /var/log/secure
+# Log all the mail messages here
+mail.*                                        -/var/log/maillog
+```
+
+
+Realtime examining logs can be done this way: 
+```bash
+tail -f
+```
+
+Although main config file for **rsyslog** is `/etc/rsyslog.conf`, it also includes `*.conf` files from `/etc/rsyslog.d/` directory.
+```bash
+# Include all config files in /etc/rsyslog.d/
+$IncludeConfig /etc/rsyslog.d/*.conf
+```
+On some systems the basic default functionality is moved from `/etc/rsyslog.conf` to the file:
+`/etc/rsyslog.d/50-default.conf`
+
+### Logrotate Log Rotation
+If not controlled log files may grow without bound until you run out of disk space.  
+The solution is to use log rotation: a scheme whereby existing log files are periodically renamed and ultimately deleted. But rsyslog continues to write messages into the file with the ‘correct’ (same) name. 
+
+Most Linux systems come with a program called logrotate, which should be run daily by cron (/etc/cron.daily/logrotate).
+logrotate can be configured with /etc/logrotate.conf to perform rotation on any or all log files. 
+
+Although main config file for logrotate is /etc/logrotate.conf, it also includes all files from /etc/logrotate.d/ directory.
+This way logrotate rotates files not only for rsyslogd, but for many other services.
+You can configure each logfile how often it should be rotated and how many old logs are kept.
+
+### Logger  Utility
+logger command is a shell command interface to the syslog system log module. 
+It makes or writes one line entries in the system log file from the command line.
+
+logger  -p daemon.info "TESTING DAEMON"
+tail -1 /var/log/messages
+
+logger  -p authpriv.info "TESTING AUTHPRIV"
+tail -1 /var/log/secure
+
+We can make custom log settings with rsyslog.
+Create separate config file:
+cat > /etc/rsyslog.d/testing.conf
+:msg, contains, "TESTING" /var/log/testing.log
+Restart rsyslog:
+systemctl restart rsyslog
+Check:
+logger  -p local3.info "TESTING LOCAL3"
+logger  -p local5.info "TESTING LOCAL5"
+logger  -p mail.info "TESTING MAIL"
+logger  -p auth.info "TESTING AUTH"
+cat /var/log/testing.log
+Centralized Logging Server Configuration
+RSyslog can be configured to log data from remote servers. This can help the Linux admin to have a multiple server logs into one single place. The Linux admin not required to login in to each servers for checking the logs, he can just login into the centralized server and start do the logs monitoring.
+
+ 
+To remind: Linux labels (auth, cron, ftp, lpr, authpriv, news, mail, syslog, etc ,..) the log messages to indicate the type of software that generated the messages with severity (Alert, critical, Warning, Notice, info, etc ,..). You can find more information on Message Labels (http://en.wikipedia.org/wiki/Syslog#Facility_levels) and Severity Levels (http://en.wikipedia.org/wiki/Syslog#Severity_levels)
+Server setup:
+In /etc/rsyslog.conf uncomment the following lines:
+
+# Provides UDP syslog reception
+$ModLoad imudp
+$UDPServerRun 514
+ 
+# Provides TCP syslog reception
+$ModLoad imtcp
+$InputTCPServerRun 514
+
+and restart the rsyslog service:
+systemctl restart rsyslog
+or 
+service rsyslog restart
+
+Verify the syslog server listening.
+ netstat -antup | grep 514
+or
+ ss -antup | grep 514
+
+Client setup:
+In /etc/rsyslog.conf add line like: 
+*.info;mail.none;authpriv.none;cron.none   @@172.16.1.58:514
+or:
+*.* @@192.168.2.79:514
+
+and restart the rsyslog service:
+systemctl restart rsyslog
+or 
+service rsyslog restart
+
+Now all the message logs are sent to the central server and also it keeps the copy locally.
+
+Firewall Port opening (Optional):
+Mostly all the production environment are protected by hardware firewall, ask them to open the TCP & UDP 514.
+If you have IP tables enabled, run the following command on server in order to accept incoming traffic on UDP / TCP port 514.
+
+firewall-cmd --permanent --zone=public --add-port=514/tcp
+firewall-cmd --permanent --zone=public --add-port=514/udp
+firewall-cmd --reload
+
+or disable the firewall:
+
+systemctl stop firewalld
+systemctl disable firewalld
+rm '/etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service'
+rm '/etc/systemd/system/basic.target.wants/firewalld.service'
+
+Allow SELinux 
+If you have SELinux enabled on your system, u
+se following command to enable rsyslog traffic on port 514:
+semanage -a -t syslogd_port_t -p udp 514
+You can verify the port opening by issuing the following command from the client.
+telnet 172.16.1.58 514
+
+Test:
+Monitor the activity from the log server, open the message log.
+On server: 
+tailf /var/log/messages
+
+On client:
+logger  -p daemon.info "TESTING REMOTE LOGGING"
+
+By this way you can monitor the other logs such as secure, mail, cron logs etc.
+
