@@ -117,26 +117,34 @@ Service Management:
 5. Shutdown the system.
 
 How to do:
-1. List the running services on your system.
-# systemctl 
-# systemctl | grep running
+1. List the running services on your system.```bash
+```bash
+systemctl 
+systemctl | grep running
+```
 
 2. Check to see if the ssh service (daemon) is running on your system. 
- # systemctl | grep ssh
+```bash
+systemctl | grep ssh
+```
 
 3. Start, stop, and restart the ssh service.
-# systemctl start sshd
-# systemctl stop sshd
-# systemctl restart sshd
-
+```bash
+systemctl start sshd
+systemctl stop sshd
+systemctl restart sshd
+```
 4. Configure the ssh service to start automatically at boot time.
-# systemctl enable sshd
-# systemctl is-enabled sshd
+```bash
+systemctl enable sshd
+systemctl is-enabled sshd
+```
 5. Shutdown the system.
-# systemctl poweroff
+```bash
+systemctl poweroff
+```
 
-
-Manage the Boot Process
+### Manage the Boot Process
 Default boot loader for many modern Linux systems is a very powerful tool - GRUB (GRand Unified Bootloader). Briefly, a boot loader is the first software program that runs when a computer starts. It is responsible for loading and transferring control to the operating system kernel software (such as Linux kernel). The kernel, in turn, initializes the rest of the operating system. GRUB can load a variety of free operating systems, as well as proprietary operating systems with chain-loading (the mechanism for loading unsupported operating systems, such as DOS or Windows, by loading another boot loader). It is broken into at least two stages. The first stage is a small machine code binary on the MBR. Its sole job is to locate the second stage boot loader and load the first part of it into memory.  Once the second stage boot loader is in memory, it presents the user with a graphical screen showing the different operating systems or kernels it has been configured to boot. On this screen a user can use the arrow keys to choose which operating system or kernel they wish to boot and press Enter. If no key is pressed, the boot loader loads the default selection after a configurable period of time has passed. Once the second stage boot loader has determined which kernel to boot, it locates the corresponding kernel binary in the /boot/ directory. The kernel binary is named using the following format — /boot/vmlinuz-<kernel-version> file (where <kernel-version> corresponds to the kernel version specified in the boot loader's settings).
 Most modern Linux versions are distributed with the GNU GRand Unified Boot loader (GRUB) version 2 boot loader, which allows the user to select an operating system or kernel to be loaded at system boot time. GRUB 2 also allows the user to pass arguments to the kernel.
 Currently GRUB 2 has replaced what was formerly known as GRUB (i.e. version 0.9x), which has, in turn, become GRUB Legacy.
@@ -144,13 +152,13 @@ GRUB 2 reads its configuration from the /boot/grub2/grub.cfg file on traditional
 
 This file contains menu information. The GRUB 2 configuration file, grub.cfg, is generated during installation, or by invoking the /usr/sbin/grub2-mkconfig utility, and is automatically updated by special command line tool for configuring GRUB, called grubby, each time a new kernel is installed. 
 
-When regenerated manually using grub2-mkconfig, the file is generated according to the template files located in /etc/grub.d/, and custom settings in the /etc/default/grub file. 
+When regenerated manually using **grub2-mkconfig**, the file is generated according to the template files located in /etc/grub.d/, and custom settings in the /etc/default/grub file. 
 
-Edits of grub.cfg will be lost any time grub2-mkconfig is used to regenerate the file, so care must be taken to reflect any manual changes in /etc/default/grub as well.
+Edits of **grub.cfg** will be lost any time **grub2-mkconfig** is used to regenerate the file, so care must be taken to reflect any manual changes in /etc/default/grub as well.
 
-The /etc/default/grub file is used by the grub2-mkconfig tool.  
-Any manual changes to /etc/default/grub require rebuilding the grub.cfg file.
-Menu Entries in grub.cfg
+The `/etc/default/grub` file is used by the grub2-mkconfig tool.  
+Any manual changes to **/etc/default/grub** require rebuilding the grub.cfg file.
+Menu Entries in **grub.cfg**
 Among various code snippets and directives, the grub.cfg configuration file contains one or more menuentry blocks, each representing a single GRUB 2 boot menu entry. These blocks always start with the menuentry keyword followed by a title, list of options, and an opening curly bracket, and end with a closing curly bracket. Anything between the opening and closing bracket should be indented. 
 
 Each menuentry block that represents an installed Linux kernel contains linux on 64-bit IBM POWER Series, linux16 on x86_64 BIOS-based systems, and linuxefi on UEFI-based systems. Then the initrd directives followed by the path to the kernel and the initramfs image respectively. If a separate /boot partition was created, the paths to the kernel and the initramfs image are relative to /boot. In the example above, the initrd /initramfs-3.8.0-0.40.el7.x86_64.imgline means that the initramfs image is actually located at /boot/initramfs-3.8.0-0.40.el7.x86_64.img when the root file system is mounted, and likewise for the kernel path.
@@ -167,7 +175,7 @@ More info at: https://access.redhat.com/documentation/en-us/red_hat_enterprise_l
 
 
 
-Recover a forgotten root password on CentOS/Redhat 7 Linux Selinux system
+### Recover a forgotten root password on CentOS/Redhat 7 Linux Selinux system
 
 The way on how you can reset a forgotten root password on a Linux system have not changed for many years. Resetting a root password on RHEL7 Linux system have not change much except that now we deal with SElinux and the system is now using systemd instead of init. Nevertheless, those who have already did reset root password on the Linux system will be with the following steps familiar. Here is the procedure of what needs to be done in order to recover a forgotten root password on Redhat 7 Linux:
 
@@ -192,28 +200,37 @@ Once you edit the boot line as show above press CTRL + x to start booting your R
 2. Read&Write root partition remount
 Once you enter a single your root partition is mounted as Read Only ro. 
 In order to mount our partition with Read/Write flag we use mount with a remount option as follows:
-# mount -o remount,rw /
+```bash
+mount -o remount,rw /
+```
 3. Change root's password
 Still in the single mode we can proceed with the actual root password recovery. To do this we use passwd command:
-# passwd
+```bash
+passwd
+```
 4. SELinux relabeling
 The additional step which needs to be taken on SELinux enables Linux system is to relabel SELinux context. If this step is ommited you will not be able to login with your new root password. The following command will ensure that the SELinux context for entire system is relabeled after reboot:
-# touch /.autorelabel
+```bash
+touch /.autorelabel
+```
 5. Sync disk changes and Restart
 The final step is to sync the changes and physically restart the server it can be done by:
-# umount /
+```bash
+umount /
+```
 Another ways of sync is
-# sync
+```bash
+sync
+```
 After restart you will be able to use your new root password.
 
 
 How to Password Protect GRUB2 Boot Loader
 
 Use grub2-setpassword to set a password for the root user :
-# grub2-setpassword
+```bash
+grub2-setpassword
+```
 This creates a file /boot/grub2/user.cfg if not already present, which contains the hashed GRUB bootloader password. This utility only supports configurations where there is a single root user.
-
-
-
 
 
