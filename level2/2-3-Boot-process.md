@@ -64,6 +64,7 @@ This process:
 - shutting the system down
 
 SystemV Runlevel	Systemd equivalent	Description
+
 0 (HALT)	poweroff.target  	Shuts down the system.
 
 1 (SINGLE-USER MODE)
