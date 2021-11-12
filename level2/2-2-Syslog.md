@@ -238,8 +238,6 @@ or disable the firewall:
 ```bash
 systemctl stop firewalld
 systemctl disable firewalld
-rm '/etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service'
-rm '/etc/systemd/system/basic.target.wants/firewalld.service'
 ```
 
 #### Allow SELinux 
