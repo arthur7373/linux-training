@@ -88,14 +88,17 @@ Basic rsyslog configuration in `/etc/rsyslog.conf` looks like:
 facility.priority           destination
 ```
 
-The **facility** specifies the subsystem that produces a specific syslog message- one of 
-`auth`, `uthpriv`, `cron`, `daemon`, `kern`, `lpr`, `mail`, `news`, `syslog`, `user`, `uucp`, `local0 - local7`. 
+The **facility** specifies the _category_ of syslog message. 
+It can be one of: 
+`auth`, `authpriv`, `cron`, `daemon`, `kern`, `lpr`, `mail`, `news`, `syslog`, `user`, `uucp`, `local0 - local7`. 
 
-The **priority** specifies a priority of a syslog messag, i.e a severity threshold beyond which messages will be logged - one of (from lowest to highest): 
+The **priority** specifies a _priority_ of syslog message,
+i.e a severity threshold beyond which messages will be logged.
+It canbe one of (from lowest to highest): 
 `debug`, `info`, `notice`, `warning`, `err`, `crit`, `alert`, `emerg`.
 
 The **destination** indicates where messages selected by the facility and level will be sent: 
-normally the name of a **log file** (under /var/log), /dev/console to send messages to the **system console or DNS name of the another server**, where to send the log (that server must have also syslogd process running).
+normally the name of a **log file** (under **/var/log**), /dev/console to send messages to the **system console or DNS name of the another server**, where to send the log (that server must have also syslogd process running).
 
 ```bash
 # Log anything of level info or higher.
@@ -126,6 +129,7 @@ $IncludeConfig /etc/rsyslog.d/*.conf
 On some systems the basic default functionality is moved from `/etc/rsyslog.conf` to the file:
 `/etc/rsyslog.d/50-default.conf`
 
+
 ### Logrotate Log Rotation
 If not controlled log files may grow without bound until you run out of disk space.  
 The solution is to use log rotation: a scheme whereby existing log files are periodically
@@ -151,8 +155,8 @@ logger  -p authpriv.info "TESTING AUTHPRIV"
 tail -1 /var/log/secure
 ```
 
-We can make custom log settings with rsyslog.
-Create separate config file:
+**Rsyslog** gives possibility to create custom logs unrelated to _facility_ settings.
+For example, create separate config file:
 
 ```bash
 cat > /etc/rsyslog.d/testing.conf 
@@ -208,23 +212,18 @@ or
  ss -antup | grep 514
 ```
 Client setup:
-In `/etc/rsyslog.conf` add line like: 
+
+
+Add new config `/etc/rsyslog.d/nettest.conf`: 
 ```bash
-*.info;mail.none;authpriv.none;cron.none   @@172.16.1.58:514
-```
-or:
-```bash
+cat > /etc/rsyslog.d/nettest.conf
 *.* @@192.168.2.79:514
 ```
 and restart the rsyslog service:
 ```bash
 systemctl restart rsyslog
 ```
-or
-```bash
-service rsyslog restart
-```
-Now all the message logs are sent to the central server and also it keeps the copy locally.
+Now all message logs are additionally sent to the central server.
 
 ### Firewall Port opening (optional):
 Mostly all the production environment are protected by hardware firewall, ask them to open the TCP & UDP 514.
