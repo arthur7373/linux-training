@@ -13,14 +13,23 @@ the small intermediate program called bootloader.
 
 2. **Bootloader**
 
-Bootloader role is to **load the operating system**. 
-Most widely used Linux bootloader is the **GRUB2** (GNU GRand Unified Bootloader). 
+Bootloader role is to **load the operating system** (such as Linux kernel). 
+Default bootloader for many modern Linux systems is a very powerful tool - 
+ **GRUB** (GNU GRand Unified Bootloader). GRUB can load a variety of operating systems.
+
 GRUB may display splash screen with menu to select Linux kernel to boot. 
 The splash screen will wait a few seconds to select and option. 
 At this time boot process can be interrupted to enter single user mode (also known as rescue mode), 
 used for recovery tasks such as resetting passwords.
-In case of no input from keyboard bootloader will load the default kernel into RAM.
+If no key is pressed, GRUB will load the default kernel into RAM.
 Thus Linux kernel becomes first running proccess (with ID **0**).
+
+Most modern Linux versions are distributed with the GNU GRand Unified Boot 
+loader (GRUB) version 2 boot loader, 
+which allows the user to select an operating system or kernel 
+to be loaded at system boot time.
+Currently **GRUB2** has replaced what was formerly known as GRUB (i.e. version 0.9x),
+which is now known as **GRUB Legacy**.
 
 3. **Kernel**
 
@@ -58,19 +67,24 @@ First initialization process (**init** / **Upstart** / **SystemD**):
 - manages the services running (enable/disable, start/stop)
 - shuts the system down
 
+### _PRACTICE_
+
+- Find out which initialization process (with ID **1**) is running in your Linux.
+
+
 
 | SystemV Runlevel | Systemd equivalent | Description
-| ---- | --- | --- |
+| --- | --- | --- |
 | 0 (HALT)|poweroff.target |Shuts down the system |
 | 1 (SINGLE-USER MODE) | rescue.target | Mode for administrative and system rescue tasks. Only the root user can log in. |
 | 2 (MULTI-USER MODE) | | All users can log in, but network interfaces aren’t configured and networks services are not exported. Display manager is not started. |
-| 3 (MULTI-USER MODE WITH NETWORKING) | multi-user.target | Starts the system normally. Display manager is not started. |
-| 5 (START THE SYSTEM NORMALLY WITH APPROPRIATE DISPLAY MANAGER (WITHGUI)) | graphical.target | Same as runlevel 3, but with a display manager.|
+| 3 (MULTI-USER MODE WITH NETWORKING) | **multi-user.target** | Starts the system normally. Display manager is not started. |
+| 5 (START THE SYSTEM NORMALLY WITH APPROPRIATE DISPLAY MANAGER (WITHGUI)) | **graphical.target** | Same as runlevel 3, but with a display manager.|
 | 6 (REBOOT) | reboot.target | Reboots the system.|
 
-### PRACTICE
+### _PRACTICE_
 
-_Enter Rescue Mode:_
+- Enter Rescue Mode:
 1. Interrupt the automatic selection of the default boot options in the GRUB menu.
 2. Edit the kernel arguments to make the system boot into rescue or single user mode. 
 3. Continue booting the system with your custom parameters. 
@@ -82,14 +96,14 @@ _How to do:_
 3. Press Ctrl X to boot with custom parameters
 4. The boot process completes.
 
-Service Management:
+- Service Management:
 1. List the running services on your system.
 2. Check to see if the ssh service (daemon) is running on your system. 
 3. Start, stop, and restart the ssh service.
 4. Configure the ssh service to start automatically at boot time.
 5. Shutdown the system.
 
-How to do:
+_How to do:_
 1. List the running services on your system.```bash
 ```bash
 systemctl 
@@ -117,10 +131,7 @@ systemctl is-enabled sshd
 systemctl poweroff
 ```
 
-### Manage the Boot Process
-Default boot loader for many modern Linux systems is a very powerful tool - GRUB (GRand Unified Bootloader). Briefly, a boot loader is the first software program that runs when a computer starts. It is responsible for loading and transferring control to the operating system kernel software (such as Linux kernel). The kernel, in turn, initializes the rest of the operating system. GRUB can load a variety of free operating systems, as well as proprietary operating systems with chain-loading (the mechanism for loading unsupported operating systems, such as DOS or Windows, by loading another boot loader). It is broken into at least two stages. The first stage is a small machine code binary on the MBR. Its sole job is to locate the second stage boot loader and load the first part of it into memory.  Once the second stage boot loader is in memory, it presents the user with a graphical screen showing the different operating systems or kernels it has been configured to boot. On this screen a user can use the arrow keys to choose which operating system or kernel they wish to boot and press Enter. If no key is pressed, the boot loader loads the default selection after a configurable period of time has passed. Once the second stage boot loader has determined which kernel to boot, it locates the corresponding kernel binary in the /boot/ directory. The kernel binary is named using the following format — /boot/vmlinuz-<kernel-version> file (where <kernel-version> corresponds to the kernel version specified in the boot loader's settings).
-Most modern Linux versions are distributed with the GNU GRand Unified Boot loader (GRUB) version 2 boot loader, which allows the user to select an operating system or kernel to be loaded at system boot time. GRUB 2 also allows the user to pass arguments to the kernel.
-Currently GRUB 2 has replaced what was formerly known as GRUB (i.e. version 0.9x), which has, in turn, become GRUB Legacy.
+### Manage the Boot Process (GRUB2)
 GRUB 2 reads its configuration from the /boot/grub2/grub.cfg file on traditional BIOS-based machines and from the /boot/efi/EFI/redhat/grub.cfg file on UEFI machines. 
 
 This file contains menu information. The GRUB 2 configuration file, grub.cfg, is generated during installation, or by invoking the /usr/sbin/grub2-mkconfig utility, and is automatically updated by special command line tool for configuring GRUB, called grubby, each time a new kernel is installed. 
