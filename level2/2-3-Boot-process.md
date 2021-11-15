@@ -28,7 +28,7 @@ Once the Linux kernel starts it checks hardware from operating system point of v
 then starts first process (process ID **1**) with the responsibility of doing the rest 
 (starting services and processes).
 
-5. **System Initialization** ( **INIT** / **SystemD** )
+4. **System Initialization** ( **INIT** / **SystemD** )
 After the bootloader starts the kernel, the kernel starts the first 
 process which initializes the rest of the system, and runs until the system is shut down.  
 
