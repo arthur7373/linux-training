@@ -24,13 +24,12 @@ Thus Linux kernel becomes first running proccess (with ID **0**).
 
 3. **Kernel**
 
-Once the Linux kernel starts it checks hardware from operating system point of view (enable needed drivers, etc.) and
-then starts first process (process ID **1**) with the responsibility of doing the rest 
-(starting services and processes).
+Once the Linux kernel starts, it checks hardware from operating system point of view (enable needed drivers, etc.) and
+then starts first initialization process (with ID **1**) with the responsibility of 
+doing the rest system initialization (starting services and processes).
+This initialization process runs until the system is shut down.
 
 4. **System Initialization** ( **INIT** / **SystemD** )
-After the bootloader starts the kernel, the kernel starts the first 
-process which initializes the rest of the system, and runs until the system is shut down.  
 
 Linux system initialization for a long time was handled by the _Unix-inspired SystemV_ **init** 
 process, which ran scripts to start services in a defined and configurable order to reach a 
@@ -40,66 +39,44 @@ The **Upstart** initialization system was developed as a replacement to _SystemV
 trigger actions based on events, rather than running scripts in a particular order. **Upstart** was 
 backwards compatible with _SystemV_ runlevels, and ran _SystemV_ init scripts.
  
-Current most popular initialization system for Linux is  **Systemd**. It is more modular, performant, integrated. 
+Current most popular initialization system for Linux is  **Systemd**. 
+It is more flexible and modular. 
+
 **Systemd** uses **targets** instead of **runlevels**. 
+
+**Systemd** can also run old _SystemV_ **init** scripts. 
+
+Goal of **runlevels**/**targets** is to process system initialization 
+and bring the Linux system to specific state.
 
 By default, there are two main targets:
 **multi-user.target** - analogous to **runlevel 3**
 **graphical.target** - analogous to **runlevel 5**
 
-**Systemd** also can run old _SystemV_ **init** scripts. 
-
-Goal of **targets** or **runlevels** is to process system initialization and bring 
-the Linux system to specific state.
-
-Once the Linux kernel has booted, it starts the first initialization process: **init** / **Upstart** / **SystemD**. 
-
-This process: 
-- manage the startup process
-- manage the services running (enable/disable, start/stop)
-- shutting the system down
-
-SystemV Runlevel	Systemd equivalent	Description
-
-0 (HALT)	poweroff.target  	Shuts down the system.
-
-1 (SINGLE-USER MODE)
-	rescue.target	Mode for administrative and 
-system rescue tasks. Only the 
-root user can log in.
-
-2 (MULTI-USER MODE)
-		All users can log in, but network 
-interfaces aren’t configured 
-and networks services are not 
-exported. Display manager is not 
-started.
-
-3 (MULTI-USER MODE WITH 
-NETWORKING)
-	multi-user.target	Starts the system normally. 
-Display manager is not started.
-
-5 (START THE SYSTEM NOR-
-MALLY WITH APPROPRIATE 
-DISPLAY MANAGER (WITH 
-GUI))
-	graphical.target	Same as runlevel 3, but with a 
-display manager.
-
-6 (REBOOT)	reboot.target	Reboots the system.
+First initialization process (**init** / **Upstart** / **SystemD**): 
+- manages the system startup process
+- manages the services running (enable/disable, start/stop)
+- shuts the system down
 
 
+| SystemV Runlevel | Systemd equivalent | Description
+| ---- | --- | --- |
+| 0 (HALT)|poweroff.target |Shuts down the system |
+| 1 (SINGLE-USER MODE) | rescue.target | Mode for administrative and system rescue tasks. Only the root user can log in. |
+| 2 (MULTI-USER MODE) | | All users can log in, but network interfaces aren’t configured and networks services are not exported. Display manager is not started. |
+| 3 (MULTI-USER MODE WITH NETWORKING) | multi-user.target | Starts the system normally. Display manager is not started. |
+| 5 (START THE SYSTEM NORMALLY WITH APPROPRIATE DISPLAY MANAGER (WITHGUI)) | graphical.target | Same as runlevel 3, but with a display manager.|
+| 6 (REBOOT) | reboot.target | Reboots the system.|
 
-Task:
+### PRACTICE
 
-Rescue Mode:
+_Enter Rescue Mode:_
 1. Interrupt the automatic selection of the default boot options in the GRUB menu.
 2. Edit the kernel arguments to make the system boot into rescue or single user mode. 
 3. Continue booting the system with your custom parameters. 
 4. Reboot the system
 
-How to do:
+_How to do:_
 1. During system boot at the GRUB prompt press E
 2. Find the kernel arguments line and append systemd.unit=rescue.target
 3. Press Ctrl X to boot with custom parameters
