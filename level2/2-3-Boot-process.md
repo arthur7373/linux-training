@@ -67,11 +67,12 @@ First initialization process (**init** / **Upstart** / **SystemD**):
 - manages the services running (enable/disable, start/stop)
 - shuts the system down
 
-### _PRACTICE_
+### PRACTICE
 
-- Find out which initialization process (with ID **1**) is running in your Linux.
+#### Find out which initialization process (with ID **1**) is running in your Linux.
+_How to do:_ You need to run command that shows all processes in tree-like manner and see the name of top process.
 
-
+Table below presents **SystemV runlevel** and **Systemd target** equivalents.
 
 | SystemV Runlevel | Systemd equivalent | Description
 | --- | --- | --- |
@@ -82,29 +83,11 @@ First initialization process (**init** / **Upstart** / **SystemD**):
 | 5 (START THE SYSTEM NORMALLY WITH APPROPRIATE DISPLAY MANAGER (WITHGUI)) | **graphical.target** | Same as runlevel 3, but with a display manager.|
 | 6 (REBOOT) | reboot.target | Reboots the system.|
 
-### _PRACTICE_
+### PRACTICE
 
-- Enter Rescue Mode:
-1. Interrupt the automatic selection of the default boot options in the GRUB menu.
-2. Edit the kernel arguments to make the system boot into rescue or single user mode. 
-3. Continue booting the system with your custom parameters. 
-4. Reboot the system
+#### Service Management:
 
-_How to do:_
-1. During system boot at the GRUB prompt press E
-2. Find the kernel arguments line and append systemd.unit=rescue.target
-3. Press Ctrl X to boot with custom parameters
-4. The boot process completes.
-
-- Service Management:
 1. List the running services on your system.
-2. Check to see if the ssh service (daemon) is running on your system. 
-3. Start, stop, and restart the ssh service.
-4. Configure the ssh service to start automatically at boot time.
-5. Shutdown the system.
-
-_How to do:_
-1. List the running services on your system.```bash
 ```bash
 systemctl 
 systemctl | grep running
@@ -131,6 +114,36 @@ systemctl is-enabled sshd
 systemctl poweroff
 ```
 
+
+#### Recover root password:
+1. Press `Esc` to prevent GRUB automatic system load. Ensure first line is selected
+at the GRUB prompt and press `e`
+2. Scroll down and locate kernel arguments line (starting with `linux` or similiar and
+ having generally `rhgb quiet` keywords. Move your cursor ( HINT: move to end of the line with CTRL+E ) on `rhgb quiet` keywords and replace them with `init=/bin/bash`
+3. Press `Ctrl X` to boot with custom parameters. Kernel will boot and run single **bash** process. 
+To make changes you need to remount root partition, since it is now mounted
+in _read-only_ mode. In order to mount root partition with read/write flag 
+we need to remount it as follows: `mount -o remount,rw /`
+4. Now **any** changes can be done, like root password change with `passwd`
+5. **IMPORTANT !** This additional step needs to be taken on SELinux-enabled 
+systems to relabel SELinux context. If not done **you will not be able to login** 
+The following command will ensure that the SELinux context for entire system is relabeled after reboot:
+`touch /.autorelabel`
+6. Final important step is to `sync` the changes on disk. After that we can simply
+power off the system (_no need to reboot, since there is no process which can do rebooting_)
+  
+_Same way can be used to do needed maintenance (eg. `fsck /dev/sda1` )_
+
+####How to Password Protect GRUB2 Boot Loader
+
+Use `grub2-setpassword` to set a password for the `root` user (_it's not Linux `root`_)
+```bash
+grub2-setpassword
+```
+This creates a file `/boot/grub2/user.cfg` if not already present, 
+which contains the hashed GRUB bootloader password. 
+This utility only supports configurations where there is a single root user.
+
 ### Manage the Boot Process (GRUB2)
 GRUB 2 reads its configuration from the /boot/grub2/grub.cfg file on traditional BIOS-based machines and from the /boot/efi/EFI/redhat/grub.cfg file on UEFI machines. 
 
@@ -156,65 +169,4 @@ The configuration format has evolved over time, and a new configuration file mig
 It is generally safe to directly edit /boot/grub2/grub.cfg in RedHat. Other distributions, in particular Debian/Ubuntu provide an update-grub command for activating your changes. Some customizations can be placed in /etc/grub.d/40_custom. 
 
 More info at: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/ch-working_with_the_grub_2_boot_loader
-
-
-
-### Recover a forgotten root password on CentOS/Redhat 7 Linux Selinux system
-
-The way on how you can reset a forgotten root password on a Linux system have not changed for many years. Resetting a root password on RHEL7 Linux system have not change much except that now we deal with SElinux and the system is now using systemd instead of init. Nevertheless, those who have already did reset root password on the Linux system will be with the following steps familiar. Here is the procedure of what needs to be done in order to recover a forgotten root password on Redhat 7 Linux:
-
-1.	We need to edit GRUB2 boot menu and enter user single mode
-2.	Next, we need to remount / partition to allow read and write
-3.	Reset the actual root password
-4.	Set entire system for SElinux relabeling after first reboot
-5.	Reboot the system from a single mode
-Now that we understand the procedure we can proceed with Redhat 7 password recovery.
-1. Edit GRUB2 boot menu
-Start your system and once you see your GRUB2 boot menu use e key to edit your default boot item. Usually it is the first line
-
-Once you hit e key you will see a screen similar to the one below:
-
-Depending on you terminal screen size you may see more or less information. In case you have a small terminal screen size note the little down pointing arrow on the right edge of your screen. The arrow means that more text is available when scrolling down.
- Scroll down and locate a line with rhgb quiet keywords
-
-Move your cursor ( HINT: move to end of the line with CTRL+E ) on rhgb quiet keywords and replace them with  init=/bin/bash as show below:
-
-Once you edit the boot line as show above press CTRL + x to start booting your RHEL 7 system into a single mode. At the end of the system boot you will enter a single mode:
-
-2. Read&Write root partition remount
-Once you enter a single your root partition is mounted as Read Only ro. 
-In order to mount our partition with Read/Write flag we use mount with a remount option as follows:
-```bash
-mount -o remount,rw /
-```
-3. Change root's password
-Still in the single mode we can proceed with the actual root password recovery. To do this we use passwd command:
-```bash
-passwd
-```
-4. SELinux relabeling
-The additional step which needs to be taken on SELinux enables Linux system is to relabel SELinux context. If this step is ommited you will not be able to login with your new root password. The following command will ensure that the SELinux context for entire system is relabeled after reboot:
-```bash
-touch /.autorelabel
-```
-5. Sync disk changes and Restart
-The final step is to sync the changes and physically restart the server it can be done by:
-```bash
-umount /
-```
-Another ways of sync is
-```bash
-sync
-```
-After restart you will be able to use your new root password.
-
-
-How to Password Protect GRUB2 Boot Loader
-
-Use grub2-setpassword to set a password for the root user :
-```bash
-grub2-setpassword
-```
-This creates a file /boot/grub2/user.cfg if not already present, which contains the hashed GRUB bootloader password. This utility only supports configurations where there is a single root user.
-
 
