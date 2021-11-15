@@ -8,32 +8,38 @@ Booting a Linux operating system on some device involves a sequence of events to
 3. **Kernel**
 4. **System Initialization** ( **INIT** / **SystemD** )
 
-At the start of the sequence the system BIOS performs Power On Self Test (POST) to 
-ensure bare metal system functionality eg: RAM is available. After passing POST, the BIOS 
-works through its disk boot order seeking a MBR or EFI system partition to execute before 
-aborting if none are found.
 
-The boot loader is installed in the first 512 bytes (when using MBR) or the EFI system 
-partition. The most widely used bootloader is the GRUB2 bootloader. GRUB2 provides 
-a basic interface to select which Linux kernel to boot along with other configurations like 
-rescue modes.
+1. **BIOS / POST**
 
-The bootloader starts the Linux kernel and system image with default parameters like 
-boot disk and graphics options. You can change kernel parameters set by the bootloader 
+When the device is powered on system BIOS performs Power On Self Test (POST) to 
+ensure **hardware functionality** eg: RAM is available. After passing POST, the BIOS 
+works through its **disk boot order** seeking a MBR or EFI system partition to small intermediate program called bootloader.
+
+2. **Bootloader**
+
+Bootloader role is to **load the operating system**. Most widely used Linux bootloader is the **GRUB2**. It provides a basic interface to select which Linux kernel to boot along with other configurations like 
+rescue modes. The bootloader starts particular Linux kernel by loading it into RAM and running it.
+This way Linux kernel becomes first proccess running (with ID **0**).
+
+The bootloader  The  bootloader.  You can change kernel parameters set by the bootloader 
 to change how the system initialises, for example interrupting the process to enter single 
 user mode (also known as rescue or runlevel 1), which is used for recovery tasks such as 
 resetting passwords.
 
-Once the Linux kernel has provided sufficient hardware access the operating systems first 
-process (process id 1) is started with the responsibility of bringing online the services and 
-processes that make the rest of the system.
+
 
 Bootloader: The GRUB2 bootloader is loaded by the UEFI / BIOS executing the EFI System 
 Partition on the system’s hard disk. The BIOS executes each disk in its configured priority 
-before aborting if no bootloader is found. The boot loader uses parameters to start the linux 
-kernel.
+before aborting if no bootloader is found. 
 
-System initialization: After the bootloader starts the kernel, the kernel starts the first 
+3. **Kernel**
+
+Once the Linux kernel starts it checks hardware from operating system point of view (enable needed drivers, etc.) and
+then starts first process (process ID **1**) with the responsibility of doing the rest 
+(starting services and processes).
+
+5. **System Initialization** ( **INIT** / **SystemD** )
+After the bootloader starts the kernel, the kernel starts the first 
 process which initializes the rest of the system, and runs until the system is shut down.  
 
 Linux system initialization for a long time was handled by the _Unix-inspired SystemV_ **init** 
