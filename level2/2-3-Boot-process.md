@@ -53,8 +53,6 @@ It is more flexible and modular.
 
 **Systemd** uses **targets** instead of **runlevels**. 
 
-**Systemd** can also run old _SystemV_ **init** scripts. 
-
 Goal of **runlevels**/**targets** is to process system initialization 
 and bring the Linux system to specific state.
 
@@ -66,6 +64,33 @@ First initialization process (**init** / **Upstart** / **SystemD**):
 - manages the system startup process
 - manages the services running (enable/disable, start/stop)
 - shuts the system down
+
+
+**Note:** Previous Linux versions, which were distributed with **SystemV init** or **Upstart**,
+used init scripts located in the `/etc/rc.d/init.d/` directory. 
+These **init** scripts were typically written in Bash, and allowed the system 
+administrator to control the state of services and daemons in their system.
+**Systemd** still can also run old _SystemV_ **init** scripts.
+But **Systemd** driven systems have init scripts replaced with **service units**. 
+**Service units** end with the **.service** file extension and serve a 
+similar purpose as init scripts.
+
+To view, `start`, `stop`, `restart`, `enable`, or `disable` system services, use the `systemctl` command as described below. 
+
+The `service` and `chkconfig` commands are still available in the system 
+and work as expected, but are only included for compatibility reasons 
+and better to be avoided. 
+
+Note
+When working with system services, it is possible to omit this file 
+extension to reduce typing.
+When the `systemctl` utility encounters a unit name without a file extension, 
+it automatically assumes it is a `.service` unit. 
+For example: 
+`systemctl status rsyslog.service`
+is same as:
+`systemctl status rsyslog`
+
 
 ### PRACTICE
 
