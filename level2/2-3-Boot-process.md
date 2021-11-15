@@ -11,26 +11,22 @@ Booting a Linux operating system on some device involves a sequence of events to
 
 1. **BIOS / POST**
 
-When the device is powered on system BIOS performs Power On Self Test (POST) to 
-ensure **hardware functionality** eg: RAM is available. After passing POST, the BIOS 
-works through its **disk boot order** seeking a MBR or EFI system partition to small intermediate program called bootloader.
+When the device is powered on instructions stored in its firmware (called BIOS - Basic Input/Output System)
+are first processed. BIOS performs Power On Self Test (POST) to 
+ensure **hardware functionality** (eg: RAM is available). After passing POST, 
+the BIOS searches through its **disk boot order**, loads, and executes 
+the small intermediate program called bootloader.
 
 2. **Bootloader**
 
-Bootloader role is to **load the operating system**. Most widely used Linux bootloader is the **GRUB2**. It provides a basic interface to select which Linux kernel to boot along with other configurations like 
-rescue modes. The bootloader starts particular Linux kernel by loading it into RAM and running it.
-This way Linux kernel becomes first proccess running (with ID **0**).
-
-The bootloader  The  bootloader.  You can change kernel parameters set by the bootloader 
-to change how the system initialises, for example interrupting the process to enter single 
-user mode (also known as rescue or runlevel 1), which is used for recovery tasks such as 
-resetting passwords.
-
-
-
-Bootloader: The GRUB2 bootloader is loaded by the UEFI / BIOS executing the EFI System 
-Partition on the system’s hard disk. The BIOS executes each disk in its configured priority 
-before aborting if no bootloader is found. 
+Bootloader role is to **load the operating system**. 
+Most widely used Linux bootloader is the **GRUB2** (GNU GRand Unified Bootloader). 
+GRUB may display splash screen with menu to select Linux kernel to boot. 
+The splash screen will wait a few seconds to select and option. 
+At this time boot process can be interrupted to enter single user mode (also known as rescue mode), 
+used for recovery tasks such as resetting passwords.
+In case of no input from keyboard bootloader will load the default kernel into RAM.
+Thus Linux kernel becomes first running proccess (with ID **0**).
 
 3. **Kernel**
 
