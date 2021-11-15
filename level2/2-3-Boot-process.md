@@ -4,12 +4,6 @@
 
 Booting a Linux operating system on some device involves a sequence of events to complete startup:
 1. **BIOS / POST**
-2. **Bootloader**
-3. **Kernel**
-4. **System Initialization** ( **INIT** / **SystemD** )
-
-
-1. **BIOS / POST**
 
 When the device is powered on instructions stored in its firmware (called BIOS - Basic Input/Output System)
 are first processed. BIOS performs Power On Self Test (POST) to 
