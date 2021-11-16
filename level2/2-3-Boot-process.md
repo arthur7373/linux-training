@@ -186,7 +186,7 @@ power off the system (_no need to reboot, since there is no process which can do
   
 _Same way can be used to do needed maintenance (eg. `fsck /dev/sda1` )_
 
-####How to Password Protect GRUB2 Boot Loader
+#### How to Password Protect GRUB2 Boot Loader
 
 Use `grub2-setpassword` to set a password for the `root` user (_it's not Linux `root`_)
 ```bash
@@ -196,7 +196,7 @@ This creates a file `/boot/grub2/user.cfg` if not already present,
 which contains the hashed GRUB bootloader password. 
 This utility only supports configurations where there is a single root user.
 
-### Manage the Boot Process (GRUB2)
+#### Manage the Boot Process (GRUB2)
 GRUB 2 reads its configuration from the /boot/grub2/grub.cfg file on traditional BIOS-based machines and from the /boot/efi/EFI/redhat/grub.cfg file on UEFI machines. 
 
 This file contains menu information. The GRUB 2 configuration file, grub.cfg, is generated during installation, or by invoking the /usr/sbin/grub2-mkconfig utility, and is automatically updated by special command line tool for configuring GRUB, called grubby, each time a new kernel is installed. 
