@@ -104,6 +104,9 @@ is same as:
 #### Find out which initialization process (with ID **1**) is running in your Linux.
 _How to do:_ You need to run command that shows all processes in tree-like manner and see the name of top process.
 
+&nbsp;
+&nbsp;
+
 Table below presents **SystemV runlevel** and **Systemd target** equivalents.
 
 | SystemV Runlevel | Systemd equivalent | Description
