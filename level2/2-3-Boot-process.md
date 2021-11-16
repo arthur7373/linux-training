@@ -165,7 +165,8 @@ or
 ```bash
 init 0
 ```
-
+&nbsp;
+&nbsp;
 #### Recover root password:
 1. Press `Esc` to prevent GRUB automatic system load. Ensure first line is selected
 at the GRUB prompt and press `e`
