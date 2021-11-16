@@ -258,13 +258,15 @@ systemctl restart rsyslog
 Now all message logs are additionally sent to the central server.
 
 
-####Test
+###Test
 
 Monitor the activity from the log server, open the message log.
+
 On server:
 ```bash
 tailf /var/log/messages
 ```
+
 On client:
 ```bash
 logger  -p daemon.info "TESTING REMOTE LOGGING"
