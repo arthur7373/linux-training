@@ -57,8 +57,11 @@ Goal of **runlevels**/**targets** is to process system initialization
 and bring the Linux system to specific state.
 
 By default, there are two main targets:
+
 **multi-user.target** - analogous to **runlevel 3**
+
 **graphical.target** - analogous to **runlevel 5**
+
 
 First initialization process (**init** / **Upstart** / **SystemD**): 
 - manages the system startup process
