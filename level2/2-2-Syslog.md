@@ -211,23 +211,15 @@ or
 ```bash
  ss -antup | grep 514
 ```
-Client setup:
-
-
-Add new config `/etc/rsyslog.d/nettest.conf`: 
-```bash
-cat > /etc/rsyslog.d/nettest.conf
-*.* @@192.168.2.79:514
-```
-and restart the rsyslog service:
-```bash
-systemctl restart rsyslog
-```
-Now all message logs are additionally sent to the central server.
 
 ### Firewall Port opening (optional):
 Mostly all the production environment are protected by hardware firewall, ask them to open the TCP & UDP 514.
 If you have IP tables enabled, run the following command on server in order to accept incoming traffic on UDP / TCP port 514.
+
+Check status:
+```bash
+systemctl is-enabled firewalld
+```
 
 ```bash
 firewall-cmd --permanent --zone=public --add-port=514/tcp
@@ -250,7 +242,23 @@ You can verify the port opening by issuing the following command from the client
 telnet 172.16.1.58 514
 ```
 
-Test:
+
+Client setup:
+
+
+Add new config `/etc/rsyslog.d/nettest.conf`: 
+```bash
+cat > /etc/rsyslog.d/nettest.conf
+*.* @@192.168.2.79:514
+```
+and restart the rsyslog service:
+```bash
+systemctl restart rsyslog
+```
+Now all message logs are additionally sent to the central server.
+
+
+####Test
 Monitor the activity from the log server, open the message log.
 On server:
 ```bash
@@ -262,3 +270,8 @@ logger  -p daemon.info "TESTING REMOTE LOGGING"
 ```
 By this way you can monitor the other logs such as secure, mail, cron logs etc.
 
+
+
+###PRACTICE
+
+Create specific configuration on **Client** to send only messages containing 'TESTING LOG' 
