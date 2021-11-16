@@ -71,7 +71,7 @@ First initialization process (**init** / **Upstart** / **SystemD**):
 
 
 **Note:** Previous Linux versions, which were distributed with **SystemV init** or **Upstart**,
-used init scripts located in the `/etc/rc.d/init.d/` directory. 
+used init scripts located in the `/etc/init.d/` directory. 
 These **init** scripts were typically written in Bash, and allowed the system 
 administrator to control the state of services and daemons in their system.
 **Systemd** still can also run old _SystemV_ **init** scripts.
