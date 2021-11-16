@@ -82,9 +82,8 @@ and work as expected, but are only included for compatibility reasons
 and better to be avoided. 
 
 Note
-When working with system services, it is possible to omit this file 
-extension to reduce typing.
-When the `systemctl` utility encounters a unit name without a file extension, 
+When working with system services, it is possible to omit this file `.service` unit
+extension to reduce typing. When the `systemctl` utility encounters a unit name without a file extension, 
 it automatically assumes it is a `.service` unit. 
 For example: 
 `systemctl status rsyslog.service`
@@ -134,11 +133,23 @@ systemctl restart sshd
 systemctl enable sshd
 systemctl is-enabled sshd
 ```
-5. Shutdown the system.
+5. Reboot & shutdown the system
+You can reboot with you can either run
+```bash
+systemctl reboot
+```
+or
+```bash
+init 6
+```
+You can shutdown with either
 ```bash
 systemctl poweroff
 ```
-
+or
+```bash
+init 0
+```
 
 #### Recover root password:
 1. Press `Esc` to prevent GRUB automatic system load. Ensure first line is selected
