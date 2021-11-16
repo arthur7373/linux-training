@@ -258,7 +258,7 @@ systemctl restart rsyslog
 Now all message logs are additionally sent to the central server.
 
 
-###Test
+#### Testing
 
 Monitor the activity from the log server, open the message log.
 
