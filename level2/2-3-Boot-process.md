@@ -22,7 +22,7 @@ The splash screen will wait a few seconds to select and option.
 At this time boot process can be interrupted to enter single user mode (also known as rescue mode), 
 used for recovery tasks such as resetting passwords.
 If no key is pressed, GRUB will load the default kernel into RAM.
-Thus Linux kernel becomes first running proccess (with ID **0**).
+Thus Linux kernel becomes first running proccess (with PID **0**).
 
 Most modern Linux versions are distributed with the GNU GRand Unified Boot 
 loader (GRUB) version 2 boot loader, 
@@ -34,7 +34,7 @@ which is now known as **GRUB Legacy**.
 3. **Kernel**
 
 Once the Linux kernel starts, it checks hardware from operating system point of view (enable needed drivers, etc.) and
-then starts first initialization process (with ID **1**) with the responsibility of 
+then starts first initialization process (with PID **1**) with the responsibility of 
 doing the rest system initialization (starting services and processes).
 This initialization process runs until the system is shut down.
 
@@ -101,7 +101,7 @@ is same as:
 
 ### PRACTICE
 
-#### Find out which initialization process (with ID **1**) is running in your Linux.
+#### Find out which initialization process (with PID **1**) is running in your Linux.
 _How to do:_ You need to run command that shows all processes in tree-like manner and see the name of top process.
 
 &nbsp;

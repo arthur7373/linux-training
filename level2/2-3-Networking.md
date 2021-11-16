@@ -13,11 +13,13 @@ or
 
 
 The names have two-character prefixes based on the type of interface:
-en for Ethernet,
-wl for wireless LAN (WLAN),
-ww for wireless wide area network (WWAN).
+`en` for Ethernet,
+&nbsp; 
+`wl` for wireless LAN (WLAN),
+&nbsp;
+`ww` for wireless wide area network (WWAN).
 
-Configuration of network interfaces (/etc/sysconfig/).  Important Network Files.
+Configuration of network interfaces (`/etc/sysconfig/`).  Important Network Files.
 Configuring resolver
 
 Network Configuration with and without NetworkManager
@@ -39,7 +41,7 @@ ip link show
 ```
 
 #### Configure DHCP on an interface
-Edit the config files in /etc/sysconfig/network-scripts directory. In this directory, each device should have a configuration file named ifcfg-<device-name>. If you want to configure DHCP on device enp0s3, edit the file ifcfg-enp0s3
+Edit the config files in `/etc/sysconfig/network-scripts` directory. In this directory, each device should have a configuration file named ifcfg-<device-name>. If you want to configure DHCP on device enp0s3, edit the file ifcfg-enp0s3
 For the device to be activated at startup time ste ONBOOT=yes
 To enable DHCP, set BOOTPROTO=dhcp
 Leave the other settings as such and restart networking
