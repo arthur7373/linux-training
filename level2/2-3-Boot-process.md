@@ -63,6 +63,7 @@ By default, there are two main targets:
 **graphical.target** - analogous to **runlevel 5**
 
 
+
 First initialization process (**init** / **Upstart** / **SystemD**): 
 - manages the system startup process
 - manages the services running (enable/disable, start/stop)
