@@ -102,7 +102,7 @@ is same as:
 ### PRACTICE
 
 #### Find out which initialization process (with PID **1**) is running in your Linux.
-_How to do:_ You need to run command that shows all processes in tree-like manner and see the name of top process.
+_HINT:_ You need to run command that shows all processes in **tree-like** manner and see the name of top process.
 
 &nbsp;
 &nbsp;
