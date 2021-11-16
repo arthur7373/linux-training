@@ -89,9 +89,13 @@ Note
 When working with system services, it is possible to omit this file `.service` unit
 extension to reduce typing. When the `systemctl` utility encounters a unit name without a file extension, 
 it automatically assumes it is a `.service` unit. 
+
 For example: 
+
 `systemctl status rsyslog.service`
+
 is same as:
+
 `systemctl status rsyslog`
 
 
