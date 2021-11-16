@@ -122,17 +122,20 @@ systemctl | grep running
 systemctl | grep ssh
 ```
 
-3. Start, stop, and restart the ssh service.
+3. Stop, start, and restart the ssh service.
 ```bash
-systemctl start sshd
 systemctl stop sshd
+systemctl start sshd
 systemctl restart sshd
 ```
-4. Configure the ssh service to start automatically at boot time.
+4. Disabling/Enabling ssh service start automatically at boot time.
 ```bash
-systemctl enable sshd
 systemctl is-enabled sshd
+systemctl disable sshd
+systemctl is-enabled sshd
+systemctl enable sshd
 ```
+
 5. Reboot & shutdown the system
 You can reboot with you can either run
 ```bash
