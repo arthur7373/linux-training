@@ -259,6 +259,7 @@ Now all message logs are additionally sent to the central server.
 
 
 ####Test
+
 Monitor the activity from the log server, open the message log.
 On server:
 ```bash
@@ -271,7 +272,3 @@ logger  -p daemon.info "TESTING REMOTE LOGGING"
 By this way you can monitor the other logs such as secure, mail, cron logs etc.
 
 
-
-###PRACTICE
-
-Create specific configuration on **Client** to send only messages containing 'TESTING LOG' 
