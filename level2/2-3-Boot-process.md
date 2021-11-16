@@ -134,6 +134,7 @@ systemctl is-enabled sshd
 systemctl disable sshd
 systemctl is-enabled sshd
 systemctl enable sshd
+systemctl is-enabled sshd
 ```
 
 5. Reboot & shutdown the system
