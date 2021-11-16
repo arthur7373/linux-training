@@ -264,7 +264,7 @@ Monitor the activity from the log server, open the message log.
 
 On server:
 ```bash
-tailf /var/log/messages
+tail -f /var/log/messages
 ```
 
 On client:
