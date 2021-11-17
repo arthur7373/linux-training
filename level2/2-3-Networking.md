@@ -3,12 +3,19 @@
 ## Networking basics
 
 #### Predictable Network Interface Names
-Current version of systemd/udev automatically assigns predictable, stable network interface names for all local network interfaces. This is a departure from the traditional interface naming scheme ("eth0", "eth1", "wlan0", ...).
+Current version of **systemd/udev** automatically assigns predictable, 
+stable network interface names for all local network interfaces. 
+This is a departure from old traditional interface naming scheme 
+("**eth0**", "**eth1**", "**wlan0**", ...).
 
 Current network interfaces names can be listed this way:
+
 `ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
+
 or
+
 `nmcli d`
+
 `nmcli c`
 
 
@@ -18,6 +25,20 @@ The names have two-character prefixes based on the type of interface:
 `wl` for wireless LAN (WLAN),
 &nbsp;
 `ww` for wireless wide area network (WWAN).
+
+Most of the modern Linux distributions will have first network interface name 
+`enp0s3`
+
+It stands for "**e**thernet **n**etwork **p**eripheral _No#_ **s**erial _No#_
+
+More info: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+
+Recent distributions have special _man_ for it:
+
+```bash
+man systemd.net-naming-scheme
+```
+
 
 Configuration of network interfaces (`/etc/sysconfig/`).  Important Network Files.
 Configuring resolver
