@@ -3,7 +3,7 @@
 ## Networking basics
 
 #### Predictable Network Interface Names
-Current version of **systemd/udev** automatically assigns predictable, 
+Current version of **systemd/udev** (starting with **v197**) automatically assign predictable, 
 stable network interface names for all local network interfaces. 
 This is a departure from old traditional interface naming scheme 
 ("**eth0**", "**eth1**", "**wlan0**", ...).
@@ -27,11 +27,18 @@ The names have two-character prefixes based on the type of interface:
 `ww` for wireless wide area network (WWAN).
 
 Most of the modern Linux distributions will have first network interface name 
-`enp0s3`
+`enp0s3`. Second network interface most probably will be `enp0s8`.
 
-It stands for "**e**thernet **n**etwork **p**eripheral _No#_ **s**erial _No#_
+`enp0s3` meaning can be expaned as: 
+
+**en** - ethernet 
+
+**p0** - peripheral/prefix/bus number 0
+
+**s3** - slot/device number 3
 
 More info: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names
 
 Recent distributions have special _man_ for it:
 
