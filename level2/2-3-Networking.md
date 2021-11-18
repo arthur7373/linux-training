@@ -71,10 +71,7 @@ The **ip** command can be used to check current settings:
 ```bash
 ip a
 ```
-
-The `ip` command can be also used to change IP addresses, 
-but the change won't be permanent. 
-For permanent changes you need to edit the config files and restart networking.
+There is old, deprecated `ifconfig` command, that should be avoided to use.
 
 ### Important Network Files.
 
@@ -93,48 +90,138 @@ The use of this file before DNS resolving `/etc/resolv.conf` is defined in
 
 ### Routing. Routing tables.
 
-/bin/netstat -rn 
-/bin/netstat -nlpt
-/bin/netstat -nlpu
-/bin/netstat -an
-/sbin/route -n
-/sbin/ip a
-/sbin/ip r
-/bin/ss -nlpt
+Linux **routing table** is obtained by one of the following commands:
+* `/sbin/ip r`
+* `/bin/netstat -rn` 
+* `/sbin/route -n`
 
-#Manual IP address assignment
-ip a a 172.16.1.189/24 brd + dev eth0
+Last two commands are old, deprecated should be avoided to use.
 
-#Manual Default Gateway assignment
-ip r a default via 172.16.1.2
+#### PRACTICE
+1. Create second network interface on two VMs in VirtualBox. 
+Assign each one to `VirtualBox Host-Only Ethernet Adapter`<br>
+After starting VMs use `nmtui` to manually assign IP addresses 
+to second interface on each VM:
+* 10.10.10.10/24 - on VM1
+* 10.10.10.11/24 - on VM2<br><br>
+After that you should be able to ping from one VM to another by these IPs
+and even connect another VMs port.
 
-IP packet forwarding should be enabled if the server has more than one network intefaces:  
-sysctl -w net.ipv4.ip_forward=1
+2. Manually assign another IP addresses to the same interfaces:
 
-You can make sure the change will persist after reboot by
-echo  'net.ipv4.ip_forward = 1'  >>  /usr/lib/sysctl.d/50-default.conf
-sysctl -p /usr/lib/sysctl.d/50-default.conf  
-
-Tools for checking connection with another computer on the network:
-ping, traceroute, mtr
-
-MTR
-mtr -nrc 5 yahoo.com
-mtr -unrc 5 yahoo.com
-mtr -i 0.2 -n yahoo.com
+* `ip a a 172.16.11.5/24 brd + dev enp0s8` - on VM1
+* `ip a a 172.16.11.6/24 brd + dev enp0s8` - on VM2<br><br>
+After that you should be able to ping from one VM to another by these IPs 
+and even connect another VMs port.
 
 
--n	No DNS (Do not try to resolve the host names)
--rw 	put mtr into “wide report mode” (report after the number of cycles specified by the 
--c option (default 10) wide allows not to cut hostnames in the report)
--c N	set the number of pings sent to determine both the machines on the network and the reliability of those machines.  Each cycle lasts one second
--u	Use UDP datagrams instead of ICMP ECHO (useful if “ICMP limiting” is found somewhere)
--i N	number of seconds between requests (default - one second)
+### Network Port Management
 
-arp command allows to see current ARP table  (arp –an)  
-new variant is: 
-ip n[eigh]
- 
+It is not enough just to deliver packets from one host to another. 
+Information should be delivered to from one process/program on one host
+to another process/program on another host.
+That is why not one, bur **TWO** pairs of identifiers play important role:
+
+|  _SourceAddress_ | _DestinationAddress_ 
+| --- | --- |
+|  **_SourcePort_** |  **_DestinationPort_**
+
+Second pair presents **UDP/TCP port numbers**. 
+It is 16 bit number (**0-65535**). 
+Each UDP/TCP packet (on transport layer) contains source & destination port.  
+This allows to uniquely identify a conversation between processes.
+
+Many ‘well known’ ports published for client-server applications can be found in: 
+`/etc/services` file. Some examples are below:
+
+|  TCP Port | Service 
+| --- | --- |
+| 20,21 | FTP
+| 22 | SSH (remote access)
+| 25 | SMTP (mail)
+| 80 | HTTP (web)
+| 143| IMAP (mail)
+| 443| HTTPS (HTTP over SSL/TLS)
+| 465| SMTPS (SMTP over SSL/TLS
+| 993 | IMAPS (IMAP over SSL/TLS) 
 
 
+* `/bin/netstat -nlpt` - Current TCP ports and appropriate processes listening
+* `/bin/netstat -nlpu` - Current UDP ports and appropriate processes listening
+* `/bin/netstat -an`  - Active connections
+* `/bin/ss -nlpt` - Alternative command to `netstat`
+
+
+### Network Tools
+
+* `ping`
+* `traceroute`
+* `mtr`
+
+Examples:
+* `ping -nc3 ya.ru`
+* `traceroute -n goo.gl`
+* `mtr yahoo.com`
+* `mtr -nrc 1 fb.com`
+
+Options:
+* **-n**	_No DNS (Do not try to resolve the host names)_
+* **-r** 	_put mtr into “wide report mode” (report after the number of cycles specified by the 
+-c option (default 10) wide allows not to cut hostnames in the report)_
+* **-c N**  _set the number of pings sent to determine both the machines on 
+the network and the reliability of those machines. Each cycle lasts one second_
+* **-u**	_Use UDP datagrams instead of ICMP ECHO (useful if “ICMP limiting” is found somewhere)_
+
+### ARP Table
+`arp` command allows to see current ARP table (`arp –an`)  
+It is old command and the new equivalent is: <br>
+`ip n[eigh]`
+
+### Network Traffic Monitor Tools
+
+**tcpdump** - basic tool to troubleshoot network.<br>
+**iftop** - interactive interface monitor tool.
+<br>
+<br>
+
+#### PRACTICE
+On VM1 run:
+* `tcpdump -i enp0s8 host 10.10.10.11`
+
+On VM2 run:
+* `ping -c2 10.10.10.10`
+
+Now on VM1 try another commands:
+* `tcpdump -i enp0s8 src 10.10.10.11`
+* `tcpdump -i enp0s8 dst 10.10.10.11`
+
+You should see difference:
+**host** filter captures both (destination) & (source) traffic.
+**src** / **dst** - only packets going one way. 
+
+You can capture whole subnet traffic:
+* `tcpdump -i enp0s8 net 10.10.10.0/24`
+
+Or only traffic to/from specific port.
+On VM1 run:
+* `tcpdump -i enp0s8 dst port 22`
+On VM2 run:
+* `ssh 10.10.10.10`
+
+We can show IP/Port in numbers.
+On VM1 run:
+* `tcpdump -i enp0s8 -nn -v dst port 80`
+On VM2 run:
+* `telnet 10.10.10.10 80` <br>
+Options:<br>
+**-nn** : 
+_A single (n) will not resolve hostnames. A double (nn) will not resolve hostnames or ports. This is handy for not only viewing the IP / port numbers but also when capturing a large amount of data, as the name resolution will slow down the capture._<br>
+**-v** : 
+_Verbose, using (-v) or (-vv) increases the amount of detail shown in the output, often showing more protocol specific information._
+
+Or see ICMP traffic only.
+On VM1 run:
+* `tcpdump -i enp0s8 icmp`
+On VM2 run:
+* `ping -c2 10.10.10.10` <br>
 
