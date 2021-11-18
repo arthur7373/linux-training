@@ -202,13 +202,13 @@ You should see difference:
 You can capture whole subnet traffic:
 * `tcpdump -i enp0s8 net 10.10.10.0/24`
 
-Or only traffic to/from specific port.
+Or only traffic to/from specific port.<br>
 On VM1 run:
 * `tcpdump -i enp0s8 dst port 22`<br>
 On VM2 run:
 * `ssh 10.10.10.10`
 
-We can show IP/Port in numbers.
+We can show IP/Port in numbers.<br>
 On VM1 run:
 * `tcpdump -i enp0s8 -nn -v dst port 80`<br>
 On VM2 run:
@@ -219,7 +219,7 @@ _A single (n) will not resolve hostnames. A double (nn) will not resolve hostnam
 **-v** : 
 _Verbose, using (-v) or (-vv) increases the amount of detail shown in the output, often showing more protocol specific information._
 
-Or see ICMP traffic only.
+Or see ICMP traffic only.<br>
 On VM1 run:
 * `tcpdump -i enp0s8 icmp`<br>
 On VM2 run:
