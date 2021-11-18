@@ -2,7 +2,7 @@
 
 ## Networking basics
 
-#### Predictable Network Interface Names
+### Predictable Network Interface Names
 For a long time Linux kernel was detecting network devices and assigning them 
 interface names "**eth0**", "**eth1**", "**wlan0**", etc, 
 which became traditional, but not so flexible.
@@ -30,30 +30,34 @@ Second network interface most probably will be `enp0s8`.
 **p0** - peripheral/prefix/bus number 0<br />
 **s3** - slot/device number 3<br />
 
-More info: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
-https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names
+More info: <br />
+https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/ <br />
+https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names <br />
 
-Recent distributions have special _man_ for it:
-
+Recent distributions have special _man_ for it:<br />
 ```bash
 man systemd.net-naming-scheme
 ```
 
+### Configuration of network interfaces (`/etc/sysconfig/`). <br />  
+### Important Network Files.
+### Configuring resolver
 
-Configuration of network interfaces (`/etc/sysconfig/`).  Important Network Files.
-Configuring resolver
+#### Network Configuration with and without NetworkManager
+Most modern Linux versions come with Network Manager, 
+a service that runs by default and has a graphical, 
+text as well as command line interface. 
+You can use Network Manager to create, edit and remove interfaces 
+and it can be used to configure Ethernet, WiFi and other connection types. 
+Using the GUI is pretty straight forward.
 
-Network Configuration with and without NetworkManager
-CentOS 7 comes with Network Manager, a service that runs by default and has a graphical, text as well as command line interface. You can use Network Manager to create, edit and remove interfaces and it can be used to configure Ethernet, WiFi, Mobile, DSL and PPPoE connections. Using the GUI is pretty straight forward. To invoke the text interface just type:
-```bash
-nmtui
-```
-The command line interface can be invoked by the command nmcli. For example to get a list if all NICs (Ethernet cards):
-```bash
-nmcli d
-```
+To invoke the text interface just type:<br />
+`nmtui`<br />
+The command line interface can be invoked by the command `nmcli`. <br />
+For example to get a list if all NICs (Ethernet cards): <br />
+`nmcli d`
+
 However you may not want to run NetworkManager service on your server because of various reasons. Advanced configuration options are limited and it does not yet support some device types like ISDN, IPSec to name a few. If you decide to disable NetworkManager service and use just the network service, you can configure your network by editing some config files and restarting the network service.
-
 
 #### List all network interfaces
 To list and manipulate devices, routing, tunnels etc you can use the ip command.
