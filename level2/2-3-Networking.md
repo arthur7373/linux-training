@@ -102,8 +102,8 @@ Last two commands are old, deprecated should be avoided to use.
 Assign each one to `VirtualBox Host-Only Ethernet Adapter`<br>
 After starting VMs use `nmtui` to manually assign IP addresses 
 to second interface on each VM:
-* 10.10.10.10/24 - on VM1
-* 10.10.10.11/24 - on VM2<br><br>
+* **10.10.10.10/24** - on VM1
+* **10.10.10.11/24** - on VM2<br><br>
 After that you should be able to `ping` from one VM to another by these IPs
 and even connect another VMs port.
 
