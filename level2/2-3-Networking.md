@@ -10,12 +10,6 @@ which became traditional, but not so flexible.
 Starting with **v197** current versions of **systemd** suite (and its part - **udev** device manager) automatically assign predictable, 
 stable _network interface names_ for all local network interfaces. 
 
-Current network interfaces names can be listed this way:
-* `ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
-* `nmcli d`
-* `nmcli c`
-
-
 The names have two-character prefixes based on the type of interface:<br />
 `en` for Ethernet,<br />
 `wl` for wireless LAN (WLAN),<br />
@@ -39,31 +33,39 @@ Recent distributions have special _man_ for it:<br />
 man systemd.net-naming-scheme
 ```
 
-### Configuration of network interfaces (`/etc/sysconfig/`). <br />  
-### Important Network Files.
-### Configuring resolver
-
-#### Network Configuration with and without NetworkManager
-Most modern Linux versions come with Network Manager, 
-a service that runs by default and has a graphical, 
-text as well as command line interface. 
-You can use Network Manager to create, edit and remove interfaces 
-and it can be used to configure Ethernet, WiFi and other connection types. 
-Using the GUI is pretty straight forward.
-
-To invoke the text interface just type:<br />
-`nmtui`<br />
-The command line interface can be invoked by the command `nmcli`. <br />
-For example to get a list if all NICs (Ethernet cards): <br />
-`nmcli d`
-
-However you may not want to run NetworkManager service on your server because of various reasons. Advanced configuration options are limited and it does not yet support some device types like ISDN, IPSec to name a few. If you decide to disable NetworkManager service and use just the network service, you can configure your network by editing some config files and restarting the network service.
+### Configuration of network interfaces. <br />  
 
 #### List all network interfaces
-To list and manipulate devices, routing, tunnels etc you can use the ip command.
-```bash
-ip link show
-```
+To list and manipulate devices, routing, tunnels etc, you can use the `ip` command:<br />
+`ip l`
+
+Other ways to list current network interfaces:
+* `ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
+* `nmcli d`
+* `nmcli c`
+
+#### NetworkManager
+Most modern Linux versions come with **Network Manager**, 
+a service that runs by default and has a graphical, 
+text as well as command line interface.
+
+You can check if **Network Manager** is enabled and running:<br>
+`systemctl is-enabled NetworkManager`<br>
+`systemctl | grep NetworkManager`<br>
+or<br>
+`systemctl status NetworkManager`<br>
+
+`nmtui` is  **Network Manager** text interface to create, edit and remove interfaces.
+It can be used to configure Ethernet, WiFi and other connection types. 
+
+### Difference between Linux distributions and release versions
+
+Network configuration is one of the most different part between various Linux distributions and even release versions of the same distros.
+For example, Ubuntu 16.04 and Ubuntu 18.04 configuration is completely different.
+Most useful way to find more information about particular network configuration detail, is searching the Internet resources.
+
+Below are presented some examples for CentOS Linux.
+CentOS network configuration is primarily located in `/etc/sysconfig/`
 
 #### Configure DHCP on an interface
 Edit the config files in `/etc/sysconfig/network-scripts` directory. In this directory, each device should have a configuration file named ifcfg-<device-name>. If you want to configure DHCP on device enp0s3, edit the file ifcfg-enp0s3
@@ -103,6 +105,9 @@ ip addr
 
 The `ip` command can be also used to change IP addresses, but the change won't be permanent. For permanent changes you need to edit the config files and restart networking.
 
+### Important Network Files.
+
+### Configuring resolver
 
 #### IP Networking Control Files
 
