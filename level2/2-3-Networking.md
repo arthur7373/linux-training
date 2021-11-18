@@ -104,14 +104,14 @@ After starting VMs use `nmtui` to manually assign IP addresses
 to second interface on each VM:
 * 10.10.10.10/24 - on VM1
 * 10.10.10.11/24 - on VM2<br><br>
-After that you should be able to ping from one VM to another by these IPs
+After that you should be able to `ping` from one VM to another by these IPs
 and even connect another VMs port.
 
 2. Manually assign another IP addresses to the same interfaces:
 
 * `ip a a 172.16.11.5/24 brd + dev enp0s8` - on VM1
 * `ip a a 172.16.11.6/24 brd + dev enp0s8` - on VM2<br><br>
-After that you should be able to ping from one VM to another by these IPs 
+After that you should be able to `ping` from one VM to another by these IPs 
 and even connect another VMs port.
 
 
