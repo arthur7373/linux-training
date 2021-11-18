@@ -36,10 +36,7 @@ man systemd.net-naming-scheme
 ### Configuration of network interfaces. <br />  
 
 #### List all network interfaces
-To list and manipulate devices, routing, tunnels etc, you can use the `ip` command:<br />
-`ip l`
-
-Other ways to list current network interfaces:
+Several ways to list interfaces:<br />
 * `ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
 * `nmcli d`
 * `nmcli c`
@@ -66,85 +63,35 @@ Most useful way to find more information about particular network configuration 
 
 Below are presented some examples for CentOS Linux.
 CentOS network configuration is primarily located in `/etc/sysconfig/`
+Ubuntu versions have network configuration in `/etc/NetworkManager/system-connections/` in case it's managed by **NetworkManager**. 
+Otherwise depending on version configuration differs.
+Starting from Ubuntu 18.04 manual network configuration is managed by **netplan** and is located in `/etc/netplan`
 
-#### Configure DHCP on an interface
-Edit the config files in `/etc/sysconfig/network-scripts` directory. In this directory, each device should have a configuration file named ifcfg-<device-name>. If you want to configure DHCP on device enp0s3, edit the file ifcfg-enp0s3
-For the device to be activated at startup time ste ONBOOT=yes
-To enable DHCP, set BOOTPROTO=dhcp
-Leave the other settings as such and restart networking
+The **ip** command can be used to check current settings:
 ```bash
-systemctl restart network
+ip a
 ```
 
-#### Configure static IP
-Edit the config file `/etc/sysconfig/network-scripts/ifcfg-<devicename>`. Using the example interface enp0s3 from above, the file to edit is /etc/sysconfig/network-scripts/ifcfg-enp0s3. Change ONBOOT to "yes" if you want interface to be UP on boot. Change BOOTPROTO to "static" and set a IP address and network mask as shown below.
-```bash
-ONBOOT=yes
-BOOTPROTO=static
-IPADDR=10.16.1.108
-NETMASK=255.255.255.0
-You could also add a Gateway address as below.
-GATEWAY=10.16.1.1
-```
-
-The default gateway can also be added to /etc/sysconfig/network file like below:
-```bash
-NETWORKING=yes
-GATEWAY=10.16.1.1
-Remember to restart the network service
-```
-
-```bash
-systemctl restart network
-```
-
-The ip command can be used to verify the settings
-```bash
-ip addr
-```
-
-The `ip` command can be also used to change IP addresses, but the change won't be permanent. For permanent changes you need to edit the config files and restart networking.
+The `ip` command can be also used to change IP addresses, 
+but the change won't be permanent. 
+For permanent changes you need to edit the config files and restart networking.
 
 ### Important Network Files.
 
-### Configuring resolver
+* `/etc/resolv.conf` This file specifies the IP addresses of DNS servers. 
+Depending on the way you configure network it may be possible to manually 
+edit it or not.Unless configured to do otherwise, the network initialization
+scripts. More info can be found in the file itself, 
+under comment lines in the top.
 
-#### IP Networking Control Files
 
-Different linux distribution vendors put their networking configuration files in different places in the filesystem. Here is a brief summary of the locations of the IP networking configuration information under a few common linux distributions along with links to further documentation. 
-Location of networking configuration files
-•	RedHat/CentOS
-o	Interface definitions 				 /etc/sysconfig/network-scripts/ifcfg-<interface-name> 
-o	Hostname and default gateway definition /etc/sysconfig/network 
-o	Definition of static routes 			 /etc/sysconfig/static-routes 
-/etc/resolv.conf
-This file specifies the IP addresses of DNS servers and the search domain. 
-Unless configured to do otherwise, the network initialization scripts populate this file. For more information about this file, refer to the resolv.conf man page.
+* `/etc/hosts` Main purpose of this file is to specify hostnames without DNS.
+The use of this file before DNS resolving `/etc/resolv.conf` is defined in 
+`/etc/nsswitch.conf` on line: <br> 
+`hosts:      files dns`
 
-/etc/hosts
-The main purpose of this file is to resolve hostnames that cannot be resolved any other way. It can also be used to resolve hostnames on small networks with no DNS 
-server. 
 
-The use of this file before DNS resolving (/etc/resolv.conf) is defined in /etc/nsswitch.conf on line 
-hosts:      files dns
-
-Scripts to brind network interfaces up and down:
-/etc/sysconfig/network-scripts/ifup
-/etc/sysconfig/network-scripts/ifdown
-The easiest way to manipulate all network scripts simultaneously is to use the /sbin/service command on the network service (/etc/rc.d/init.d/network), as illustrated the following command: 
-/sbin/service network <action>
-Here, <action> can be either start, stop, or restart. 
-To view a list of configured devices and currently active network interfaces, use the following command: 
-/sbin/service network status
-
-Make sure NetworkManager is on
-
-systemctl start NetworkManager
-systemctl enable NetworkManager 
-
-(nmtui & nmcli /nmcli help/ commands can be used for manual text-mode configuration)
-
-Routing. Routing tables.
+### Routing. Routing tables.
 
 /bin/netstat -rn 
 /bin/netstat -nlpt
