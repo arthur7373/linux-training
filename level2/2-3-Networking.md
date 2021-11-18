@@ -204,13 +204,13 @@ You can capture whole subnet traffic:
 
 Or only traffic to/from specific port.
 On VM1 run:
-* `tcpdump -i enp0s8 dst port 22`
+* `tcpdump -i enp0s8 dst port 22`<br>
 On VM2 run:
 * `ssh 10.10.10.10`
 
 We can show IP/Port in numbers.
 On VM1 run:
-* `tcpdump -i enp0s8 -nn -v dst port 80`
+* `tcpdump -i enp0s8 -nn -v dst port 80`<br>
 On VM2 run:
 * `telnet 10.10.10.10 80` <br>
 Options:<br>
@@ -221,7 +221,7 @@ _Verbose, using (-v) or (-vv) increases the amount of detail shown in the output
 
 Or see ICMP traffic only.
 On VM1 run:
-* `tcpdump -i enp0s8 icmp`
+* `tcpdump -i enp0s8 icmp`<br>
 On VM2 run:
 * `ping -c2 10.10.10.10` <br>
 
