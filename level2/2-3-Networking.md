@@ -1,4 +1,4 @@
-# Linux Administration and Networking Basics (level 2) Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
+# Linux Administration and Networking Basics (level 2) <br />Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
 ## Networking basics
 
@@ -24,9 +24,10 @@ The names have two-character prefixes based on the type of interface:
 `ww` for wireless wide area network (WWAN).
 
 Most of the modern Linux distributions will have first network interface name 
-`enp0s3`. Second network interface most probably will be `enp0s8`.
+`enp0s3`. <br />
+Second network interface most probably will be `enp0s8`.
 
-`enp0s3` meaning can be expaned as: 
+`enp0s3` meaning: 
 
 **en** - ethernet 
 
