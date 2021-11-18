@@ -198,19 +198,25 @@ Now on VM1 try another commands:
 You should see difference:
 **host** filter captures both (destination) & (source) traffic.
 **src** / **dst** - only packets going one way. 
-
-You can capture whole subnet traffic:
+<br>
+<br><br>
+You can also capture whole subnet traffic:
 * `tcpdump -i enp0s8 net 10.10.10.0/24`
 
 Or only traffic to/from specific port.<br>
 On VM1 run:
-* `tcpdump -i enp0s8 dst port 22`<br>
+* `tcpdump -i enp0s8 dst port 22`
+
 On VM2 run:
 * `ssh 10.10.10.10`
+<br>
+<br>
 
-We can show IP/Port in numbers.<br>
+We can show IP/Port in numbers.
+
 On VM1 run:
-* `tcpdump -i enp0s8 -nn -v dst port 80`<br>
+* `tcpdump -i enp0s8 -nn -v dst port 80`
+
 On VM2 run:
 * `telnet 10.10.10.10 80` <br>
 Options:<br>
@@ -220,8 +226,10 @@ _A single (n) will not resolve hostnames. A double (nn) will not resolve hostnam
 _Verbose, using (-v) or (-vv) increases the amount of detail shown in the output, often showing more protocol specific information._
 
 Or see ICMP traffic only.<br>
+
 On VM1 run:
-* `tcpdump -i enp0s8 icmp`<br>
+* `tcpdump -i enp0s8 icmp`
+
 On VM2 run:
 * `ping -c2 10.10.10.10` <br>
 
