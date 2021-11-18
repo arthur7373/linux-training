@@ -3,20 +3,17 @@
 ## Networking basics
 
 #### Predictable Network Interface Names
-Current version of **systemd/udev** (starting with **v197**) automatically assign predictable, 
-stable network interface names for all local network interfaces. 
-This is a departure from old traditional interface naming scheme 
-("**eth0**", "**eth1**", "**wlan0**", ...).
+For a long time Linux kernel was detecting network devices and assigning them 
+interface names "**eth0**", "**eth1**", "**wlan0**", etc, 
+which became traditional, but not so flexible.
+
+Starting with **v197** current versions of **systemd** suite (and its part - **udev** device manager) automatically assign predictable, 
+stable _network interface names_ for all local network interfaces. 
 
 Current network interfaces names can be listed this way:
-
-`ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
-
-or
-
-`nmcli d`
-
-`nmcli c`
+* `ip l | grep mtu | sed 's/://g' | awk '{print $1,$2}' `
+* `nmcli d`
+* `nmcli c`
 
 
 The names have two-character prefixes based on the type of interface:
