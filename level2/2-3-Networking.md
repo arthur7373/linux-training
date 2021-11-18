@@ -1,4 +1,4 @@
-# Linux Administration and Networking Basics (level 2) <br />Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
+# Linux Administration and Networking Basics (level 2) <br /> Linux-ի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
 ## Networking basics
 
@@ -16,24 +16,19 @@ Current network interfaces names can be listed this way:
 * `nmcli c`
 
 
-The names have two-character prefixes based on the type of interface:
-`en` for Ethernet,
-&nbsp; 
-`wl` for wireless LAN (WLAN),
-&nbsp;
-`ww` for wireless wide area network (WWAN).
+The names have two-character prefixes based on the type of interface:<br />
+`en` for Ethernet,<br />
+`wl` for wireless LAN (WLAN),<br />
+`ww` for wireless wide area network (WWAN)<br />
 
 Most of the modern Linux distributions will have first network interface name 
 `enp0s3`. <br />
 Second network interface most probably will be `enp0s8`.
 
-`enp0s3` meaning: 
-
-**en** - ethernet 
-
-**p0** - peripheral/prefix/bus number 0
-
-**s3** - slot/device number 3
+`enp0s3` meaning:<br />
+**en** - ethernet<br />
+**p0** - peripheral/prefix/bus number 0<br />
+**s3** - slot/device number 3<br />
 
 More info: https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
 https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names
