@@ -16,8 +16,8 @@ The names have two-character prefixes based on the type of interface:<br />
 `ww` for wireless wide area network (WWAN)<br />
 
 Most of the modern Linux distributions will have first network interface name 
-`enp0s3`. <br />
-Second network interface most probably will be `enp0s8`.
+`enp0s3`  ( or `ens33`) <br />
+Second network interface most probably will be `enp0s8` ( or `ens37`).
 
 `enp0s3` meaning:<br />
 **en** - ethernet<br />
@@ -73,6 +73,11 @@ ip a
 ```
 There is old, deprecated `ifconfig` command, that should be avoided to use.
 
+### ARP Table
+`arp` command allows to see current ARP table (`arp –an`)  
+It is old command and the new equivalent is: <br>
+`ip n[eigh]`
+
 ### Important Network Files.
 
 * `/etc/resolv.conf` This file specifies the IP addresses of DNS servers. 
@@ -80,7 +85,6 @@ Depending on the way you configure network it may be possible to manually
 edit it or not.Unless configured to do otherwise, the network initialization
 scripts. More info can be found in the file itself, 
 under comment lines in the top.
-
 
 * `/etc/hosts` Main purpose of this file is to specify hostnames without DNS.
 The use of this file before DNS resolving `/etc/resolv.conf` is defined in 
@@ -146,10 +150,11 @@ Many ‘well known’ ports published for client-server applications can be foun
 | 993 | IMAPS (IMAP over SSL/TLS) 
 
 
-* `/bin/netstat -nlpt` - Current TCP ports and appropriate processes listening
-* `/bin/netstat -nlpu` - Current UDP ports and appropriate processes listening
-* `/bin/netstat -an`  - Active connections
-* `/bin/ss -nlpt` - Alternative command to `netstat`
+* `netstat -nlpt` - Current TCP ports and appropriate processes listening
+* `netstat -nlpu` - Current UDP ports and appropriate processes listening
+* `netstat -ant`  - Active TCP connections
+* `netstat -anu`  - Active UDP connections
+* `ss -nlpt` - Alternative command to `netstat`
 
 
 ### Network Tools
@@ -172,10 +177,6 @@ Options:
 the network and the reliability of those machines. Each cycle lasts one second_
 * **-u**	_Use UDP datagrams instead of ICMP ECHO (useful if “ICMP limiting” is found somewhere)_
 
-### ARP Table
-`arp` command allows to see current ARP table (`arp –an`)  
-It is old command and the new equivalent is: <br>
-`ip n[eigh]`
 
 ### Network Traffic Monitor Tools
 
