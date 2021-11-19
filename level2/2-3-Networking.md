@@ -156,7 +156,6 @@ Many ‘well known’ ports published for client-server applications can be foun
 * `netstat -anu`  - Active UDP connections
 * `ss -nlpt` - Alternative command to `netstat`
 
-
 ### Network Tools
 
 * `ping`
