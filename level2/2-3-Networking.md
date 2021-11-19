@@ -13,25 +13,27 @@ stable _network interface names_ for all local network interfaces.
 The names have two-character prefixes based on the type of interface:<br />
 `en` for Ethernet,<br />
 `wl` for wireless LAN (WLAN),<br />
-`ww` for wireless wide area network (WWAN)<br />
 
 Most of the modern Linux distributions will have first network interface name 
-`enp0s3`  ( or `ens33`) <br />
-Second network interface most probably will be `enp0s8` ( or `ens37`).
+`enp0s3` <br>
+Second network interface most probably will be `enp0s8`
 
 `enp0s3` meaning:<br />
 **en** - ethernet<br />
 **p0** - peripheral/prefix/bus number 0<br />
 **s3** - slot/device number 3<br />
 
-More info: <br />
-https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/ <br />
-https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names <br />
+There are different naming schemes supported by **systemd**. Interface name examples:<br>
+* `ens33`, `ens192`
+* `eno16780032`
+* `enx78e7d1ea46da`
 
-Recent distributions have special _man_ for it:<br />
-```bash
-man systemd.net-naming-scheme
-```
+Recent distributions have special _man_ for it: `man systemd.net-naming-scheme`
+
+More details can be found at: <br />
+* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/ch-consistent_network_device_naming#sec-Naming_Schemes_Hierarchy<br>
+* https://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/ <br />
+* https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/networking_guide/sec-understanding_the_predictable_network_interface_device_names <br />
 
 ### Configuration of network interfaces. <br />  
 
