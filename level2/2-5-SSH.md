@@ -38,9 +38,6 @@ in SSH config directory: `~/.ssh`
 
 * `ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_myserver`
 
-Windows version:
-* `ssh-keygen -t rsa -b 4096 -f c:\Users\[username]\.ssh\id_myserver`
-
 Generally you can go forward with _Enter_'s. You may add security by specifying the passphrase, 
 but it has to be entered every time the key is used for authentication.
 
@@ -97,7 +94,15 @@ sftp -i ~/.ssh/id_myserver 10.6.0.111
 
 1. Create keypair on one system and copy to another. Then try connecting without password.
 
+
 2. Try connecting from Windows to Linux using available Windows clients.
+
+
+3. Enter Windows `PowerShell`. 
+Generate keypair and transfer to Linux to connect without password.
+* `ssh-keygen -t rsa -b 4096 -f c:\Users\[username]\.ssh\id_myserver`
+* `cd .ssh`
+* `cat id_myserver.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'`
 
 ### TCP wrappers
 TCP Wrapper is a host-based ACL system, used to filter network access to specific network services. 
