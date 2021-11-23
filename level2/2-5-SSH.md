@@ -18,7 +18,7 @@ SSH allows:
 Examples:<br>
 * `ssh student@172.16.1.145`
 * `ssh -l student 172.16.1.134 date`
-* `ssh root@172.16.1.145 echo "Hello Linux" > /tmp/hello`
+* `ssh root@172.16.1.145 ' echo "Hello Linux" > /tmp/hello' `
 * `scp -r student@172.16.1.83:/etc/fonts /tmp`
 * `scp  student@172.16.1.134:/bin/ls  root@172.16.1.145:/tmp`
 * `sftp 10.10.10.111`
