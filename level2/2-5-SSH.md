@@ -97,7 +97,6 @@ sftp -i ~/.ssh/id_myserver 10.6.0.111
 
 1. Create keypair on one system and copy to another. Then try connecting without password.
 
-
 2. Try connecting from Windows to Linux using available Windows clients.
 
 ### TCP wrappers
