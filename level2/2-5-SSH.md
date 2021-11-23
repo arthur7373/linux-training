@@ -19,7 +19,7 @@ Examples:<br>
 * `ssh student@172.16.1.145`
 * `ssh -l student 172.16.1.134 date`
 * `ssh root@172.16.1.145 ' echo "Hello Linux" > /tmp/hello' `
-* `scp -r student@172.16.1.83:/etc/fonts /tmp`
+* `scp -r student@172.16.1.83:/etc/sysconfig /tmp`
 * `scp  student@172.16.1.134:/bin/ls  root@172.16.1.145:/tmp`
 * `sftp 10.10.10.111`
 
@@ -87,10 +87,10 @@ or just run a single command remotely.
 Also you can use sftp and scp commands as well - all that without password.
 
 ```bash
-ssh  10.6.0.111
-ssh  student@10.6.0.111 /bin/date
-scp  student@10.6.0.111:/bin/ls  ./
-sftp 10.6.0.111
+ssh -i ~/.ssh/id_myserver 10.6.0.111
+ssh -i ~/.ssh/id_myserver student@10.6.0.111 /bin/date
+scp -i ~/.ssh/id_myserver student@10.6.0.111:/bin/ls  ./
+sftp -i ~/.ssh/id_myserver 10.6.0.111
 ```
 
 #### PRACTICE
