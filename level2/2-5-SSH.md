@@ -3,7 +3,7 @@
 ## SSH
 
 **SSH** stands for ‘Secure SHell’. 
-Today it's Client/Server-based de-facto stadard for network remote access.
+Today it's Client/Server-based de-facto standard for network remote access.
 SSH Clients are included in almost all Linux versions out of the box 
 (recent versions of Windows also include SSH Client).
 
@@ -155,15 +155,16 @@ sshd : client-2.example.com : deny
 
 ### SSH HardeningTips
 
-Changes below are to be done in the SSH Server config:
+Changes below are to be done in the SSH Server configuration file:
+
 `/etc/ssh/sshd_config`
 
 #### Changing the listening port
 Some say that obscurity is not security but that's not true. 
 Any measure that makes attacking your system harder can be valid. 
-One of the effective measures is changing the SSH port. 
-> NOTE: In case of firewall, it should be adjusted for the new SSH port
-
+One of the effective measures is **changing the SSH port**. 
+> NOTE: If firewall (`firewalld`/`ufw`) is active, then its settings 
+> need to be adjusted for the new SSH port too.
 
 ```bash
 #Port 22
@@ -300,11 +301,6 @@ See more: http://www.unixlore.net/articles/five-minutes-to-even-more-secure-ssh.
 https://sanctum.geek.nz/arabesque/restricting-public-keys/
 
 
-
-
-
-
-
 ### SSH as a filesystem: sshfs
 Using the FUSE project with `sshfs`, it's possible to mount a remote 
 filesystem over SSH. CentOS package for `sshfs` is available from **EPEL** repository. 
@@ -330,66 +326,23 @@ Automounting can be done by adding the appropriate line to `/etc/fstab`,
 like:
 `sshfs#user@remote.host:/somedir /somemydir fuse uid=1000,gid=1000 0 0`
 
-### Passphrase automation
-(it's necessarry to set key-pair with passphrase first)
 
-If used passphrase with your keypair and don't want to reenter your passphrase every time you use your SSH key, you can add your key to the SSH agent, which manages your SSH keys and remembers your passphrase.
+### Rsync
 
-Start SSH-Agent (if not started at login)
+Rsync provides fast incremental file transfer. It synchronizes files and 
+directories from one location to another. 
+An important feature of rsync not found in most similar programs/protocols 
+is that the mirroring takes place with only one transmission in each direction. 
+rsync can copy or display directory contents and copy files, optionally using 
+compression and recursion. 
+
 ```bash
-eval `ssh-agent`
+rsync [OPTIONS] SOURCE DESTINATION
 ```
-Add Identity
-`ssh-add`
 
-Enter passphrase for /home/cent/.ssh/id_rsa:
-Identity added: /home/cent/.ssh/id_rsa (/home/cent/.ssh/id_rsa)
+The most important `rsync` options are: 
 
-Confirm
-ssh-add -l
-
-Try to conenct with SSH without passphrase and run ‘id’ command
-ssh [hostname] id
-
-To exit from SSH-Agent run
-eval `ssh-agent -k`
-
-Parallel SSH to connect to multiple hosts
-(https://www.server-world.info/en/note?os=CentOS_7&p=ssh&f=9)
-Parallel SSH or PSSH is a good tool to use for executing commands in an environment where a System Administrator has to work with many servers on a network. It will make it easy for commands to be executed remotely on different hosts on a network.
-
-Install from EPEL
-yum --enablerepo=epel -y install pssh 
-
-Below example will work in case of key-pair authentication without passphrase.
-If passphrase is set in key-pair, start SSH-Agent first to automate inputting passphrase.
-(https://www.server-world.info/en/note?os=CentOS_7&p=ssh&f=8)
-
-Connect to hosts and run ’df’ command
-pssh -H "10.0.0.51 10.0.0.52" -i "df -Th"
-
-It's possible to read host list from a file
-cat > pssh_hosts
-student@10.0.0.51:22
-student@10.0.0.52:22
-
-pssh -h pssh_hosts -i "uptime"
-
-It's possible to connect with password authentication too, but it needs passwords on all hosts are the same one.
-
-PSSH package includes pscp, prsync, pslurp, pnuke commands which can be used the same way as pssh.
-pscp – copying files in parallel to a number of hosts.
-prsync – efficiently copying files to multiple hosts in parallel.
-pnuke – kills processes on multiple remote hosts in parallel.
-pslurp – copies files from multiple remote hosts to a central host in parallel.
-
-
-Rsync - an open source utility that provides fast incremental file transfer
-Rsync - synchronizes files and directories from one location to another. An important feature of rsync not found in most similar programs/protocols is that the mirroring takes place with only one transmission in each direction. rsync can copy or display directory contents and copy files, optionally using compression and recursion. See man rsync for more info.
-
-rsync [OPTIONS] SRC DEST
-
-The most important rsync options are: 
+```bash
 -a, --archive		archive mode; same as -rlptgoD (no -H)
 -r, --recursive          	recurse into directories
 -l, --links                 	copy symlinks as symlinks
@@ -404,18 +357,35 @@ The most important rsync options are:
 --delete		delete files that don't exist on sender
 -n, --dry-run              perform a trial run with no changes made
 -z, --compress	compress file data during the transfer
+```
 
 Examples:
-rsync -av --delete /etc/fonts 172.16.1.196:/tmp 
+```bash
+rsync -av --delete /etc/fonts 172.16.1.196:/tmp
+
 rsync -av --exclude="fonts.conf" --delete 172.16.1.196:/tmp /etc/fonts 
+```
 
-Backup via Rsync Server
-On Source Host
-yum -y install rsync
+#### PRACTICE Backup via Rsync
+1. On Source Host:<br>
+Ensure you have `rsync` package installed.
+`yum -y install rsync`
 
-On Destination Host
+
+2. On Destination Host<br>
+* Ensure you have `rsync` package installed & server enabled and running.
+```bash
 yum -y install rsync
-nano /etc/rsyncd.conf
+systemctl start rsyncd
+systemctl enable rsyncd
+```
+* Prepare Backaup
+```bash
+mkdir /BACKUP
+```
+
+* Add following to `/etc/rsyncd.conf`:
+```bash
 # any name you like
 [backup]
 # destination directory for copy
@@ -427,72 +397,74 @@ list = true
 uid = root
 gid = root
 read only = false
+```
 
-mkdir /BACKUP
-systemctl start rsyncd
-systemctl enable rsyncd
+3. Execute rsync on Source Host like follows.
+`rsync -avz --delete /home/ 172.16.1.196::backup`
 
-Execute rsync on Source Host like follows.
-rsync -avz --delete /home/ 172.16.1.196::backup
-
-Add to cron if you'd like to run reguraly.
+4. Add to cron if you'd like to run regularly.
 
 
  
-Screen manager
+### Screen manager
 
 Screen  is  a  remote terminal session manager that multiplexes a single connection between several windows (typically interactive shells). It provides the detaching/reattaching functionality. See man screen for more info.
 
-screen -RD
+`screen -RD`
 
 Each process gets its own virtual window, and you can bounce between virtual windows interacting with each process. The processes managed by screen continue to run when their window is not active. Screen offers the ability to detach from a session and then attach to it at a later time. When detached from a session, the processes screen is managing continue to run. You can then re-attach to the session at a later time, and your terminals are still there, the way you left them.
 
 Before actually running screen, it's important to understand how to interact with it. Screen sends all entered text to the current window, with the exception of the command character. The default command character is Ctrl-a (press the Ctrl and the a key at the same time).
 The command character is used to notify screen that you'd like to control screen itself, rather than the application in the current window. The key pressed after the command character designates which screen command you would like to perform. Some of the more useful commands and their key bindings are shown in table below:
 Keys bindings in screen:
+```bash
 Ctrl+a c		new window
 Ctrl+a n		next window
 Ctrl+a p	previous window
 Ctrl+a d		detach screen from terminal.	Run 'screen -RD' to reattach
 Ctrl+a A	set window title
 Ctrl+a k	kill current window
+```
 
-screen 
+#### PRACTICE
+
 Start the screen
+`screen`
 (Detach from the screen with " Ctrl+a d")
 
-screen -ls
+
+`screen -ls`
 There is a screen on:
         3209.pts-0.server (Dead ???)
         5345.pts-0.server (Detached)
 Remove dead screens with 'screen -wipe'.
 2 Sockets in /home/student/.screen.
 
-screen -wipe
+`screen -wipe`
 Remove dead screens
 
-screen -ls
+`screen -ls`
 There is a screen on:
         5345.pts-0.server (Detached)
 1 Sockets in /home/student/.screen.
 
-screen -rd  5345.pts-0.server
+`screen -rd  5345.pts-0.server`
 Reattach a session  5345.pts-0.server 
 (Detach again from the screen with "Ctrl+a d")
 screen -x 5345
 Attach  to  a  not  detached screen session. (Multi display mode)
 
-exit
+`exit`
 Close current screen session
 
 
+> There is also `-d -m` switch combination to start  screen  in  "detached" mode, i.e. create a new session but don't attach to it. It’s useful for running scripts.
 
-There is also -d -m switch combination to start  screen  in  "detached" mode, i.e. create a new session but don't attach to it. It’s useful for running scripts.
-
-.screenrc is the per-user configuration file in your home directory, 
+`.screenrc` is the per-user configuration file in your home directory, 
 and /etc/screenrc is the system-wide configuration file that applies to all users.
 
 Example of useful “.screenrc” config file:  
+```bash
 # Save this in ~/.screenrc
 # Use bash
 shell /bin/bash
@@ -511,13 +483,14 @@ screen -t 'test'  1 bash # Make screen - test
 screen -t 'workspace' 2 bash # Make screen for general work
 # Switch to the workspace screen
 select 2
+```
+
+> Another alternative programs are: `tmux` 
+> http://habrahabr.ru/post/126996/
 
 
-Another alternative programs are:
-•	tmux (yum install tmux)
-http://habrahabr.ru/post/126996/
- 
-Fail2ban – protect from brute-force attacks (SSH example)
+
+### Fail2ban – protect from brute-force attacks (SSH example)
 
 If you pay attention to application logs for SSH service, you may see repeated, systematic login attempts that represent brute-force attacks by users and bots alike.
 
@@ -532,7 +505,9 @@ Once the installation has finished, use systemctl to enable the fail2ban service
 systemctl enable fail2ban
 Fail2ban service keeps its configuration files in the /etc/fail2ban directory. There, you can find a file with default values called jail.conf. Since this file may be overwritten by package upgrades, we shouldn't edit it in-place. Instead, we'll write a new file called jail.local. Any values defined in jail.local will override those in jail.conf.
 
-/etc/fail2ban/jail.local
+`/etc/fail2ban/jail.local`
+
+```bash
 [DEFAULT]
 # Ban hosts for one hour
 bantime = 3600
@@ -543,37 +518,55 @@ maxretry = 3
 banaction = iptables-multiport
 [sshd]
 enabled = true
+```
+
 Restart the fail2ban service using systemctl:
-systemctl restart fail2ban
+
+`systemctl restart fail2ban`
+
 In order to check that the service is running, we can use fail2ban-client:
-fail2ban-client status
+
+`fail2ban-client status`
+
 You can also get more detailed information about a specific jail:
-fail2ban-client status sshd
+
+`fail2ban-client status sshd`
+
 Now try to login with ssh and enter wrong password several times. 
-After that run again:  fail2ban-client status sshd
+After that run again:  
+
+`fail2ban-client status sshd`
+
 You will see your IP banned.
+
 Also the following command will show the current firewall rules enabled, where you will see you IP:
+
+```
 iptables -L -n
 iptables -S
+```
 You can remove your IP from ban list by:
-fail2ban-client set sshd unbanip <IP address>
 
-You can create whitelist of you subnets with the following option:
+`fail2ban-client set sshd unbanip <IP address>`
+
+You can create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
+```
 ignoreip = 127.0.0.1/8 192.168.0.0/16 10.0.0.0/8
+```
 
+For protecting other services see what kind of other filters are available:
+`ls /etc/fail2ban/filter.d`
 
-See what kind of other filters are available:
-
-ls /etc/fail2ban/filter.d
-
-For example add to  /etc/fail2ban/jail.local
- [nginx-botsearch]
+For example add to `/etc/fail2ban/jail.local`
+```bash
+[nginx-botsearch]
 enabled = true
 [apache-botsearch]
 enabled = true
+```
 
 Restart the fail2ban service using systemctl:
-systemctl restart fail2ban
+`systemctl restart fail2ban`
 
 
 
