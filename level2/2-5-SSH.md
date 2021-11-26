@@ -211,7 +211,7 @@ PasswordAuthentication no
 
 you can specify that only the root user must use a key with
 ```bash
-PermitRootLogin without-password"
+PermitRootLogin without-password
 ```
 
 Save the file and restart the SSH daemon:<br>
