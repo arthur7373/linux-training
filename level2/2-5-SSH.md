@@ -110,6 +110,12 @@ TCP Wrapper is a host-based ACL system, used to filter network access to specifi
 It is old enough and not widely used anymore, but in most Linux versions 
 TCP wrapper support is integrated into SSH, so it works for SSH and it's important to know how. 
 
+> IMPORTANT! Different Linux distributions implement TCP Wrappers differently!
+> More info:   
+> `man 5 hosts_access` & `man 5 hosts_options`
+>
+> > TCP Wrappers were **deprecated** and **removed** from **CentOS/RHEL 8** (https://access.redhat.com/solutions/3906701)
+
 Everything related to TCP wrapper is configured in two text files: 
 * `/etc/hosts.allow`
 * `/etc/hosts.deny`
@@ -133,7 +139,7 @@ It is not necessary (or even possible) to list every single address that may con
 ```bash
 # /etc/hosts.allow: list of hosts that are allowed to access the system.
 #                   See the manual pages hosts_access(5) and hosts_options(5).
-sshd: 199.170.177.  10.10.10.10 
+sshd: 127.0.0.1  10.10.10.10 
 ```
 
 ```bash
@@ -141,21 +147,6 @@ sshd: 199.170.177.  10.10.10.10
 #                  See the manual pages hosts_access(5) and hosts_options(5).
 sshd: ALL
 ```
-
-> IMPORTANT! Different Linux distributions implement TCP Wrappers differently!
-> More info:   
-> `man 5 hosts_access`
-> `man 5 hosts_options`
-> http://static.closedsrc.org/articles/dn-articles/hosts_allow.html <br>
-> It is also possible to specify a facility using the severity option. The following example logs any SSH connection attempts by hosts from the example.com domain to the local7 facility with a priority of alert:<br>
-> `sshd : .example.com : severity local7.alert`
-
-Option fields also allow administrators to explicitly allow or deny hosts in a single rule by adding the allow or deny directive as the final option.
-
-For instance, the following two rules allow SSH connections from client-1.example.com, but deny connections from client-2.example.com:
-
-sshd : client-1.example.com : allow
-sshd : client-2.example.com : deny
 
 
 ### SSH HardeningTips
