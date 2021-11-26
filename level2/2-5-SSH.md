@@ -215,7 +215,7 @@ PermitRootLogin without-password
 ```
 
 Save the file and restart the SSH daemon:<br>
-`service sshd restart`
+`systemctl restart sshd`
 
 Check the port to ensure IPv6 is off now:<br>
 `lsof -i  | grep ssh`
