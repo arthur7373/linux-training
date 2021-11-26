@@ -100,7 +100,8 @@ sftp -i ~/.ssh/id_myserver 10.6.0.111
 
 3. Enter Windows `PowerShell`. 
 Generate keypair and transfer to Linux to connect without password.
-* `ssh-keygen -t rsa -b 4096 -f c:\Users\[username]\.ssh\id_myserver`
+* `mkdir c:\Users\[username]\.ssh`
+* `ssh-keygen -t rsa -b 4096 -f c:\Users\[username]/.ssh/id_myserver`
 * `cd .ssh`
 * `cat id_myserver.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'`
 
@@ -263,8 +264,9 @@ and `specialuser` can connect from anywhere.
 
 ### Restricting password-less SSH logins to particular IP addresses
 
-Rather than just storing the public-part of a key to your users `~/.ssh/authorized_keys` 
-file you also store some configuration entries:
+Rather than just storing the public keys of connecting users 
+`~/.ssh/authorized_keys` file also allows to 
+specify some additional configuration entries:
 
 Options are comma-separated and are documented in the `man sshd`, 
 under the section "AUTHORIZED_KEYS FILE FORMAT". 
@@ -284,14 +286,20 @@ to an SSH agent on their client, using the -A or ForwardAgent option to ssh.
 As a good example of a secure login this is a good start:
 
 ```bash
+from="127.0.0.1,10.10.10.*" ssh-rsa ...
+```
+
+Another possible restrictions are, to disable use of agent-forwarding, port-forwarding, etc. whilst still allowing interactive logins.
+
+```bash
 from="!127.0.0.1,10.0.0.?",no-agent-forwarding,no-port-forwarding,no-X11-forwarding ssh-rsa ...
 ```
 
-This disables the use of agent-forwarding, port-forwarding, etc. whilst still allowing interactive logins.
-
+```bash
 * - Matches zero or more characters
 ? - Matches exactly one character
 ! - Negates the host pattern match
+```
 
 If you were using SSH for special-purpose logins you could restrict things further, by denying interactive login-shells and forcing the execution of a particular command:
 
