@@ -274,31 +274,32 @@ to an SSH agent on their client, using the -A or ForwardAgent option to ssh.
 * no-X11-forwarding  - Prevents the key user from forwarding X11 processes.
 * no-pty - Prevents the key user from being allocated a tty device at all (does not allow interactive login)
     
-As a good example of a secure login this is a good start:
+#### PRACTICE
+Add to your following to the line of you public key in `~/.ssh/authorized_keys` file: 
 
 ```bash
-from="127.0.0.1,10.10.10.*" ssh-rsa ...
+from="127.0.0.1,10.10.10.*" command="date" ssh-rsa ...
 ```
+ 
+> ```bash
+> * - Matches zero or more characters
+> ? - Matches exactly one character
+> ! - Negates the host pattern match
+> ```
 
-Another possible restrictions are, to disable use of agent-forwarding, port-forwarding, etc. whilst still allowing interactive logins.
+Now try connecting from other IP address, next from allowed IP address.
+Try executing `date` command, which is only one allowed.
+
+
+Such restriction can be useful for remote backups scripts, 
+as it can ensure that your remote user can only execute the 
+expected command - and not anything else.
+
+Another useful restrictions are, to disable use of agent-forwarding, port-forwarding, X11 and interactive logins.
 
 ```bash
-no-agent-forwarding,no-port-forwarding,no-X11-forwarding ssh-rsa ...
+no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-pty ssh-rsa ...
 ```
-
-```bash
-* - Matches zero or more characters
-? - Matches exactly one character
-! - Negates the host pattern match
-```
-
-If you were using SSH for special-purpose logins you could restrict things further, by denying interactive login-shells and forcing the execution of a particular command:
-
-```bash
-no-pty,command="uptime" ssh-rsa ..
-```
-
-This is useful for remote backups carried out via rsync + ssh, as it can ensure that your remote user can only execute the expected command - and not anything else.
 
 See more: http://www.unixlore.net/articles/five-minutes-to-even-more-secure-ssh.html
 https://sanctum.geek.nz/arabesque/restricting-public-keys/
@@ -499,14 +500,25 @@ If you pay attention to application logs for SSH service, you may see repeated, 
 
 Fail2ban can mitigate this problem by creating rules that automatically alter your firewall configuration based on a predefined number of unsuccessful login attempts. This will allow your server to respond to illegitimate access attempts without intervention from you.
 
-Install Fail2ban
+#### Install Fail2ban
 
-While Fail2ban is not available in the official CentOS package repository, it is packaged for the EPEL project. EPEL, standing for Extra Packages for Enterprise Linux, can be installed with a release package that is available from CentOS:  yum -y install epel-release
+While Fail2ban is not available in the official CentOS package repository, 
+it is packaged for the EPEL project. 
+EPEL, standing for Extra Packages for Enterprise Linux, 
+can be installed with a release package that is available from CentOS: 
 
-Now we should be able to install the fail2ban package:  yum -y install fail2ban
+`yum -y install epel-release`
+
+Now we should be able to install the fail2ban package:  
+
+`yum -y install fail2ban`
+
 Once the installation has finished, use systemctl to enable the fail2ban service:
-systemctl enable fail2ban
-Fail2ban service keeps its configuration files in the /etc/fail2ban directory. There, you can find a file with default values called jail.conf. Since this file may be overwritten by package upgrades, we shouldn't edit it in-place. Instead, we'll write a new file called jail.local. Any values defined in jail.local will override those in jail.conf.
+
+`systemctl enable fail2ban`
+
+Fail2ban service keeps its configuration files in the `/etc/fail2ban` directory. There, you can find a file with default values called `jail.conf`. 
+Since this file may be overwritten by package upgrades, we shouldn't edit it in-place. Instead, we'll write a new file called `jail.local`. Any values defined in `jail.local` will override those in `jail.conf`.
 
 `/etc/fail2ban/jail.local`
 
@@ -535,12 +547,13 @@ You can also get more detailed information about a specific jail:
 
 `fail2ban-client status sshd`
 
-Now try to login with ssh and enter wrong password several times. 
-After that run again:  
+#### PRACTICE
+Now try to login with ssh and enter wrong password 3 or more times. 
+After that run again:
 
 `fail2ban-client status sshd`
 
-You will see your IP banned.
+You should see your IP banned.
 
 Also the following command will show the current firewall rules enabled, where you will see you IP:
 
@@ -548,17 +561,31 @@ Also the following command will show the current firewall rules enabled, where y
 iptables -L -n
 iptables -S
 ```
-You can remove your IP from ban list by:
+Now remove your IP from ban list by:
 
 `fail2ban-client set sshd unbanip <IP address>`
 
-You can create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
+Create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
 ```
 ignoreip = 127.0.0.1/8 192.168.0.0/16 10.0.0.0/8
 ```
+Restart the fail2ban:
 
-For protecting other services see what kind of other filters are available:
+`systemctl restart fail2ban`
+
+Now again try to login with ssh and enter wrong password 3 or more times.
+After that run again:
+
+`fail2ban-client status sshd`
+
+You should not see your IP address banned.
+And you should be able to login from that IP address
+
+
+For protecting other services you may see what kind of other filters are available:
+
 `ls /etc/fail2ban/filter.d`
+
 
 For example add to `/etc/fail2ban/jail.local`
 ```bash
@@ -568,8 +595,6 @@ enabled = true
 enabled = true
 ```
 
-Restart the fail2ban service using systemctl:
+After any change remember to restart the fail2ban service:
+
 `systemctl restart fail2ban`
-
-
-
