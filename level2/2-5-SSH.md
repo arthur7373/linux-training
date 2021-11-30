@@ -279,7 +279,12 @@ specify some additional configuration entries:
 > 
 > * **from="<hostname/ip>"**  _- Prepending from="*.example.com" to the key line would only allow public-key authenticated login if the connection was coming from some host with a reverse DNS of example.com. You can also put IP addresses in here. This is particularly useful for setting up automated processes through keys with null passphrases._
 >
-> 
+>> ```bash
+>> * - Matches zero or more characters
+>> ? - Matches exactly one character
+>> ! - Negates the host pattern match
+>> ```
+>
 > * **command="<command>"**  _- Means that once authenticated, the command specified is run, and the connection is closed. Again, this is useful in automated setups for running only a certain script on successful authentication, and nothing else._
 > 
 > 
@@ -304,11 +309,6 @@ in `~/.ssh/authorized_keys` file:
 from="127.0.0.1,10.10.10.*",command="w" ssh-rsa ...
 ```
  
-> ```bash
-> * - Matches zero or more characters
-> ? - Matches exactly one character
-> ! - Negates the host pattern match
-> ```
 
 Now try connecting:  
 * from allowed IP address
