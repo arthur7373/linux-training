@@ -273,18 +273,27 @@ specify some additional configuration entries:
 Options are comma-separated and are documented in the `man sshd`, 
 under the section "AUTHORIZED_KEYS FILE FORMAT". 
 
-Here are the most useful ones:
+> Here are the most useful ones:
+> 
+> * **from="<hostname/ip>"**  _- Prepending from="*.example.com" to the key line would only allow public-key authenticated login if the connection was coming from some host with a reverse DNS of example.com. You can also put IP addresses in here. This is particularly useful for setting up automated processes through keys with null passphrases._
+>
+> 
+> * **command="<command>"**  _- Means that once authenticated, the command specified is run, and the connection is closed. Again, this is useful in automated setups for running only a certain script on successful authentication, and nothing else._
+> 
+> 
+> * **no-agent-forwarding**  _- Prevents the key user from forwarding authentication requests 
+> to an SSH agent on their client, using the -A or ForwardAgent option to ssh._
+>
+> 
+> * **no-port-forwarding** - _Prevents the key user from forwarding ports using -L and -R._
+>
+> 
+> * **no-X11-forwarding**  - _Prevents the key user from forwarding X11 processes._
+>
+> 
+> * **no-pty** - _Prevents the key user from being allocated a tty device at all (does not allow interactive login)_
+>    
 
-* from="<hostname/ip>"  - Prepending from="*.example.com" to the key line would only allow public-key authenticated login if the connection was coming from some host with a reverse DNS of example.com. You can also put IP addresses in here. This is particularly useful for setting up automated processes through keys with null passphrases.
-
-* command="<command>"  - Means that once authenticated, the command specified is run, and the connection is closed. Again, this is useful in automated setups for running only a certain script on successful authentication, and nothing else.
-
-* no-agent-forwarding  - Prevents the key user from forwarding authentication requests 
-to an SSH agent on their client, using the -A or ForwardAgent option to ssh.
-* no-port-forwarding - Prevents the key user from forwarding ports using -L and -R.
-* no-X11-forwarding  - Prevents the key user from forwarding X11 processes.
-* no-pty - Prevents the key user from being allocated a tty device at all (does not allow interactive login)
-    
 #### PRACTICE
 Add to your following to the line of you public key, before "**ssh-rsa ...**" 
 in `~/.ssh/authorized_keys` file: 
