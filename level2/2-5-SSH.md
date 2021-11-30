@@ -301,14 +301,14 @@ specify some additional configuration entries:
 > * **no-pty** - _Prevents the key user from being allocated a tty device at all (does not allow interactive login)_
 >    
 
-#### PRACTICE
+#### PRACTICE 1
+
 Add to your following to the line of you public key, before "**ssh-rsa ...**" 
 in `~/.ssh/authorized_keys` file: 
 
 ```bash
 from="127.0.0.1,10.10.10.*",command="w" ssh-rsa ...
 ```
- 
 
 Now try connecting:  
 * from allowed IP address
@@ -322,15 +322,15 @@ Such restriction can be useful for remote backups scripts,
 as it can ensure that your remote user can only execute the 
 expected command - and not anything else.
 
-Another useful restrictions are, to disable use of agent-forwarding, port-forwarding, X11 and interactive logins.
+> Another useful restrictions are, to disable use of agent-forwarding, port-forwarding, X11 and interactive logins.
+> 
+> >  ```bash
+> > no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-pty ssh-rsa ...
+> > ```
 
-```bash
-no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-pty ssh-rsa ...
-```
+#### PRACTICE 2
 
-#### PRACTICE
-
-Restricting key-based command execution. Issue is that `command=` option is not supporting arguments.
+`command=` option is not supporting arguments.
 Solution is in creating additional intermediate script like one below. 
 
 1. Create file `/opt/checkssh` and make it executable.
@@ -443,6 +443,8 @@ read only = false
 `rsync -avz --delete /home/ 172.16.1.196::backup`
 
 4. Add to cron if you'd like to run regularly.
+
+
 
 
 ### SSH as a filesystem: sshfs
