@@ -233,27 +233,38 @@ AllowGroups
 
 The format for all of them will be the same - 
 a space-separated list of users or group names, 
-with optional host names. Here is an example:
+with optional host names.
 
-1. To limit any SSH users to access only from specific IP range (e.g. network 9.9.9.0/24) at the bottom of the file /etc/ssh/sshd_config we can add:
+#### PRACTICE
+
+1. Try to limit any SSH users to access only from specific IP range (e.g. network 9.9.9.0/24) 
+at the bottom of the file `/etc/ssh/sshd_config` add:
 ```bash
-AllowUsers *@9.9.9.*
+AllowUsers *@10.10.10.*
 ```
 
-Save the file, restart SSH daemon and this will take effect – only users coming from network
-9.9.9.0/24 will be able to login by ssh, any other source IP will always get “Wrong username or password”
+Save the file, restart SSH daemon, Now only users coming from network
+10.10.10.0/24 should be able to login by ssh, any other source IP will always get “Wrong username or password”
+Try connecting from localhost:
 
-2. To limit some users to access from specific IPs but allow others 
-3. from any address at the bottom of the file `/etc/ssh/sshd_config` we can add:
 ```bash
-AllowUsers  student@1.2.3.4  test@5.6.7.*  specialuser
+ssh 127.0.0.1
 ```
 
-Thus we restrict user `student` to connect only from `1.2.3.4` IP address, 
-user `test` to connect only from `5.6.7.0/24` subnet 
-and `specialuser` can connect from anywhere.
+2. Try to set per-user limited access.
+At the bottom of the file `/etc/ssh/sshd_config` add:
 
-### Restricting password-less SSH logins to particular IP addresses
+```bash
+AllowUsers  student@127.0.0.1  test@10.10.10.*  specialuser
+```
+
+Thus: 
+* we restrict user `student` to connect only from `127.0.0.1` IP address, 
+* user `test` to connect only from `10.10.10.0/24` subnet 
+* and `specialuser` can connect from anywhere.
+
+
+### Restricting key-based SSH access to particular IP addresses
 
 Rather than just storing the public keys of connecting users 
 `~/.ssh/authorized_keys` file also allows to 
