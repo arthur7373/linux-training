@@ -286,10 +286,11 @@ to an SSH agent on their client, using the -A or ForwardAgent option to ssh.
 * no-pty - Prevents the key user from being allocated a tty device at all (does not allow interactive login)
     
 #### PRACTICE
-Add to your following to the line of you public key in `~/.ssh/authorized_keys` file: 
+Add to your following to the line of you public key, before "**ssh-rsa ...**" 
+in `~/.ssh/authorized_keys` file: 
 
 ```bash
-from="127.0.0.1,10.10.10.*" command="date" ssh-rsa ...
+from="127.0.0.1,10.10.10.*",command="w" ssh-rsa ...
 ```
  
 > ```bash
@@ -298,9 +299,13 @@ from="127.0.0.1,10.10.10.*" command="date" ssh-rsa ...
 > ! - Negates the host pattern match
 > ```
 
-Now try connecting from other IP address, next from allowed IP address.
-Try executing `date` command, which is only one allowed.
+Now try connecting:  
+* from allowed IP address
 
+You will get `w` command output
+* from other IP address
+
+You will get password prompt
 
 Such restriction can be useful for remote backups scripts, 
 as it can ensure that your remote user can only execute the 
@@ -312,35 +317,44 @@ Another useful restrictions are, to disable use of agent-forwarding, port-forwar
 no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-pty ssh-rsa ...
 ```
 
-See more: http://www.unixlore.net/articles/five-minutes-to-even-more-secure-ssh.html
-https://sanctum.geek.nz/arabesque/restricting-public-keys/
+#### PRACTICE
 
+Restricting key-based command execution. Issue is that `command=` option is not supporting arguments.
+Solution is in creating additional intermediate script like one below. 
 
-### SSH as a filesystem: sshfs
-Using the FUSE project with `sshfs`, it's possible to mount a remote 
-filesystem over SSH. CentOS package for `sshfs` is available from **EPEL** repository. 
-Make sure you have EPEL and type:<br>
-`yum -y install fuse-sshfs`
+1. Create file `/opt/checkssh` and make it executable.
 
-Once `sshfs` is installed, run it like:<br>
-`sshfs user@remote.host:/somedir /somemydir  -o reconnect`
-
-Example:
 ```bash
-mkdir /media/usr-local
-sshfs user@172.16.1.113:/usr/local  /media/usr-local -o reconnect
+#!/bin/bash
+if [ -n "$SSH_ORIGINAL_COMMAND" ]; then
+    if [[ "$SSH_ORIGINAL_COMMAND" =~ ^ls\  ]]; then
+        echo "`/bin/date`: $SSH_ORIGINAL_COMMAND" >> $HOME/ssh-command-log
+        exec $SSH_ORIGINAL_COMMAND
+    else
+        echo "`/bin/date`: DENIED $SSH_ORIGINAL_COMMAND" >> $HOME/ssh-command-log
+    fi
+fi
 ```
-> To set other UID/GID on copied files we can add:<br>
-> _-o uid=1000,gid=1000_<br>
-> See `man sshfs` for more options
+> NOTE: Allowed command in the above script specifically ends with `\ `, 
+> which means, there should be a space after the command (for options/arguments):
+> 
+> `^ls\ `
+> 
 
-Unmounting can be done like:
-`fusermount -u /media/usr-local`
+`chmod +x /opt/checkssh`
 
-Automounting can be done by adding the appropriate line to `/etc/fstab`, 
-like:
-`sshfs#user@remote.host:/somedir /somemydir fuse uid=1000,gid=1000 0 0`
+2. Modify `~/.ssh/authorized_keys` file:
+```bash
+from="127.0.0.1,10.10.10.*",command="/opt/checkssh" ssh-rsa ...
+```
 
+3. Try run 
+
+`ssh student@127.0.0.1 ls /opt`
+
+`ssh student@127.0.0.1 ls -l /tmp`
+
+The same way other restricted commands can be specified (like `rsync`, discussed below).  
 
 ### Rsync
 
@@ -420,6 +434,31 @@ read only = false
 4. Add to cron if you'd like to run regularly.
 
 
+### SSH as a filesystem: sshfs
+Using the FUSE project with `sshfs`, it's possible to mount a remote 
+filesystem over SSH. CentOS package for `sshfs` is available from **EPEL** repository. 
+Make sure you have EPEL and type:<br>
+`yum -y install fuse-sshfs`
+
+Once `sshfs` is installed, run it like:<br>
+`sshfs user@remote.host:/somedir /somemydir  -o reconnect`
+
+Example:
+```bash
+mkdir /media/usr-local
+sshfs user@172.16.1.113:/usr/local  /media/usr-local -o reconnect
+```
+> To set other UID/GID on copied files we can add:<br>
+> _-o uid=1000,gid=1000_<br>
+> See `man sshfs` for more options
+
+Unmounting can be done like:
+`fusermount -u /media/usr-local`
+
+Automounting can be done by adding the appropriate line to `/etc/fstab`, 
+like:
+`sshfs#user@remote.host:/somedir /somemydir fuse uid=1000,gid=1000 0 0`
+
  
 ### Screen manager
 
@@ -441,44 +480,13 @@ Ctrl+a A	set window title
 Ctrl+a k	kill current window
 ```
 
+Screen has system-wide configuration file: `/etc/screenrc`.
+Each user can create `~/.screenrc` personal configuration file.
+
+
 #### PRACTICE
 
-Start the screen
-`screen`
-(Detach from the screen with " Ctrl+a d")
-
-
-`screen -ls`
-There is a screen on:
-        3209.pts-0.server (Dead ???)
-        5345.pts-0.server (Detached)
-Remove dead screens with 'screen -wipe'.
-2 Sockets in /home/student/.screen.
-
-`screen -wipe`
-Remove dead screens
-
-`screen -ls`
-There is a screen on:
-        5345.pts-0.server (Detached)
-1 Sockets in /home/student/.screen.
-
-`screen -rd  5345.pts-0.server`
-Reattach a session  5345.pts-0.server 
-(Detach again from the screen with "Ctrl+a d")
-screen -x 5345
-Attach  to  a  not  detached screen session. (Multi display mode)
-
-`exit`
-Close current screen session
-
-
-> There is also `-d -m` switch combination to start  screen  in  "detached" mode, i.e. create a new session but don't attach to it. It’s useful for running scripts.
-
-`.screenrc` is the per-user configuration file in your home directory, 
-and /etc/screenrc is the system-wide configuration file that applies to all users.
-
-Example of useful “.screenrc” config file:  
+1. Create “~/.screenrc” config file:  
 ```bash
 # Save this in ~/.screenrc
 # Use bash
@@ -499,6 +507,19 @@ screen -t 'workspace' 2 bash # Make screen for general work
 # Switch to the workspace screen
 select 2
 ```
+2. Start the screen
+`screen`
+(Detach from the screen with " Ctrl+a d")
+
+3. Check `screen -ls`
+
+4. Return back:
+
+`screen -RD`
+
+
+> There is also `-d -m` switch combination to start  screen  in  "detached" mode, i.e. create a new session but don't attach to it. It’s useful for running scripts.
+
 
 > Another alternative programs are: `tmux` 
 > http://habrahabr.ru/post/126996/
@@ -511,7 +532,7 @@ If you pay attention to application logs for SSH service, you may see repeated, 
 
 Fail2ban can mitigate this problem by creating rules that automatically alter your firewall configuration based on a predefined number of unsuccessful login attempts. This will allow your server to respond to illegitimate access attempts without intervention from you.
 
-#### Install Fail2ban
+#### Install and configure Fail2ban
 
 While Fail2ban is not available in the official CentOS package repository, 
 it is packaged for the EPEL project. 
@@ -528,10 +549,14 @@ Once the installation has finished, use systemctl to enable the fail2ban service
 
 `systemctl enable fail2ban`
 
+`systemctl start fail2ban`
+
 Fail2ban service keeps its configuration files in the `/etc/fail2ban` directory. There, you can find a file with default values called `jail.conf`. 
 Since this file may be overwritten by package upgrades, we shouldn't edit it in-place. Instead, we'll write a new file called `jail.local`. Any values defined in `jail.local` will override those in `jail.conf`.
 
-`/etc/fail2ban/jail.local`
+#### PRACTICE
+
+1. Create `/etc/fail2ban/jail.local`
 
 ```bash
 [DEFAULT]
@@ -546,65 +571,61 @@ banaction = iptables-multiport
 enabled = true
 ```
 
-Restart the fail2ban service using systemctl:
+2. Restart the fail2ban service using systemctl:
 
 `systemctl restart fail2ban`
 
-In order to check that the service is running, we can use fail2ban-client:
+3. Check that the service is running:
 
 `fail2ban-client status`
 
-You can also get more detailed information about a specific jail:
+4. Get more detailed information about a specific jail:
 
 `fail2ban-client status sshd`
 
-#### PRACTICE
-Now try to login with ssh and enter wrong password 3 or more times. 
-After that run again:
+5. Now try to login with ssh and enter wrong password 3 or more times. 
+
+6. After that run again:
 
 `fail2ban-client status sshd`
 
 You should see your IP banned.
 
-Also the following command will show the current firewall rules enabled, where you will see you IP:
+> Also the following command will show the current firewall rules enabled, 
+where you will see you IP:
+> 
+> ```
+> iptables -L -n
+> iptables -S
+> ```
 
-```
-iptables -L -n
-iptables -S
-```
-Now remove your IP from ban list by:
+7. Now remove your IP from ban list by:
 
 `fail2ban-client set sshd unbanip <IP address>`
 
-Create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
+8. Create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
 ```
 ignoreip = 127.0.0.1/8 192.168.0.0/16 10.0.0.0/8
 ```
-Restart the fail2ban:
+
+9. Restart the fail2ban:
 
 `systemctl restart fail2ban`
 
-Now again try to login with ssh and enter wrong password 3 or more times.
-After that run again:
+10. Now again try to login with ssh and enter wrong password 3 or more times.
+You should not be banned. Run again:
 
 `fail2ban-client status sshd`
 
 You should not see your IP address banned.
-And you should be able to login from that IP address
+And you should be able to login.
+
+<br><br>
 
 
 For protecting other services you may see what kind of other filters are available:
 
 `ls /etc/fail2ban/filter.d`
-
-
-For example add to `/etc/fail2ban/jail.local`
-```bash
-[nginx-botsearch]
-enabled = true
-[apache-botsearch]
-enabled = true
-```
 
 After any change remember to restart the fail2ban service:
 
