@@ -254,7 +254,7 @@ with optional host names.
 1. Try to limit any SSH users to access only from specific IP range (e.g. network 9.9.9.0/24) 
 at the bottom of the file `/etc/ssh/sshd_config` add:
 ```bash
-AllowUsers *@10.10.10.*
+AllowUsers student@127.0.0.1
 ```
 
 Save the file, restart SSH daemon, Now only users coming from network
@@ -262,20 +262,34 @@ Save the file, restart SSH daemon, Now only users coming from network
 Try connecting from localhost:
 
 ```bash
-ssh 127.0.0.1
+ssh -p 5502 stident@127.0.0.1
 ```
-
-2. Try to set per-user limited access.
-At the bottom of the file `/etc/ssh/sshd_config` add:
+You should be able to connect, but below variants should not work:
 
 ```bash
-AllowUsers  student@127.0.0.1  test@10.10.10.*  specialuser
+ssh -p 5502 student@10.10.10.10
 ```
 
-Thus: 
-* we restrict user `student` to connect only from `127.0.0.1` IP address, 
-* user `test` to connect only from `10.10.10.0/24` subnet 
-* and `specialuser` can connect from anywhere.
+```bash
+ssh -p 5502 root@127.0.0.1
+```
+
+
+2. Add per-user access config:
+
+```bash
+AllowUsers  student@127.0.0.1  *@10.10.10.*  specialuser
+```
+
+You should now be able to connect, with below variants:
+
+```bash
+ssh -p 5502 student@10.10.10.10
+```
+
+```bash
+ssh -p 5502 root@127.0.0.1
+```
 
 
 ### Restricting key-based SSH access to particular IP addresses
