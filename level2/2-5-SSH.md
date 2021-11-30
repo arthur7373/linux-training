@@ -270,9 +270,11 @@ Rather than just storing the public keys of connecting users
 `~/.ssh/authorized_keys` file also allows to 
 specify some additional configuration entries:
 
-Options are comma-separated and are documented in the `man sshd`, 
-under the section "AUTHORIZED_KEYS FILE FORMAT". 
 
+
+> Options are comma-separated and are documented in the `man sshd`, 
+> under the section `"AUTHORIZED_KEYS FILE FORMAT"`. 
+> 
 > Here are the most useful ones:
 > 
 > * **from="<hostname/ip>"**  _- Prepending from="*.example.com" to the key line would only allow public-key authenticated login if the connection was coming from some host with a reverse DNS of example.com. You can also put IP addresses in here. This is particularly useful for setting up automated processes through keys with null passphrases._
