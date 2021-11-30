@@ -8,6 +8,9 @@ SSH Clients are included in almost all Linux versions out of the box
 (recent versions of Windows also include SSH Client).
 
 > Read more on "How does the SSH protocol work" here: _https://www.ssh.com/academy/ssh/protocol#how-does-the-ssh-protocol-work_
+> 
+> It's important to understand that assymetric keys are **not used for traffic encryption/decrytion**. 
+> Key-based access is used to generate symmetric one-time key used for current session
 
 SSH allows:
 * remote terminal access `ssh`
@@ -33,6 +36,16 @@ Some free SSH clients for Windows are (plus many commercial ones, like: SecureCR
 feature _(if not can be added via “Optional features” (start typing in search “optional”…)_
 
 ### Using ssh without password (authenticating via public/private keypairs instead of password)
+
+> Remember again that assymetric keys are **not used for traffic encryption/decrytion**. 
+> Key-based access is used to generate symmetric one-time key used for current session
+> * SSH Client puts it's public key in server's directory in `~/.ssh/authorized_keys`. When that client tries to connect, server generates a random message and asks to encrypt it with its private key.
+> * SSH Server gets encrypted message from SSH Client and tries to decrypt it with Client's public key. 
+> * If OK then it trusts that Client. SSH Server generates symmetric key and securely sends it to the Client.
+> * This key can even be regenerated during a session upon mutual agreement.
+>
+
+
 Use `ssh-keygen` on your local system to generate public and private keys 
 in SSH config directory: `~/.ssh`
 
@@ -222,7 +235,8 @@ Also changing the port will bring the number of SSH brute-force attacks to zero.
 
 OpenSSH provides the possibility to restrict access for specific user and/or specific IP addresses. 
 
-SSH allows you to restrict users and groups by host or IP address. There are four different directives you can use in your `sshd_config` file (they are evaluated in this order):
+SSH allows you to restrict users and groups by host or IP address. 
+There are four different directives you can use in your `/etc/ssh/sshd_config` file (they are evaluated in this order):
 
 ```bash
 DenyUsers
