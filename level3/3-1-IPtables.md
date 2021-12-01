@@ -211,6 +211,11 @@ iptables -A INPUT -i enp0s3 -p icmp -s 9.9.9.9 --icmp-type echo-reply -j DROP
 iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJECT --reject-with icmp-host-prohibited
 ```
 
+> NOTE: depending on the expected packet we use different ICMP types:
+> * `--icmp-type echo-reply`
+> * `--icmp-type echo-request`
+>
+
 
 > ICMP error messages that can be added if **REJECT** method is used:<br>
 > `--reject-with icmp-host-prohibited`
@@ -219,46 +224,52 @@ iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJ
 > `--reject-with icmp-host-unreachable`
 
 
-Limit the number of connections per IP address (uses  connlimit module)
+We can limit the number of connections per IP address (uses **connlimit** module)
 Here we allow only 1 SSH connection per IP address:
+```bash
 iptables -A INPUT -p tcp --syn --dport 22 -m connlimit --connlimit-above 1 -j REJECT
+```
+Now try connecting with ssh twice.
 
-Block 80,443 ports (if we want force browsers to use proxy)
-/usr/sbin/iptables -A INPUT -p tcp -m multiport -s 10.10.100.100 --dport 80,443 -j DROP
+```bash
+ssh student@127.0.0.1
+ssh student@127.0.0.1
+```
 
-Block Microsoft-DS and Netbios ports
-/usr/sbin/iptables -A FORWARD -p tcp -m multiport --dport 445,137,138,139  -j DROP
-/usr/sbin/iptables -A FORWARD -p udp -m multiport --dport 445,137,138,139  -j DROP
 
-Mac-based blocking
-iptables -A INPUT -m mac --mac-source 00:19:99:3C:AB:23 -j DROP
+Multuple ports can be blocked in ine rule with **multiport** module
+Here we block Microsoft-DS and Netbios ports for both TCP & UDP
+```bash
+iptables -A FORWARD -p tcp -m multiport --dport 445,137,138,139  -j DROP
+iptables -A FORWARD -p udp -m multiport --dport 445,137,138,139  -j DROP
+```
 
-Example: only accept traffic for TCP port 22 from mac 00:19:99:3C:AB:22 
+Note that here FORWARD chain is used, so this is example of filtering **transit** traffic.
+
+Mac-based blocking is also possible with **mac** module:
+In this example we only accept traffic for TCP port 22 from mac 00:19:99:3C:AB:22 
+```bash
 iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:19:99:3C:AB:22 -j ACCEPT
 iptables -A INPUT -p tcp --destination-port 22 -j REJECT
-
-Block  ICMP /ping/
-iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
-
-ICMP  error  messages that can be added if REJECT method is used
---reject-with icmp-host-prohibited
---reject-with icmp-net-prohibited
---reject-with icmp-net-unreachable
---reject-with icmp-host-unreachable
---reject-with icmp-port-unreachable
---reject-with icmp-proto-unreachable
-
+```
 
 Examples with NAT
 
-iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j SNAT --to-source 10.4.2
-or
-iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -j MASQUERADE
+NAT is special case and uses different chain POSTROUTING.
+```bash
+iptables -t nat -A POSTROUTING -s 127.0.0.1/24 -j SNAT --to-source 127.5.5.5
+```
 
-Set default route on other servers to go via this one:
-ip r del default; ip r add default via 192.168.1.1
+Try connecting to localhost 
+```bash
+ssh student@127.0.0.1
+w
+```
+You should see student login from 127.5.5.5
 
-Drop all current rules in NAT table:
+To clear/drop all current rules in NAT table specify table name with `-t`
+```bash
 iptables -F -t nat
+```
 
 
