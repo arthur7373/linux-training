@@ -10,7 +10,7 @@ SSH Clients are included in almost all Linux versions out of the box
 > Read more on "How does the SSH protocol work" here: _https://www.ssh.com/academy/ssh/protocol#how-does-the-ssh-protocol-work_
 > 
 > It's important to understand that assymetric keys are **not used for traffic encryption/decrytion**. 
-> Key-based access is used to generate symmetric one-time key used for current session
+> Key-based access is used to generate symmetric one-time keys used for current session.
 
 SSH allows:
 * remote terminal access `ssh`
@@ -207,7 +207,6 @@ PubkeyAuthentication no
 PasswordAuthentication yes
 ```
 
-
 You can require all logins use keys with 
 ```bash
 PasswordAuthentication no
@@ -296,7 +295,7 @@ ssh -p 5502 root@127.0.0.1
 
 Rather than just storing the public keys of connecting users 
 `~/.ssh/authorized_keys` file also allows to 
-specify some additional configuration entries:
+specify some additional configuration entries for each key:
 
 
 
@@ -355,6 +354,10 @@ expected command - and not anything else.
 > >  ```bash
 > > no-agent-forwarding,no-port-forwarding,no-X11-forwarding,no-pty ssh-rsa ...
 > > ```
+> 
+> Recent OpenSSH versions >=7.2 have additional option `restrict` in the `authorized_keys`.
+> It enables all restrictions, i.e. disable the above altogether. Also any future restriction capabilities are added to this option.
+> 
 
 #### PRACTICE 2
 
