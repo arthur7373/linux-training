@@ -196,7 +196,7 @@ option for ports)
 ```bash
 iptables -A INPUT -p tcp --dport 80 -j DROP
 ```
-
+ 
 Check:
 ```bash
 telnet fb.com 80 
