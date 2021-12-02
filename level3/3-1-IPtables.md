@@ -1,6 +1,6 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
-## Packet filtering, Firewalld
+## Linux firewall, packet filtering, iptables 
 
 Linux kernel includes network firewall capabilities to filter packets (called **netfilter**).
 
@@ -75,7 +75,8 @@ For each chain there is **default action** - final decision what to do with pack
 
 Standard default action is **ACCEPT**.
 
-
+<br>
+<br>
 
 #### PRACTICE
 
@@ -162,8 +163,7 @@ Because the reply packets are filtered in the INPUT chain
 
 Other way to filter is at OUTPUT chain.
 
-Clear
-
+Clear:
 ```bash
 iptables -F
 ```
@@ -237,7 +237,7 @@ ssh student@127.0.0.1
 ```
 
 
-Multuple ports can be blocked in ine rule with **multiport** module
+Multiple ports can be blocked in ine rule with **multiport** module
 Here we block Microsoft-DS and Netbios ports for both TCP & UDP
 ```bash
 iptables -A FORWARD -p tcp -m multiport --dport 445,137,138,139  -j DROP
@@ -265,7 +265,7 @@ Try connecting to localhost
 ssh student@127.0.0.1
 w
 ```
-You should see student login from 127.5.5.5
+You should see **student** login from **127.5.5.5**
 
 To clear/drop all current rules in NAT table specify table name with `-t`
 ```bash

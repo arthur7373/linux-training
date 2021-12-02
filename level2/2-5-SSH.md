@@ -414,94 +414,105 @@ rsync [OPTIONS] SOURCE DESTINATION
 The most important `rsync` options are: 
 
 ```bash
--a, --archive		archive mode; same as -rlptgoD (no -H)
--r, --recursive          	recurse into directories
--l, --links                 	copy symlinks as symlinks
--p, --perms              	preserve permissions
--t, --times                 	preserve modification times
--g, --group               	preserve group
--o, --owner              	preserve owner (super-user only)
---devices               preserve device files (super-user only)
-           --specials              preserve special files
+-a, --archive		archive mode; same as -rlptgoD
+  -r, --recursive          	recurse into directories
+  -l, --links                 	copy symlinks as symlinks
+  -p, --perms              	preserve permissions
+  -t, --times                 	preserve modification times
+  -g, --group               	preserve group
+  -o, --owner              	 preserve owner (super-user only)
+  -D, --devices --specials      preserve special files
+
+--delete		delete files that don not exist on sender
 -v, --verbose		increase verbosity
 -u, --update		skip files that are newer on the receiver
---delete		delete files that don't exist on sender
--n, --dry-run              perform a trial run with no changes made
+-n, --dry-run           perform a trial run with no changes made
 -z, --compress	compress file data during the transfer
 ```
+#### PRACTICE Simple rsync Examples
 
-Examples:
+1. Create some initial directories & files
 ```bash
-rsync -av --delete /etc/fonts 172.16.1.196:/tmp
-
-rsync -av --exclude="fonts.conf" --delete 172.16.1.196:/tmp /etc/fonts 
+mkdir /tmp/rs1 /tmp/rs2 ; \
+fallocate -l 10K /tmp/rs1/f1 ; \
+fallocate -l 10K /tmp/rs1/f2 ; \
+fallocate -l 101M /tmp/rs1/f3 ; \
+fallocate -l 122M /tmp/rs1/f4 
+```
+2. Run `rsync`
+```bash
+rsync -av --delete /tmp/rs1 127.0.0.1:/tmp/rs2
 ```
 
-#### PRACTICE Backup via Rsync
-1. On Source Host:<br>
-Ensure you have `rsync` package installed.
-`yum -y install rsync`
+Now you have a full backup copy of `/tmp/rs1` directory 
+on "remote" server's `127.0.0.1:/tmp/rs2` directory (inside it !)
 
-
-2. On Destination Host<br>
-* Ensure you have `rsync` package installed & server enabled and running.
+3. Add a file and run `rsync` again
 ```bash
-yum -y install rsync
-systemctl start rsyncd
-systemctl enable rsyncd
+fallocate -l 5M /tmp/rs1/a5 ; \
+rsync -av --delete /tmp/rs1 127.0.0.1:/tmp/rs2
 ```
-* Prepare Backaup
-```bash
-mkdir /BACKUP
-```
+You should see new file `/tmp/rs1/a5` added to "remote" copy.
 
-* Add following to `/etc/rsyncd.conf`:
+4. Remove some file and run `rsync` again
 ```bash
-# any name you like
-[backup]
-# destination directory for copy
-path = /BACKUP
-# hosts you allow to access
-hosts allow = 172.16.1.0/24
-hosts deny = *
-list = true
-uid = root
-gid = root
-read only = false
+rm /tmp/rs1/f3 ; \
+rsync -av --delete /tmp/rs1 127.0.0.1:/tmp/rs2
+```
+You should see `f3` file removed from "remote" copy too.<br>
+> NOTE: this is because of `--delete` option. 
+> if you run `rsync` without this option it will only add files
+
+5. Create new files in both dirs, but in second one first
+   (we imitate we have newer file on destination)
+```bash
+fallocate -l 1M /tmp/rs1/f77 ; \
+touch /tmp/rs2/rs1/f77 
 ```
 
-3. Execute rsync on Source Host like follows.
-`rsync -avz --delete /home/ 172.16.1.196::backup`
-
-4. Add to cron if you'd like to run regularly.
-
-
-
+6. Run `rsync` again <br> 
+(NOTE: now we add `-u` option) <br>
+and check if file `f77` file copied (it should not)
+```bash
+rsync -avu --delete /tmp/rs1 127.0.0.1:/tmp/rs2
+ls -l /tmp/rs2/rs1
+```
 
 ### SSH as a filesystem: sshfs
 Using the FUSE project with `sshfs`, it's possible to mount a remote 
 filesystem over SSH. CentOS package for `sshfs` is available from **EPEL** repository. 
 Make sure you have EPEL and type:<br>
-`yum -y install fuse-sshfs`
+```bash
+yum -y install fuse-sshfs
+```
 
 Once `sshfs` is installed, run it like:<br>
 `sshfs user@remote.host:/somedir /somemydir  -o reconnect`
 
-Example:
+> You should have key-based access configure for that user
+
+#### PRACTICE
+1. Mount remote directory via ssh link
 ```bash
-mkdir /media/usr-local
-sshfs user@172.16.1.113:/usr/local  /media/usr-local -o reconnect
+mkdir /opt/sshfs
+sshfs student@10.10.10.11:/tmp/rs1  /opt/sshfs -o reconnect
+df -h
 ```
 > To set other UID/GID on copied files we can add:<br>
 > _-o uid=1000,gid=1000_<br>
 > See `man sshfs` for more options
 
-Unmounting can be done like:
-`fusermount -u /media/usr-local`
+2. Unmount it
+```bash
+fusermount -u /opt/sshfs
+df -h
+```
 
-Automounting can be done by adding the appropriate line to `/etc/fstab`, 
-like:
-`sshfs#user@remote.host:/somedir /somemydir fuse uid=1000,gid=1000 0 0`
+> Automounting can be done by adding the appropriate line to `/etc/fstab`, 
+> like:
+> ```bash
+> sshfs#user@remote.host:/somedir /somemydir fuse uid=1000,gid=1000 0 0
+> ```
 
  
 ### Screen manager
@@ -532,7 +543,6 @@ Each user can create `~/.screenrc` personal configuration file.
 
 1. Create “~/.screenrc” config file:  
 ```bash
-# Save this in ~/.screenrc
 # Use bash
 shell /bin/bash
 autodetach on
@@ -547,23 +557,21 @@ hardstatus string "%{.kW}%-w%{.bW}%t [%n]%{-}%+w %=%{..G} %H %{..Y} %Y/%m/%d %c"
 # Setup screens
 screen -t 'main' 0 bash # Make first screen - main
 screen -t 'test'  1 bash # Make screen - test
-screen -t 'workspace' 2 bash # Make screen for general work
-# Switch to the workspace screen
-select 2
+# Switch to screen 1
+select 1
 ```
 2. Start the screen
-`screen`
+`screen -RD`
 (Detach from the screen with " Ctrl+a d")
 
 3. Check `screen -ls`
 
-4. Return back:
+4. Close terminal, open new one and return back:
 
 `screen -RD`
 
 
 > There is also `-d -m` switch combination to start  screen  in  "detached" mode, i.e. create a new session but don't attach to it. It’s useful for running scripts.
-
 
 > Another alternative programs are: `tmux` 
 > http://habrahabr.ru/post/126996/

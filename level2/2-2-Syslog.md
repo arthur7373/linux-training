@@ -23,7 +23,7 @@ $ crontab -e
 
 1. Create directory /tmp/task1
 ```bash
-$ mkdir /tmp/task1
+mkdir /tmp/task1
 ```
 2. Create files of different sizes in directory /tmp/task1
    (_to create example files of desired sizes we use different ways just for fun_)

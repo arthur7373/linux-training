@@ -1,10 +1,8 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
-## Packet filtering, Firewalld
+## Firewalld
 
 Linux kernel includes network firewall capabilities to filter packets (called **netfilter**).
-
-To use these capabilities different Linux distributions and versions use different tools.
 
 * **IPtables**
 * **Firewalld**
