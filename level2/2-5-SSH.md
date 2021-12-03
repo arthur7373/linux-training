@@ -480,11 +480,21 @@ ls -l /tmp/rs2/rs1
 
 ### SSH as a filesystem: sshfs
 Using the FUSE project with `sshfs`, it's possible to mount a remote 
-filesystem over SSH. CentOS package for `sshfs` is available from **EPEL** repository. 
+filesystem over SSH. 
+
+CentOS package for `sshfs` is available from **EPEL** repository in CentOS 7. 
 Make sure you have EPEL and type:<br>
+
 ```bash
 yum -y install fuse-sshfs
 ```
+
+> NOTE: For CentOS 8 you need to install from **powertools** repository (disabled by default)<br>
+> `dnf --enablerepo=powertools -y install fuse-sshfs`
+> <br><br>
+> For Ubuntu package name is just `sshfs`
+> `apt install sshfs` 
+
 
 Once `sshfs` is installed, run it like:<br>
 `sshfs user@remote.host:/somedir /somemydir  -o reconnect`
