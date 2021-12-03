@@ -496,8 +496,11 @@ yum -y install fuse-sshfs
 > `apt install sshfs` 
 
 
-Once `sshfs` is installed, run it like:<br>
-`sshfs user@remote.host:/somedir /somemydir  -o reconnect`
+> IMPORTANT: once `sshfs` is installed, it can be used by any user. Users can mount remote directories somewhere in their home
+ 
+
+Syntax is like:<br>
+`sshfs user@remote.host:/somedir ~/localdir  -o reconnect`
 
 > You should have key-based access configure for that user
 
