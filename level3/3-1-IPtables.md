@@ -246,10 +246,10 @@ ping -c 2 9.9.9.9
 ```
 
 > ICMP error messages that can be added if **REJECT** method is used:<br>
-> `--reject-with icmp-host-prohibited`
-> `--reject-with icmp-net-prohibited`
-> `--reject-with icmp-net-unreachable`
-> `--reject-with icmp-host-unreachable`
+>* `--reject-with icmp-host-prohibited`
+>* `--reject-with icmp-net-prohibited`
+>* `--reject-with icmp-net-unreachable`
+>* `--reject-with icmp-host-unreachable`
 
 
 We can limit the number of connections per IP address (uses **connlimit** module)
