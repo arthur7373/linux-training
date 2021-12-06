@@ -117,7 +117,6 @@ Here we specify **default** rules with `-P` option:
 ```bash
 iptables -P OUTPUT ACCEPT ; \
 iptables -P INPUT DROP ; \
-iptables -P FORWARD DROP ; \
 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT 
 ```
 
@@ -125,27 +124,34 @@ Last rule allows only those packets, which are parts of some already established
 
 Check:
 ```bash
+ping -c 2 8.8.8.8
 iptables -L -v -n 
-ping 8.8.8.8
-ping 127.0.0.1
 ```
+ping should work and you should see increase in number of 'pkts' for "RELATED,ESTABLISHED" chain
 
-Restore:
+```bash
+ping -c 2 127.0.0.1
+iptables -L -v -n 
+```
+ping should not work and you should see increase in number of packets for default INPUT 'polycy DROP'
+
+> * Can you explain the reason of this difference?
+
+Now we can clear (flush) all rules<br> and restore default actions for INPUT & OUTPUT chains:
 ```bash
 iptables -F ; \
 iptables -P OUTPUT ACCEPT ; \
-iptables -P INPUT ACCEPT ; \
-iptables -P FORWARD ACCEPT 
+iptables -P INPUT ACCEPT  
 ```
 
-Check:
+And check the difference:
 ```bash
 iptables -L -v -n 
-ping 8.8.8.8
-ping 127.0.0.1
+ping -c2 8.8.8.8
+ping -c2 127.0.0.1
 ```
 
-Block some IP-address or subnet
+We can block some specific IP-address or subnet
 ```bash
 iptables -A INPUT -s 8.8.8.8/16 -j DROP
 iptables -A INPUT -s 1.1.1.1 -j DROP
@@ -154,14 +160,12 @@ iptables -A INPUT -s 1.1.1.1 -j DROP
 Check:
 ```bash
 iptables -L -v -n 
-ping 8.8.8.8
-ping 8.8.4.4
-ping 1.1.1.1
+ping -c 2 8.8.8.8
+ping -c 2 8.8.4.4
+ping -c 2 1.1.1.1
 ```
-Why doesn't it work?
-Because the reply packets are filtered in the INPUT chain
+> * Can you explain why ping doesn't work, when we only restricted INPUT ?
 
-Other way to filter is at OUTPUT chain.
 
 Clear:
 ```bash
@@ -171,12 +175,12 @@ iptables -F
 Check:
 ```bash
 iptables -L -v -n 
-ping 8.8.8.8
-ping 8.8.4.4
-ping 1.1.1.1
+ping -c 2 8.8.8.8
+ping -c 2 8.8.4.4
+ping -c 2 1.1.1.1
 ```
 
-Now give new rules for OUTPUT chain
+Now we set rules for OUTPUT chain
 ```bash
 iptables -F
 iptables -A OUTPUT -d 8.8.8.8/16 -j DROP
@@ -186,36 +190,60 @@ iptables -A OUTPUT -d 1.1.1.1 -j DROP
 Check:
 ```bash
 iptables -L -v -n 
-ping 8.8.8.8
-ping 8.8.4.4
-ping 1.1.1.1
+ping -c 2 8.8.8.8
+ping -c 2 8.8.4.4
+ping -c 2 1.1.1.1
 ```
 
-Block some port (note that the protocol TCP or UDP is required 
-option for ports)
+> * Can you explain the difference of restricting only INPUT or OUTPUT ?
+> * Is one of them enough, or both are needed ?
+
+We can block some port (note that the `-p` protocol option is required 
+for ports)
 ```bash
-iptables -A INPUT -p tcp --dport 80 -j DROP
+iptables -A OUTPUT -p tcp --dport 80 -j DROP
 ```
  
-Check:
+Try:
 ```bash
 telnet fb.com 80 
 ```
 
+```bash
+iptables -A INPUT -p tcp --dport 22 -j REJECT
+```
+ 
+Try:
+```bash
+ssh 127.0.0.1 
+```
+
+> * What the difference will be if we set 'DROP' instead of 'REJECT'
+
+Clear:
+```bash
+iptables -F
+```
 
 We can combine multiple options in rules, and also 
 specify the network interface <br>(`-i` for _incoming_ , `-o` for outgoing).
 
 ```bash
-iptables -A INPUT -i enp0s3 -p icmp -s 9.9.9.9 --icmp-type echo-reply -j DROP
 iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJECT --reject-with icmp-host-prohibited
+iptables -A INPUT -i enp0s3 -p icmp -s 9.9.9.9 --icmp-type echo-reply -j DROP
 ```
 
-> NOTE: depending on the expected packet we use different ICMP types:
-> * `--icmp-type echo-reply`
-> * `--icmp-type echo-request`
->
+> NOTE: 
+> 1. we filter once for INPUT and another time for OUTPUT 
+> 2. depending on the expected packet we use different ICMP types:
+>    * `--icmp-type echo-request` - for OUTPUT
+>    * `--icmp-type echo-reply` - for INPUT
 
+Try:
+```bash
+ping -c 2 127.1.2.3
+ping -c 2 9.9.9.9
+```
 
 > ICMP error messages that can be added if **REJECT** method is used:<br>
 > `--reject-with icmp-host-prohibited`
@@ -227,13 +255,19 @@ iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJ
 We can limit the number of connections per IP address (uses **connlimit** module)
 Here we allow only 1 SSH connection per IP address:
 ```bash
-iptables -A INPUT -p tcp --syn --dport 22 -m connlimit --connlimit-above 1 -j REJECT
+iptables -A INPUT -p tcp --syn -d 127.0.0.1 --dport 22 -m connlimit --connlimit-above 1 -j REJECT 
 ```
 Now try connecting with ssh twice.
 
 ```bash
 ssh student@127.0.0.1
 ssh student@127.0.0.1
+```
+
+But this will work both times, since we block only 127.0.0.1
+```bash
+ssh student@127.0.0.2
+ssh student@127.0.0.2
 ```
 
 
