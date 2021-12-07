@@ -45,9 +45,11 @@ systemctl disable ufw
 First we will get understanding of `iptables`, since it's anyway remaining
 at the bottom of any modern netfilter-based Linux firewall.
 
-`iptables -L -v -n`
-
 This command will give the list of all current active **chains** & **rules**. 
+```bash
+iptables -nvL
+```
+
 
 ![img.png](img.png)
 
@@ -85,14 +87,14 @@ Add rule to INPUT chain:<br>
 iptables -A INPUT -d 127.0.0.2 --jump REJECT
 ```
 
-Check: `iptables -L -v -n`
+Check: `iptables -nvL`
 
 Try if it works:
 ```bash
 ping -c 1 127.0.0.2
 ```
 
-Check again: `iptables -L -v -n` <br>
+Check again: `iptables -nvL` <br>
 You should see 1 more packet (in **pkts** column) filtered for that rule.
 
 
@@ -105,7 +107,7 @@ It is also possible to remove all rules:
 iptables -F
 ````
 
-Check:<br> `iptables -L -v -n`
+Check:<br> `iptables -nvL`
 
 Try if it works:
 ```bash
@@ -124,13 +126,13 @@ Last rule allows only those packets, which are parts of some already established
 Check:
 ```bash
 ping -c 2 8.8.8.8
-iptables -L -v -n 
+iptables -nvL 
 ```
 ping should work and you should see increase in number of 'pkts' for "RELATED,ESTABLISHED" chain
 
 ```bash
 ping -c 2 127.0.0.1
-iptables -L -v -n 
+iptables -nvL 
 ```
 ping should not work and you should see increase in number of packets for default INPUT 'polycy DROP'
 
@@ -144,7 +146,7 @@ iptables -F
 
 And check the difference:
 ```bash
-iptables -L -v -n 
+iptables -nvL
 ping -c2 8.8.8.8
 ping -c2 127.0.0.1
 ```
@@ -157,7 +159,7 @@ iptables -A INPUT -s 1.1.1.1 -j DROP
 
 Check:
 ```bash
-iptables -L -v -n 
+iptables -nvL
 ping -c 2 8.8.8.8
 ping -c 2 8.8.4.4
 ping -c 2 1.1.1.1
@@ -172,7 +174,7 @@ iptables -F
 
 Check:
 ```bash
-iptables -L -v -n 
+iptables -nvL
 ping -c 2 8.8.8.8
 ping -c 2 8.8.4.4
 ping -c 2 1.1.1.1
@@ -187,7 +189,7 @@ iptables -A OUTPUT -d 1.1.1.1 -j DROP
 
 Check:
 ```bash
-iptables -L -v -n 
+iptables -nvL 
 ping -c 2 8.8.8.8
 ping -c 2 8.8.4.4
 ping -c 2 1.1.1.1
