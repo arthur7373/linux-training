@@ -115,7 +115,6 @@ ping -c 1 127.0.0.2
 We can allow only outgoing traffic.
 Here we specify **default** rules with `-P` option:
 ```bash
-iptables -P OUTPUT ACCEPT ; \
 iptables -P INPUT DROP ; \
 iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT 
 ```
@@ -139,9 +138,8 @@ ping should not work and you should see increase in number of packets for defaul
 
 Now we can clear (flush) all rules<br> and restore default actions for INPUT & OUTPUT chains:
 ```bash
-iptables -F ; \
-iptables -P OUTPUT ACCEPT ; \
-iptables -P INPUT ACCEPT  
+iptables -P INPUT ACCEPT  ;\
+iptables -F 
 ```
 
 And check the difference:
@@ -153,7 +151,7 @@ ping -c2 127.0.0.1
 
 We can block some specific IP-address or subnet
 ```bash
-iptables -A INPUT -s 8.8.8.8/16 -j DROP
+iptables -A INPUT -s 8.8.8.8/16 -j DROP ;\
 iptables -A INPUT -s 1.1.1.1 -j DROP
 ```
 
@@ -182,8 +180,8 @@ ping -c 2 1.1.1.1
 
 Now we set rules for OUTPUT chain
 ```bash
-iptables -F
-iptables -A OUTPUT -d 8.8.8.8/16 -j DROP
+iptables -F ;\
+iptables -A OUTPUT -d 8.8.8.8/16 -j DROP ;\
 iptables -A OUTPUT -d 1.1.1.1 -j DROP
 ```
 
@@ -208,6 +206,9 @@ Try:
 ```bash
 telnet fb.com 80 
 ```
+
+> * Change the rule to filter in INPUT chain
+
 
 ```bash
 iptables -A INPUT -p tcp --dport 22 -j REJECT
@@ -289,17 +290,27 @@ iptables -A INPUT -p tcp --destination-port 22 -j REJECT
 
 Examples with NAT
 
-NAT is special case and uses different chain POSTROUTING.
+NAT is special case. To see NAT table specify table name with `-t nat`:
 ```bash
-iptables -t nat -A POSTROUTING -s 127.0.0.1/24 -j SNAT --to-source 127.5.5.5
+iptables -nvL -t nat
 ```
 
-Try connecting to localhost 
+We need to set rules in special chain POSTROUTING:
 ```bash
-ssh student@127.0.0.1
+iptables -t nat -A POSTROUTING -d 127.100.0.0/16 -j SNAT --to-source 127.5.5.5 ;\
+iptables -t nat -A POSTROUTING -d 127.200.0.0/16 -j SNAT --to-source 127.7.7.7
+```
+
+Try connecting to localhost with different IPs to see the effect of NAT rules
+```bash
+ssh student@127.100.0.1
+w
+ssh student@127.200.0.1
 w
 ```
-You should see **student** login from **127.5.5.5**
+You should see **student** logins from:
+* 127.5.5.5
+* 127.7.7.7
 
 To clear/drop all current rules in NAT table specify table name with `-t`
 ```bash
