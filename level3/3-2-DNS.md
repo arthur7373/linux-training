@@ -71,6 +71,8 @@ is being moved to the following directory `/var/named/chroot`
 > Thus all WORKING ACTIVE configuration has preceding
 > `/var/named/chroot` prefix added to the path of any config file.
 
+![img_1.png](img_1.png)
+
 So the main BIND config file becomes:	
 `/var/named/chroot/etc/named.conf`
 
@@ -90,33 +92,26 @@ Zone files are located in:
 > config/zone files in their default locations
 > `/etc/` & `/var/named`
 > (for example `/etc/named.conf`)
+> 
+> Don't forget to restart **bind-chroot** after each configuration change.
 
 
-Then you should restart/start the service:
-```bash
-systemctl restart named-chroot
-```
-or
-```bash
-systemctl start named-chroot
-```
 
-
-Make few changes in default config.
+1.Make few changes in default config.
 
 Default config listens only to `127.0.0.1` and serves only queries from `localhost`
 
 We will change it for training purposes.
 Open `/var/named/chroot/etc/named.conf`
 
-find section options { … }
-change:
+find section `options { … }`
+and change:
 > listen-on port 53 { 127.0.0.1; };	
 
 to	
 >  listen-on port 53 { any; }; 
 
-and change:
+also change:
 > allow-query     { localhost; };
 
 to
@@ -133,13 +128,15 @@ to
 > REMEMBER to include green part if bind-chroot is started 
 > and to omit it if bind-chroot is stopped)
 
-1.Create master zone config file /var/named/chroot/etc/named/lt01.am.zone
+2.Create master zone config file /var/named/chroot/etc/named/lt01.am.zone
 
+```bash
 cat >> /var/named/chroot/etc/named/lt01.am.zone
 zone "lt01.am." IN {
         type master;
         file "lt01.am.db";
 };
+```
 
 2.Include it in main config file /var/named/chroot/etc/named.conf
 
