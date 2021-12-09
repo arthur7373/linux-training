@@ -138,42 +138,60 @@ zone "lt01.am." IN {
 };
 ```
 
-2.Include it in main config file /var/named/chroot/etc/named.conf
+3.Include it in main config file /var/named/chroot/etc/named.conf
 
+```bash
 cat  >> /var/named/chroot/etc/named.conf
-include "/etc/named/lt01.am.zone";
+```
+> ```bash
+> include "/etc/named/lt01.am.zone";
+> ```
 
-3.Create master zone data file /var/named/chroot/var/named/lt01.am.db
+4.Create master zone data file 
+`/var/named/chroot/var/named/lt01.am.db`
 
+```bash
 cat >> /var/named/chroot/var/named/lt01.am.db
-$TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. ( 2021121100
-              				3H ; refresh
-              				1H ; retry
-              				1W ; expire
-              				1H ) ; minimum
-              	            		NS      ns.lt01.am.
-              	            		MX      0 mail
-              	             		A       10.10.1.1
-www			      A       10.10.1.1
-ns			      A       10.10.1.2
-mail			      A       10.10.1.3
-proxy			      A       10.10.1.4
+```
 
-4. Restart the service
-systemctl restart named-chroot (CentOS7)			service named restart (CentOS6)
+> ````bash
+> $TTL 1H
+> @       SOA     ns.lt01.am.     dns.lt01.am. ( 2021121100
+>               				3H ; refresh
+>               				1H ; retry
+>               				1W ; expire
+>               				1H ) ; minimum
+>               	            		NS      ns.lt01.am.
+>               	            		MX      0 mail
+>               	             		A       10.10.1.1
+> www			      A       10.10.1.1
+> ns			      A       10.10.1.2
+> mail			      A       10.10.1.3
+> test			      A       10.10.1.4
+> ```
 
-Check
+5.Restart the service
+
+```bash
+systemctl restart named-chroot
+```
+
+
+6.Check
+
+```bash
 host -t soa lt01.am 127.0.0.1
 dig -t soa lt01.am @127.0.0.1
+```
 
+#### PRACTICE
 
-Task
-
-Create new resource record in your zone lt01.am.
-RR type:		A 
-name:  		ftp
-value:			10.10.1.5
+Create new resource record in your zone `lt01.am`.
+> ```bash
+> type:   A 
+> name:   stat
+> value:  127.50.50.50 
+> ```
 
 
 
