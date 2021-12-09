@@ -319,4 +319,14 @@ To clear/drop all current rules in NAT table specify table name with `-t`
 iptables -F -t nat
 ```
 
+#### Firewalld
 
+**firewalld** is a zone-based firewall.
+A zone is associated with at least one network interface.
+Actions are based on set of defined rules 
+applied against incoming/outgoing packets.
+
+Firewalld Basic Operation is available at:
+```bash
+https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
+```
