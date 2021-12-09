@@ -2,7 +2,17 @@
 
 ## DNS Server (BIND, Berkeley Internet Name Domain/Daemon)
 
-BIND is free and one of the most widespread solution for implementation of Domain Name System (DNS) server.
+Basic knowledge of DNS is essential for this part.
+
+Some URLs:
+
+`https://www.dnstree.com/`
+`https://simpledns.plus/lookup-dg`
+`http://www.kloth.net/services/dig.php`
+`http://dns.squish.net/`
+`https://dnsdumpster.com/`
+
+
 
 We may need few DNS utilities:
 `dig [options] <domain/ip> <name-server>`
@@ -29,6 +39,7 @@ Use examples:
 `dig -x 8.8.4.4 @8.8.8.8`
 
 
+We will use BIND package for DNS server. BIND is free and one of the most widespread solution for implementation of Domain Name System (DNS) server.
 CentOS has special package for secure DNS server configuration `bind-chroot`.
 
 BIND Installation:
@@ -374,9 +385,4 @@ Check the BIND version
 dig chaos txt version.bind @127.0.0.1
 ```
 
-Additional URLs:
-
-`http://dnstree.com`
-`http://www.kloth.net/services/dig.php`
-`http://dns.squish.net/`
 
