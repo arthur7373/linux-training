@@ -328,5 +328,9 @@ applied against incoming/outgoing packets.
 
 Firewalld Basic Operation is available at:
 ```bash
+https://www.redhat.com/sysadmin/beginners-guide-firewalld
+```
+or
+```bash
 https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
 ```
