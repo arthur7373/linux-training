@@ -334,3 +334,10 @@ or
 ```bash
 https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
 ```
+
+> Since Linux kernel 3.13 there is replacement for `iptables` 
+> called `nftables`. It is controlled by `nft` command with different syntax
+> More info: 
+> * https://netfilter.org/projects/nftables/
+> * https://habr.com/ru/company/ruvds/blog/580648/
+> 

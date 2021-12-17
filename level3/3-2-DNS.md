@@ -48,8 +48,7 @@ yum -y install bind-chroot
 
 Non-chroot BIND version (if any) should be stopped and disabled	
 ```bash
-systemctl stop named ; \
-systemctl disable named
+systemctl disable --now named
 ```
 
 Setup chroot environment for BIND:
@@ -57,14 +56,9 @@ Setup chroot environment for BIND:
 /usr/libexec/setup-named-chroot.sh /var/named/chroot on
 ```
 
-Enable service
+Enable and start service
 ```bash
-systemctl enable named-chroot
-```
-
-Manually start it
-```bash
-systemctl start named-chroot
+systemctl enable --now named-chroot
 ```
 
 Check
@@ -80,14 +74,21 @@ may cause problems, we will turn them off for the training period.
 
 Turn off firewalld
 ```bash
-systemctl stop firewalld
-systemctl disable firewalld
+systemctl disable --now firewalld
 ```
+or allow DNS ports
+
+```bash
+firewall-cmd --add-port=53/udp ; \
+firewall-cmd --add-port=53/tcp
+```
+
 
 Turn off SELinux 
 ```bash
 setenforce 0
 ```
+
 `nano /etc/sysconfig/selinux`
 
 ```bash
@@ -144,7 +145,7 @@ and change:
 > listen-on port 53 { 127.0.0.1; };	
 
 to	
->  listen-on port 53 { any; }; 
+> listen-on port 53 { any; }; 
 
 also change:
 > allow-query     { localhost; };
@@ -383,5 +384,3 @@ Check the BIND version
 ```bash
 dig chaos txt version.bind @127.0.0.1
 ```
-
-
