@@ -63,7 +63,6 @@ systemctl enable --now named-chroot
 
 Check
 ```bash
-systemctl status named-chroot -l 
 ps ax | grep named
 netstat -nlptu | grep named
 ss -nlptu | grep named
@@ -224,15 +223,25 @@ dig -t soa lt01.am @127.0.0.1
 
 #### PRACTICE
 
-Create new resource record in your zone `lt01.am`.
+1.Add new A resource record in your zone `lt01.am`.
+
 > ```bash
 > type:   A 
 > name:   stat
 > value:  10.10.1.50 
 > ```
 
+> ```bash
+> type:   A 
+> name:   ns2
+> value:  10.10.10.11
+> ```
 
-
+2.Add new NS resource record in your zone `lt01.am`.
+> ```bash 
+> type:		NS
+> value:	ns2.lt01.am.
+> ```
 
 
 ### Reverse Zones
@@ -286,20 +295,24 @@ systemctl restart named-chroot
 
 5.Check
 ```bash
-systemctl status named-chroot.service -l  |  grep '1.10.10'
 host 10.10.1.1 127.0.0.1
 dig -x 10.10.1.1 @127.0.0.1
 ```
 
 #### PRACTICE
 
-Create new resource record in your zone `1.10.10.in-addr.arpa.`
+1.Add new PTR resource record in your zone `1.10.10.in-addr.arpa.`
 > ```bash 
 > type:		PTR
 > name:  		50
 > value:		stat.lt01.am.
 > ```
 
+2.Add new NS resource record in your zone `1.10.10.in-addr.arpa.`
+> ```bash 
+> type:		NS
+> value:	ns2.lt01.am.
+> ```
 
 ### Slave Zones
 
@@ -353,12 +366,16 @@ dig -t soa lt01.am @127.0.0.1
 
 #### PRACTICE
 
-Create configuration to get a Slave Zone copy for zone `1.10.10.in-addr.arpa`
+1. Create configuration to get a Slave Zone copy for zone `1.10.10.in-addr.arpa`
 
+2. For Master server add in `options { … }` section of `/var/named/chroot/etc/named.conf`
+`notify yes;`
+   to activate sending notification of master zone changes to slaves.
+   Restart master and check result in slave `/var/named/chroot/var/named/data/named.run`.
 
 
 ### Advanced configuration:
-There are lots of options for advanced BIND configuration. They can be used both in main 
+There are lots of other options for advanced BIND configuration. They can be used both in main 
 `options { … }`  part, as well as in each zone description 
 parts `zone lt01.am. IN { ... }`
 
@@ -376,7 +393,6 @@ options {
                 127.0.0.1/32;           	
                  local-ips;            	
                  }; 
-	notify yes;			// Send notification to slaves about master zone changes
 	   };
 ```
 
