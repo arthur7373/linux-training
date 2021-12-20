@@ -237,34 +237,34 @@ Set  root password for MySQL:
 mysqladmin -u root password '123456'
 ```
 
+> NOTE: we do this for testing, but in production it should be done via `mysql_secure_installation`
+
 Check MySQL.  Create mysqltest.php
 ```bash
-cat << EOF5 > /var/www/lt01.am/mysqltest.php
+nano /var/www/lt01.am/mysqltest.php
+```
+
+```bash
 <?php
-ini_set('display_errors', 1); 
-$dblocation = "localhost"; 
-$dbname = "mysql"; 	
-$dbuser = "root"; 	
-$dbpasswd = "new-password"; 
+$user = "root";
+$password = "123456";
+$database = "mysql";
+$table = "users";
  
-$dbcnx = @mysql_connect($dblocation, $dbuser, $dbpasswd);
-if (!$dbcnx){
-    echo "<p>Error MySQL Server  not available</p>";
-    exit();
+try {
+  $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
+  echo "<h2>TODO</h2><ol>";
+  foreach($db->query("SELECT content FROM $table") as $row) {
+    echo "<li>" . $row['content'] . "</li>";
+  }
+  echo "</ol>";
+} catch (PDOException $e) {
+    print "Error!: " . $e->getMessage() . "<br/>";
+    die();
 }
-if (!@mysql_select_db($dbname,$dbcnx)){
-    echo "<p>Error database not available</p>";
-    exit();
-}
-$ver = mysql_query("SELECT VERSION()");
-if(!$ver){
-    echo "<p>Query Error</p>";
-    exit();
-}
-echo mysql_result($ver, 0);
+
 ?>
-EOF5
- ```
+```
 
 Check: 
 ```bash
@@ -283,27 +283,12 @@ mysql> DROP DATABASE tester;
 mysql -u tester -h 192.168.1.1 -p  
 ```
 
-### Install and configure ‘mod_ssl’ for Apache
+### Configure ‘mod_ssl’ for Apache
+
+Self-signed Certificate generation:
 
 ```bash
-yum -y install mod_ssl openssl
-```
-
-Certificate request generation:
-
-```bash
-openssl req -nodes -newkey rsa:2048 -nodes -keyout lt01.am.key -out lt01.am.csr \
--subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
-```
-
-Self-signed key generation:
-```bash
-openssl x509 -req -days 3650 -in lt01.am.csr -signkey lt01.am.key -out lt01.am.crt
-```
-
-One-command variant:
-```bash
-openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key \ -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
+openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
 ```
 
 
@@ -316,20 +301,19 @@ mv lt01.am.key /etc/pki/tls/private/
 ### Create SSL Virtual Host
 
 ```bash
-cat > /etc/httpd/conf.d/lt01.am-ssl.conf 
-```
-
->```bash
-> <VirtualHost *:443>
->         SSLEngine on
->        SSLCertificateFile /etc/pki/tls/certs/lt01.am.crt
->        SSLCertificateKeyFile /etc/pki/tls/private/lt01.am.key
->        <Directory /var/www/lt01.am >
->         AllowOverride All
->         </Directory>
->         DocumentRoot /var/www/lt01.am
->         ServerName lt01.am
-> </VirtualHost>
+cat <<EOF4  > /etc/httpd/conf.d/lt01.am-ssl.conf 
+ <VirtualHost *:443>
+         SSLEngine on
+        SSLCertificateFile /etc/pki/tls/certs/lt01.am.crt
+        SSLCertificateKeyFile /etc/pki/tls/private/lt01.am.key
+        <Directory /var/www/lt01.am >
+         AllowOverride All
+         </Directory>
+         DocumentRoot /var/www/lt01.am
+         ServerName www.lt01.am
+        ServerAlias lt01.am
+</VirtualHost>
+EOF4
 > ```
 
 Restart Apache: 
@@ -346,7 +330,7 @@ Redirect 80 port to 443 (SSL)
 > <VirtualHost *:80>
 > ServerName www.lt01.am 
 > ServerAlias lt01.am
-> Redirect permanent  /  https://lt01.am/
+> Redirect permanent  /  https://www.lt01.am/
 > …
 > </VirtualHost>
 > ```
