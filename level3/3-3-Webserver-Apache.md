@@ -160,7 +160,7 @@ links www.lt01.am/closed/123
 
 Let us create another subdirectory `secure` and make it password-protected
 ```bash
-mkdir -p /var/www/lt01.am/secure/test123 ;\ 
+mkdir -p /var/www/lt01.am/secure/test123 ;\
 cat << EOF1 > /var/www/lt01.am/secure/.htaccess
 AuthName "Member's Area Name"
 AuthUserFile /etc/httpd/conf.d/.htpasswd
