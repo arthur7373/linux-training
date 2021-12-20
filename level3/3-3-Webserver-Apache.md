@@ -149,7 +149,7 @@ We can add handling of HTTP protocols errors, like 404 - Not found
 cat << EOF3 >> /var/www/lt01.am/closed/.htaccess
 ErrorDocument 404 http://ping.eu
 EOF3
-> ```
+```
 
 Now if we try non existing URL, we will be redirected to `ping.eu`
 ```bash
