@@ -33,9 +33,12 @@ systemctl enable --now httpd
 configure the system to use your local DNS server, 
 where you already have `lt01.am` zone.
 * Set current IP address of the server to `www.lt01.am` record in the DNS.
-* If you did everything correct you should be able to 
+* If you did everything correct you should be able to open it locally, with `links www.lt01.am`
+* Now try also `links lt01.am`. Did it open? Why? How to fix it?
 
 
+
+### Apache configuration
 Default website location directory is:  `/var/www/html` 
 
 After installation Apache webserver is ready to use by default configuration.
@@ -51,7 +54,8 @@ Create a separate virtual host configuration file /etc/httpd/conf.d/lt01.am.conf
 ```bash
 cat > /etc/httpd/conf.d/lt01.am.conf 
 ```
-> ```bash <VirtualHost *:80> 
+> ```bash 
+> <VirtualHost *:80> 
 > ServerName lt01.am
 > ServerAlias www.lt01.am
 > DocumentRoot /var/www/lt01.am
