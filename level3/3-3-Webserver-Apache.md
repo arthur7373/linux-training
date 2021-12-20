@@ -17,7 +17,7 @@ hostname
 
 Install Apache and related stuff: 
 
-For CentOS 8 first run this:<br> `dnf config-manager --set-enabled powertools`
+For CentOS 8 first run this:  `dnf config-manager --set-enabled powertools`
 
 ```bash
 yum -y install httpd mod_ssl openssl elinks lynx
@@ -27,6 +27,14 @@ Enable & start:
 ```bash
 systemctl enable --now httpd 
 ```
+
+#### PRACTICE
+* Now you have running Apache webserver, 
+configure the system to use your local DNS server, 
+where you already have `lt01.am` zone.
+* Set current IP address of the server to `www.lt01.am` record in the DNS.
+* If you did everything correct you should be able to 
+
 
 Default website location directory is:  `/var/www/html` 
 
