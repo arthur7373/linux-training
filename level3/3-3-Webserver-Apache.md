@@ -245,24 +245,24 @@ ini_set('display_errors', 1);
 $dblocation = "localhost"; 
 $dbname = "mysql"; 	
 $dbuser = "root"; 	
-$dbpasswd = "123456"; 
+$dbpasswd = "new-password"; 
  
 $dbcnx = @mysql_connect($dblocation, $dbuser, $dbpasswd);
 if (!$dbcnx){
-     echo "<p>Error MySQL Server  not available</p>";
-     exit();
- }
- if (!@mysql_select_db($dbname,$dbcnx)){
-     echo "<p>Error database not available</p>";
-     exit();
- }
- $ver = mysql_query("SELECT VERSION()");
- if(!$ver){
-     echo "<p>Query Error</p>";
-     exit();
- }
- echo mysql_result($ver, 0);
- ?>
+    echo "<p>Error MySQL Server  not available</p>";
+    exit();
+}
+if (!@mysql_select_db($dbname,$dbcnx)){
+    echo "<p>Error database not available</p>";
+    exit();
+}
+$ver = mysql_query("SELECT VERSION()");
+if(!$ver){
+    echo "<p>Query Error</p>";
+    exit();
+}
+echo mysql_result($ver, 0);
+?>
 EOF5
  ```
 
