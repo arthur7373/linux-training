@@ -160,34 +160,42 @@ links www.lt01.am/closed/123
 
 Let us create another subdirectory `secure` and make it password-protected
 ```bash
-mkdir -p /var/www/lt01.am/secure/test123 ;\
-cat << EOF1 > /var/www/lt01.am/secure/.htaccess
+mkdir -p /var/www/lt01.am/secure/docs ;\
+cat << EOF3 > /var/www/lt01.am/secure/index.html
+<h1> Linux Training </h1>
+EOF3
+cat << EOF4 > /var/www/lt01.am/secure/.htaccess
 AuthName "Member's Area Name"
 AuthUserFile /etc/httpd/conf.d/.htpasswd
 AuthType Basic
 require valid-user
-EOF1
+EOF4
 ```
 
-Create user ‘test123’ and set the password (-c is needed only once to create the new file)
+Create user ‘test123’ and set the password 
 ```bash
 htpasswd -c /etc/httpd/conf.d/.htpasswd  test123
 ```
+> NOTE: `-c` is needed only once to create the new file
+> To change password you will need to run:
+> ```bash
+> htpasswd /etc/httpd/conf.d/.htpasswd test123
+> ```
 
-To change password use:
+Now try access this URL. You will require user/password
 ```bash
-htpasswd /etc/httpd/conf.d/.htpasswd  test123
+links www.lt01.am/secure/
 ```
+
 
 ### Installing PHP with database support
 
 ```bash
-yum -y install php php-common php-gd php-xml php-mbstring php-mcrypt 
-yum -y install php-pecl-memcache php-mysql php-gd ImageMagick-devel
+yum -y install php php-common php-gd php-xml php-mbstring php-mysqlnd php-gd
 ```
 Restart Apache:
 ```bash
-systemctl restart httpd   
+systemctl restart httpd
 ```
 
 Create php script:   
@@ -197,23 +205,33 @@ echo '<?php phpinfo(); ?>' > /var/www/lt01.am/inf.php
 
 Check: 
 ```bash
-links http://lt01.am/inf.php
+links http://www.lt01.am/inf.php
 ```
 > (PHP Fine tuning can be done in config files: `/etc/php.ini`, `/etc/php.d/`)
 
-### Install MariaDB (MySQL)
+Now we can create an PHP index file 
 ```bash
-yum -y install mariadb mariadb-server 
+cat << EOF1 > /var/www/lt01.am/index.php
+<?php echo "<h3>HI THIS PHP INDEX</h3>"; ?>
+EOF1
 ```
 
-Enable MySQL:
+Check: 
 ```bash
-systemctl enable mariadb  
+links http://www.lt01.am/
 ```
-Start MySQL:
+
+
+### Install MariaDB (MySQL)
 ```bash
-systemctl start mariadb
+yum -y install mariadb mariadb-server
 ```
+
+Enable and Start MySQL:
+```bash
+systemctl enable --now mariadb  
+```
+
 Set  root password for MySQL:
 ```bash
 mysqladmin -u root password 'new-password'
