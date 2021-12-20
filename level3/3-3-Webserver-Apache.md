@@ -16,10 +16,16 @@ hostname
 ```
 
 Install Apache and related stuff: 
+
+CentOS 8 require this first:
 ```bash
 dnf config-manager --set-enabled powertools
-dnf -y install httpd mod_ssl elinks lynx
 ```
+
+```bash
+yum -y install httpd mod_ssl openssl elinks lynx
+```
+
 Enable & start: 
 ```bash
 systemctl enable --now httpd 
