@@ -90,37 +90,84 @@ links lt01.am
 
 ### Access Control with .htaccess (http://www.htaccess-guide.com/)
 
-Restrict visitors by IP address
+It is possible to restrict visitors by IP address. For this to be able 
+on per-directory basis, without restarting Apache, we have in the above VirtualHost configuration following option `AllowOverride ALL`.
+After that we can just create a `.htaccess` file in the directory we want to restrict access.
 
+Let us create a restricted subdirectory `closed`
 ```bash
-cat > /var/www/lt01.am/.htaccess
-```
-> ```bash
-> order allow,deny
-> allow from 127.
-> allow from 10.
-> allow from 192.168. 
+mkdir -p /var/www/lt01.am/closed/img ;\
+cat << EOF1 > /var/www/lt01.am/closed/test.html
+<h2> Hello Linux </h2>
+EOF1
+cat << EOF2 > /var/www/lt01.am/closed/.htaccess
+order allow,deny 
+allow from 127.
+#allow from 10.
+#allow from 192.168. 
+options +indexes
+EOF2
 > ```
 
-Error documents
+Now try opening it
 ```bash
-cat >> /var/www/lt01.am/.htaccess
+links www.lt01.am/closed
 ```
-> ```bash
-> ErrorDocument 404 http://ya.ru
+
+To access it you need to uncomment `#allow from 10.` line in `.htaccess`
+Remove hashtag and try again.
+
+Now you should be able to access the directory, but you will see it's file list, because we have
+`options +indexes` option. 
+
+Try commenting it an open it again
+```bash
+links www.lt01.am/closed
+```
+
+You will not see the directory contents, but will be able to access files by the name:
+
+```bash
+links www.lt01.am/closed/test.html
+```
+
+Now we can create an index file 
+```bash
+cat << EOF1 > /var/www/lt01.am/closed/index.html
+<h2> THIS IS INDEX OF CLOSED DIR </h2>
+EOF1
+```
+
+Try to open it again
+```bash
+links www.lt01.am/closed
+```
+
+#### Error handling
+We can add handling of HTTP protocols errors, like 404 - Not found
+```bash
+cat << EOF3 >> /var/www/lt01.am/closed/.htaccess
+ErrorDocument 404 http://ping.eu
+EOF3
 > ```
 
-Password protection
-
+Now if we try non existing URL, we will be redirected to `ping.eu`
 ```bash
-cat >> /var/www/lt01.am/.htaccess
+links www.lt01.am/closed/123
 ```
-> ```bash
-> AuthName "Member's Area Name"
-> AuthUserFile /etc/httpd/conf.d/.htpasswd
-> AuthType Basic
-> require valid-user
-> ```
+
+#### Password protection
+
+Let us create another subdirectory `secure` and make it password-protected
+```bash
+mkdir -p /var/www/lt01.am/secure/test123 ;\ 
+cat << EOF1 > /var/www/lt01.am/secure/.htaccess
+AuthName "Member's Area Name"
+AuthUserFile /etc/httpd/conf.d/.htpasswd
+AuthType Basic
+require valid-user
+EOF1
+```
 
 Create user ‘test123’ and set the password (-c is needed only once to create the new file)
 ```bash
