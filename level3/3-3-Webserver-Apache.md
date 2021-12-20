@@ -234,40 +234,37 @@ systemctl enable --now mariadb
 
 Set  root password for MySQL:
 ```bash
-mysqladmin -u root password 'new-password'
+mysqladmin -u root password '123456'
 ```
 
 Check MySQL.  Create mysqltest.php
 ```bash
-nano /var/www/lt01.am/mysqltest.php
-```
-
-> ```bash 
-> <?php
-> ini_set('display_errors', 1); 
-> $dblocation = "localhost"; 
-> $dbname = "mysql"; 	
-> $dbuser = "root"; 	
-> $dbpasswd = "new-password"; 
->  
-> 
-> $dbcnx = @mysql_connect($dblocation, $dbuser, $dbpasswd);
-> if (!$dbcnx){
->     echo "<p>Error MySQL Server  not available</p>";
->     exit();
-> }
-> if (!@mysql_select_db($dbname,$dbcnx)){
->     echo "<p>Error database not available</p>";
->     exit();
-> }
-> $ver = mysql_query("SELECT VERSION()");
-> if(!$ver){
->     echo "<p>Query Error</p>";
->     exit();
-> }
-> echo mysql_result($ver, 0);
-> ?>
-> ```
+cat << EOF5 > /var/www/lt01.am/mysqltest.php
+<?php
+ini_set('display_errors', 1); 
+$dblocation = "localhost"; 
+$dbname = "mysql"; 	
+$dbuser = "root"; 	
+$dbpasswd = "123456"; 
+ 
+$dbcnx = @mysql_connect($dblocation, $dbuser, $dbpasswd);
+if (!$dbcnx){
+     echo "<p>Error MySQL Server  not available</p>";
+     exit();
+ }
+ if (!@mysql_select_db($dbname,$dbcnx)){
+     echo "<p>Error database not available</p>";
+     exit();
+ }
+ $ver = mysql_query("SELECT VERSION()");
+ if(!$ver){
+     echo "<p>Query Error</p>";
+     exit();
+ }
+ echo mysql_result($ver, 0);
+ ?>
+EOF5
+ ```
 
 Check: 
 ```bash
