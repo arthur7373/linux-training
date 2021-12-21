@@ -107,7 +107,7 @@ allow from 127.
 #allow from 192.168. 
 options +indexes
 EOF2
-> ```
+```
 
 Now try opening it
 ```bash
@@ -255,7 +255,7 @@ try {
   $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
   echo "<h2>TODO</h2><ol>";
   foreach($db->query("SELECT user FROM $table;") as $row) {
-    echo "<li>" . $row['content'] . "</li>";
+    echo "<li>" . $row['user'] . "</li>";
   }
   echo "</ol>";
 } catch (PDOException $e) {
@@ -293,11 +293,10 @@ Self-signed Certificate generation:
 openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
 ```
 
-
 Put certificates at their place:
 ```bash
 mv lt01.am.crt /etc/pki/tls/certs
-mv lt01.am.key /etc/pki/tls/private/ 
+mv lt01.am.key /etc/pki/tls/private
 ```
 
 ### Create SSL Virtual Host
@@ -305,15 +304,17 @@ mv lt01.am.key /etc/pki/tls/private/
 ```bash
 cat <<EOF4  > /etc/httpd/conf.d/lt01.am-ssl.conf 
  <VirtualHost *:443>
-         SSLEngine on
+        SSLEngine on
         SSLCertificateFile /etc/pki/tls/certs/lt01.am.crt
         SSLCertificateKeyFile /etc/pki/tls/private/lt01.am.key
         <Directory /var/www/lt01.am >
-         AllowOverride All
-         </Directory>
-         DocumentRoot /var/www/lt01.am
-         ServerName www.lt01.am
-        ServerAlias lt01.am
+        AllowOverride All
+        </Directory>
+        DocumentRoot /var/www/lt01.am
+        ServerName lt01.am
+        ServerAlias www.lt01.am
+        ErrorLog logs/lt01.am.-ssl_error_log
+        TransferLog logs/lt01.am-ssl_access_log
 </VirtualHost>
 EOF4
 > ```
