@@ -249,12 +249,12 @@ nano /var/www/lt01.am/mysqltest.php
 $user = "root";
 $password = "123456";
 $database = "mysql";
-$table = "users";
+$table = "user";
  
 try {
   $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
   echo "<h2>TODO</h2><ol>";
-  foreach($db->query("SELECT user,authentication_string,plugin,host FROM mysql.user;") as $row) {
+  foreach($db->query("SELECT user FROM $table;") as $row) {
     echo "<li>" . $row['content'] . "</li>";
   }
   echo "</ol>";
@@ -271,16 +271,18 @@ Check:
 links http://lt01.am/mysqltest.php
 ```
 
-Examples of MySQL queries:
+Create new MySQL user:
 ```bash
-mysql -u root -p 
-mysql> CREATE DATABASE tester;
-mysql> SHOW DATABASES;
-mysql> GRANT ALL PRIVILEGES ON tester.* TO tester@localhost IDENTIFIED BY 'tester_users_pass' WITH GRANT OPTION;
-mysql> GRANT ALL PRIVILEGES ON tester.*  TO tester@'192.168.1.%' IDENTIFIED BY 'tester_users_pass' WITH GRANT OPTION;
-mysql> flush privileges;
-mysql> DROP DATABASE tester;
-mysql -u tester -h 192.168.1.1 -p  
+mysql -u root -p <<EOF4
+CREATE DATABASE tester;
+GRANT ALL PRIVILEGES ON tester.* TO tester@localhost IDENTIFIED BY 'test555' WITH GRANT OPTION;
+flush privileges;
+EOF4
+```
+
+Check again: 
+```bash
+links http://lt01.am/mysqltest.php
 ```
 
 ### Configure ‘mod_ssl’ for Apache
