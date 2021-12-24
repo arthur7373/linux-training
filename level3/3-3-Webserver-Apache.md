@@ -165,7 +165,7 @@ cat << EOF3 > /var/www/lt01.am/secure/index.html
 <h1> Linux Training </h1>
 EOF3
 cat << EOF4 > /var/www/lt01.am/secure/.htaccess
-AuthName "Member's Area Name"
+AuthName "SECURE Area"
 AuthUserFile /etc/httpd/conf.d/.htpasswd
 AuthType Basic
 require valid-user
@@ -290,7 +290,8 @@ links http://lt01.am/mysqltest.php
 Self-signed Certificate generation:
 
 ```bash
-openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
+openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key
+ -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
 ```
 
 Put certificates at their place:
@@ -313,11 +314,11 @@ cat <<EOF4  > /etc/httpd/conf.d/lt01.am-ssl.conf
         DocumentRoot /var/www/lt01.am
         ServerName lt01.am
         ServerAlias www.lt01.am
-        ErrorLog logs/lt01.am.-ssl_error_log
+        ErrorLog logs/lt01.am-ssl_error_log
         TransferLog logs/lt01.am-ssl_access_log
 </VirtualHost>
 EOF4
-> ```
+```
 
 Restart Apache: 
 ```bash

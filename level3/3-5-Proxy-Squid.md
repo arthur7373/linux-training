@@ -34,14 +34,107 @@ to serve the clients if they connect from the internal LAN IP addresses (defined
 * 172.16.0.0/12 
 * 192.168.0.0/16 
 
-To use proxy server 
-
-Set proxy variable:
+To use proxy server in terminal set `http_proxy` variable:
 ```bash
 export http_proxy=http://127.0.0.1:3128
+```
+
+
+Check.
+In one terminal open this:  
+```bash
+tail -f /var/log/squid/access.log
+```
+In another try opening this URL:
+```bash
+http://all-nettools.com/toolbox/proxy-test.php
+```
+
+> Also try it in another Browser on your Windows system
+
+
+All below modifications are to be made in `/etc/squid/squid.conf`
+
+Squid configuration documentation is located in: `/usr/share/doc/squid-*.*.*/squid.conf.documented`
+
+After any changes you should restart squid server `systemctl restart squid`
+
+Log files are stored in: `/var/log/squid`
+
+* `/var/log/squid/access.log`
+* `/var/log/squid/cache.log`
+ 
+
+Configuration examples
+
+#### Set Anonymous Headers to hide proxy use
+```bash
+cat <<EOF4  >> /etc/squid/squid.conf
+request_header_access Via deny all
+request_header_access X-Forwarded-For deny all
+request_header_access From deny all
+request_header_access Link deny all
+request_header_access Server deny all
+EOF4
+```
+Restart Squid
+```bash
+systemctl restart squid
 ```
 
 Check
 ```bash
 http://all-nettools.com/toolbox/proxy-test.php
 ```
+
+#### Change the server public hostname, it will be visible in case of errors
+
+Access wrong URL
+```bash
+http://1
+```
+
+Now change 
+```bash
+cat <<EOF4  >> /etc/squid/squid.conf
+visible_hostname MYPROXY
+EOF4
+```
+Restart Squid
+```bash
+systemctl restart squid
+```
+
+Access wrong URL
+```bash
+http://1
+```
+
+
+#### User/password based access
+
+In `/etc/squid/squid.conf` add this at appropriate places
+
+```bash
+
+auth_param basic program /usr/lib64/squid/basic_ncsa_auth /usr/local/etc/passwd
+auth_param basic children 5
+auth_param basic realm MYPROXY
+auth_param basic credentialsttl 2 hours
+acl pss proxy_auth REQUIRED
+```
+
+```bash
+#http_access allow  localnet
+#http_access allow  localhost
+http_access allow  pss
+http_access deny all
+EOF4
+```
+
+Create Users/Passwords with ‘htpasswd’ command:
+> NOTE: to change password use the same command without `-c`
+```bash
+htpasswd -c /usr/local/etc/passwd demo
+```
+
