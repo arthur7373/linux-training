@@ -47,7 +47,7 @@ tail -f /var/log/squid/access.log
 ```
 In another try opening this URL:
 ```bash
-http://all-nettools.com/toolbox/proxy-test.php
+lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
 
 > Also try it in another Browser on your Windows system
@@ -84,14 +84,14 @@ systemctl restart squid
 
 Check
 ```bash
-http://all-nettools.com/toolbox/proxy-test.php
+lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
 
 #### Change the server public hostname, it will be visible in case of errors
 
 Access wrong URL
 ```bash
-http://1
+lynx http://1
 ```
 
 Now change 
@@ -105,9 +105,9 @@ Restart Squid
 systemctl restart squid
 ```
 
-Access wrong URL
+Access wrong URL again and notice change in message
 ```bash
-http://1
+lynx http://1
 ```
 
 
@@ -115,26 +115,36 @@ http://1
 
 In `/etc/squid/squid.conf` add this at appropriate places
 
-```bash
+Under
+> `# Recommended minimum configuration:`
 
-auth_param basic program /usr/lib64/squid/basic_ncsa_auth /usr/local/etc/passwd
+add:
+```bash
+auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/pss
 auth_param basic children 5
 auth_param basic realm MYPROXY
 auth_param basic credentialsttl 2 hours
 acl pss proxy_auth REQUIRED
 ```
+Under
 
+> `# Recommended minimum Access Permission configuration:`
+
+add:
 ```bash
 #http_access allow  localnet
 #http_access allow  localhost
+http_access deny  !pss
 http_access allow  pss
-http_access deny all
-EOF4
 ```
 
-Create Users/Passwords with ‘htpasswd’ command:
+Now create Users/Passwords with ‘htpasswd’ command:
 > NOTE: to change password use the same command without `-c`
 ```bash
-htpasswd -c /usr/local/etc/passwd demo
+htpasswd -c /etc/squid/pss demo
 ```
 
+Try accessing some URL:
+```bash
+lynx http://all-nettools.com/toolbox/proxy-test.php
+```
