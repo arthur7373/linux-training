@@ -8,7 +8,7 @@ Squid (http://www.squid-cache.org/) is a caching proxy for the Web supporting HT
 Install Squid:
 
 ```bash
-yum -y install squid
+yum -y install squid 
 ```
 
 Config directory is:   `/etc/squid/` 
@@ -50,7 +50,15 @@ In another try opening this URL:
 lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
 
-> Also try it in another Browser on your Windows system
+Another way to test with `curl`
+
+> `curl` is available by default on all modern Windows, Mac, and Linux environments, so you can open any local shell to run this command:
+> for remote connetion just change `127.0.0.1` with the external IP address of the server
+```bash
+curl -v -x http://127.0.0.1:3128 https://ya.ru/
+```
+
+> Also try it with some other Browser on your Windows system
 
 
 All below modifications are to be made in `/etc/squid/squid.conf`
@@ -68,6 +76,19 @@ Log files are stored in: `/var/log/squid`
 Configuration examples
 
 #### Set Anonymous Headers to hide proxy use
+
+Check
+```bash
+lynx http://all-nettools.com/toolbox/proxy-test.php
+```
+
+Try the same with `curl`
+```bash
+curl -v -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected
+```
+
+Now hide HTTP headers that reveal you are behind the proxy
+
 ```bash
 cat <<EOF4  >> /etc/squid/squid.conf
 request_header_access Via deny all
@@ -77,15 +98,21 @@ request_header_access Link deny all
 request_header_access Server deny all
 EOF4
 ```
-Restart Squid
+Reload Squid
 ```bash
-systemctl restart squid
+systemctl reload squid
 ```
 
 Check
 ```bash
 lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
+
+Try the same with `curl`
+```bash
+curl -v -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
+```
+
 
 #### Change the server public hostname and Squid version, appearing in case of errors
 
@@ -101,9 +128,9 @@ visible_hostname MYPROXY
 httpd_suppress_version_string on
 EOF4
 ```
-Restart Squid
+Reload Squid
 ```bash
-systemctl restart squid
+systemctl reload squid
 ```
 
 Access wrong URL again and notice change in message
@@ -123,7 +150,7 @@ add:
 ```bash
 auth_param basic program /usr/lib64/squid/basic_ncsa_auth /etc/squid/pss
 auth_param basic children 5
-auth_param basic realm MYPROXY
+auth_param basic realm AUTHENTICATE
 auth_param basic credentialsttl 2 hours
 acl pss proxy_auth REQUIRED
 ```
@@ -145,14 +172,19 @@ Now create Users/Passwords with ‘htpasswd’ command:
 htpasswd -c /etc/squid/pss demo
 ```
 
-Restart Squid
+Reload Squid
 ```bash
-systemctl restart squid
+systemctl reload squid
 ```
 
 Try accessing some URL:
 ```bash
 lynx http://all-nettools.com/toolbox/proxy-test.php
+```
+
+Try the same with `curl`
+```bash
+curl -v -x http://demo:123456@127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
 ```
 
 
@@ -195,3 +227,9 @@ lynx http://127.0.0.1/squidanalyzer/
 ```
 
 
+#### PRACTICE
+
+* Create new proxy user `student` with some password
+* Access some URL with that user, while having `tail -f /var/log/squid/access.log` on another terminal. You should see in the logs that you access with user `student`
+* Run SquidAnalyzer manually again 
+* Check the new report and find statistics for user `student`
