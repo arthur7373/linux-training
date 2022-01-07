@@ -87,7 +87,7 @@ Check
 lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
 
-#### Change the server public hostname, it will be visible in case of errors
+#### Change the server public hostname and Squid version, appearing in case of errors
 
 Access wrong URL
 ```bash
@@ -98,6 +98,7 @@ Now change
 ```bash
 cat <<EOF4  >> /etc/squid/squid.conf
 visible_hostname MYPROXY
+httpd_suppress_version_string on
 EOF4
 ```
 Restart Squid
@@ -142,6 +143,11 @@ Now create Users/Passwords with ‘htpasswd’ command:
 > NOTE: to change password use the same command without `-c`
 ```bash
 htpasswd -c /etc/squid/pss demo
+```
+
+Restart Squid
+```bash
+systemctl restart squid
 ```
 
 Try accessing some URL:
