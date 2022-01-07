@@ -154,3 +154,38 @@ Try accessing some URL:
 ```bash
 lynx http://all-nettools.com/toolbox/proxy-test.php
 ```
+
+
+### SquidAnalyzer - Squid access log report generation tool (https://github.com/darold/squidanalyzer)
+
+SquidAnalyzer parse native access log format of the Squid proxy and 
+generate general statistics about hits, bytes, users, networks, top url,
+top second level domain and denied URLs.
+
+Install & Run manually
+
+```bash
+git clone https://github.com/darold/squidanalyzer.git ;\
+cd squidanalyzer ; \
+perl Makefile.PL ; \
+make && make install ; \
+ln -s /var/log/squid/ /var/log/squid3 ;\
+/usr/local/bin/squid-analyzer ;\
+ln -s /var/www/squidanalyzer /var/www/lt01.am/squidanalyzer
+```
+
+> _For production use following cronjob should be configured to run squid-analyzer daily:_
+>
+> ```bash
+> # SquidAnalyzer log reporting daily
+> 0 2 * * * /usr/local/bin/squid-analyzer > /dev/null 2>&1
+> ```
+> 
+
+Try accessing the reports
+
+```bash
+lynx http://127.0.0.1/squidanalyzer/
+```
+
+
