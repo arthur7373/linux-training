@@ -162,9 +162,15 @@ SquidAnalyzer parse native access log format of the Squid proxy and
 generate general statistics about hits, bytes, users, networks, top url,
 top second level domain and denied URLs.
 
-Install & Run manually
+Ensure you have `git` package
+```bash
+yum install git
+```
+
+Install SquidAnalyzer & run it manually once
 
 ```bash
+cd ;\
 git clone https://github.com/darold/squidanalyzer.git ;\
 cd squidanalyzer ; \
 perl Makefile.PL ; \
@@ -182,7 +188,7 @@ ln -s /var/www/squidanalyzer /var/www/lt01.am/squidanalyzer
 > ```
 > 
 
-Try accessing the reports
+Try accessing the report
 
 ```bash
 lynx http://127.0.0.1/squidanalyzer/
