@@ -136,6 +136,7 @@ cat > /etc/httpd/conf.d/lt01.am.conf
 > </VirtualHost>
 > ```
 
+
 Create virtual host website directory:  
 ```bash
 mkdir /var/www/lt01.am
