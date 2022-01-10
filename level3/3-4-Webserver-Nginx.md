@@ -48,8 +48,7 @@ Now you should have running Apache webserver on port 8080, and Nginx on port 80
 * Change Apache configuration to work on another port - 8888. After that you should be able to access `http://lt01.am:8888/`
 * Change it back to 8080
 
-
-### Nginx configuration
+### Nginx configuration as front end reverse proxy of Apache web server
 Create virtual host config file for our domain `lt01.am`
 ```bash
 cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
@@ -106,3 +105,138 @@ links lt01.am/inf.php
  and A record `lt01.am` pointing to your server's IP address
 > * and your `/etc/resolv.conf` refers to `nameserver 127.0.0.1`
 
+### Nginx configuration as standalone server
+
+We need to change configuration of our virtual host as follows
+
+```bash
+cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
+server {
+listen *:80;
+access_log /var/log/nginx/lt01.am-access.log;
+error_log /var/log/nginx/lt01.am-error.log;
+server_name lt01.am www.lt01.am;
+# Redirect to backend
+location / {
+root /var/www/lt01.am-nginx;
+}
+}
+EOF1
+```
+
+Create new directory for Nginx virtual host:
+
+```bash
+mkdir /var/www/lt01.am-nginx
+```
+
+Put some index page there:
+```bash
+cat << EOF1 > /var/www/lt01.am-nginx/index.html
+HI this is NGINX page
+EOF1
+```
+
+Restart Nginx: 
+
+```bash
+systemctl restart nginx
+```
+
+Now try opening some Nginx URL and Apache URL. You should see appropriate logs. 
+```bash
+links lt01.am
+links lt01.am:8080
+```
+
+
+### HAProxy : HTTP Load Balancing
+_(based on `https://www.server-world.info/en/note?os=CentOS_8&p=haproxy&f=1`)_
+	
+HAProxy allows to balance between multiple servers. Simple configuration of two servers we have Apache and Nginx follows.
+
+This example is based on the environment like follows.
+```bash
+--------+---------------------+----------------------+------------
+        |                     |                      |
+        |10.10.10.10:80       |10.10.10.10:8080      |10.10.10.10:8088
++-------+--------+   +--------+---------+   +--------+---------+
+|   [ lt01.am ]  |   | [ lt01.am:8080 ] |   | [ lt01.am:8088 ] |
+|     HAProxy    |   | Apache Server #1 |   |  Nginx Server#2  |
++----------------+   +------------------+   +------------------+
+
+```
+
+We already have Apache confugred to listed port `8080`, 
+but we need Nginx to be reconfigured to listen port `8088` as shown on scheme above.
+this way we will free port `80` for HAProxy balancer.
+
+Reconfigure Nginx to listen port `8088` instead `80`
+
+In file `/etc/nginx/nginx.conf` change the following lines:
+```bash
+#        listen       80 default_server;
+#        listen       [::]:80 default_server;
+listen       8088 default_server;
+listen       [::]:8088 default_server;
+```
+
+Replace file `/etc/nginx/nginx.conf` with another port:
+```bash
+cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
+server {
+listen *:8088;
+access_log /var/log/nginx/lt01.am-access.log;
+error_log /var/log/nginx/lt01.am-error.log;
+server_name lt01.am www.lt01.am;
+# Redirect to backend
+location / {
+root /var/www/lt01.am-nginx;
+}
+}
+EOF1
+```
+
+Install HAProxy to configure Load Balancing Server.
+
+```bash
+dnf -y install haproxy
+```
+
+Move default HAProxy config and create simple configuration.
+
+```bash
+mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-orig ;\
+cat << EOF1 > /etc/haproxy/haproxy.cfg
+# define frontend ( any name is OK for [http-in] )
+frontend http-in
+    # listen 80 port
+    bind *:80
+    # set default backend
+    default_backend    backend_servers
+    # send X-Forwarded-For header
+    option             forwardfor
+
+# define backend
+backend backend_servers
+    # balance with roundrobin
+    balance            roundrobin
+    # define backend servers
+    server             node01 127.0.0.1:8080 check
+    server             node02 127.0.0.1:8088 check
+EOF1
+```
+
+Enable and start HAProxy
+```bash
+systemctl enable --now haproxy
+```
+
+Now you connect to `lt01.am` several times. You should see Apache and Nginx pages in rotation
+
+```bash
+links lt01.am
+```
+
+> NOTE: this is very simple configuration example. Production solution requires much more to configure as well as
+> additional services like `keepalived`, `vrrp`, etc., which are our of scope of this tutorial
