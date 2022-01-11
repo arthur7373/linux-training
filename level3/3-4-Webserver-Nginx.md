@@ -247,6 +247,11 @@ Enable and start HAProxy
 systemctl enable --now haproxy
 ```
 
+Check the status of all related services:
+```bash
+netstat -nlpt | grep -E '(haproxy|http|nginx)'
+```
+
 Now you connect to `lt01.am` several times. You should see Apache and Nginx pages in rotation
 
 ```bash
