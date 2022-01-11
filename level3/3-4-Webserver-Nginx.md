@@ -206,7 +206,7 @@ Restart Nginx:
 systemctl restart nginx
 ```
 
-Check that Nginx listens port 80:
+Check that Nginx listens port 8088:
 
 ```bash
 netstat -nlpt | grep nginx
