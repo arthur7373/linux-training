@@ -49,6 +49,9 @@ Now you should have running Apache webserver on port 8080, and Nginx on port 80
 * Change it back to 8080
 
 ### Nginx configuration as front end reverse proxy of Apache web server
+
+![img_2.png](img_2.png)
+
 Create virtual host config file for our domain `lt01.am`
 ```bash
 cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
