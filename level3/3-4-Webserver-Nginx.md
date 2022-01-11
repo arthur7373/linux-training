@@ -183,7 +183,7 @@ In file `/etc/nginx/nginx.conf` change the following lines:
 listen       8088 default_server;
 listen       [::]:8088 default_server;
 ```
-
+ 
 Replace file `/etc/nginx/conf.d/lt01.am.conf` with another port:
 ```bash
 cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
