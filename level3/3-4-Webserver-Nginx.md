@@ -215,7 +215,7 @@ netstat -nlpt | grep nginx
 Install HAProxy to configure Load Balancing Server.
 
 ```bash
-dnf -y install haproxy
+yum -y install haproxy
 ```
 
 Move default HAProxy config and create simple configuration.
