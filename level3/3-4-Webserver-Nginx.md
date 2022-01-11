@@ -200,6 +200,18 @@ root /var/www/lt01.am-nginx;
 EOF1
 ```
 
+Restart Nginx:
+
+```bash
+systemctl restart nginx
+```
+
+Check that Nginx listens port 80:
+
+```bash
+netstat -nlpt | grep nginx
+```
+
 Install HAProxy to configure Load Balancing Server.
 
 ```bash
