@@ -246,7 +246,11 @@ useradd tester ;\
 passwd tester
 ```
 
-Now try the above mail sending with `telnet`  
+Now try the above mail sending with `telnet`
+> ```bash
+> Install telnet if needed
+> yum -y install telnet
+> ```
 https://github.com/arthur7373/linux-training/blob/main/level3/3-6-Mailserver.md#smtp-session-example
 
 Try sending mail via terminal `mail` command 
