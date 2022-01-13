@@ -62,7 +62,7 @@ telnet lt01.am 25
 > 220 lt01.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
 helo lo
 > 250 yahoo.com Hello root@lt01.am [192.168.2.200], pleased to meet you
-> mail from: user@yahoo.com
+mail from: user@yahoo.com
 > 250 user@yahoo.com... Sender ok
 rcpt to: tester@lt01.am     
 > 250 root@lt00.am... Recipient ok
