@@ -246,6 +246,9 @@ useradd tester ;\
 passwd tester
 ```
 
+Now try the above mail sending with `telnet`  
+https://github.com/arthur7373/linux-training/blob/main/level3/3-6-Mailserver.md#smtp-session-example
+
 
 In one terminal open this:  
 ```bash
