@@ -247,7 +247,7 @@ passwd tester
 ```
 
 Now try the above mail sending with `telnet`
-> ```bash
+> ```
 > Install telnet if needed
 > yum -y install telnet
 > ```
