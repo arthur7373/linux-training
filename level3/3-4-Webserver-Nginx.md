@@ -1,6 +1,6 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
-## Web Server (Nginx)
+## Web Server (Nginx) (+ HAProxy) 
 
 
 Nginx is another widely used webserver. 
