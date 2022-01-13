@@ -52,7 +52,7 @@ user's system, it is called an email client
 When it is a web interface used for interacting with the 
 incoming mail server, it is called **Webmail**. 
 
-SMTP Session example:
+#### SMTP Session example:
 (we can try this example in rea below after server configuration)
 ```bash
 telnet lt01.am 25
