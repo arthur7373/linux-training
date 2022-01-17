@@ -79,8 +79,9 @@ Create master zone data file
 `/var/named/chroot/var/named/linuxexam.am.db`
 
 ```bash
-cat << EOF1 >> /var/named/chroot/var/named/linuxexam.am.db
-linuxexam.am       SOA     ns.linuxexam.am.     dns.linuxexam.am. ( 2021121100
+cat << "EOF1" >> /var/named/chroot/var/named/linuxexam.am.db
+$TTL 1H
+@       SOA     ns.linuxexam.am.     dns.linuxexam.am. ( 2021121100
                             3H ; refresh
                             1H ; retry
                             1W ; expire
