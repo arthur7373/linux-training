@@ -52,36 +52,6 @@ user's system, it is called an email client
 When it is a web interface used for interacting with the 
 incoming mail server, it is called **Webmail**. 
 
-#### SMTP Session example:
-(we can try this example in rea below after server configuration)
-```bash
-telnet lt01.am 25
-> Trying 192.168.1.1...
-> Connected to lt01.am.
-> Escape character is '^]'.
-> 220 lt01.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
-helo lo
-> 250 yahoo.com Hello root@lt01.am [192.168.2.200], pleased to meet you
-mail from: user@yahoo.com
-> 250 user@yahoo.com... Sender ok
-rcpt to: tester@lt01.am     
-> 250 tester@lt00.am... Recipient ok
-data
-> 354 Enter mail, end with "." on a line by itself
-From: "TEST" <test@mail.com>
-To: "TEST" <test@mail.com>
-Subject: Test message
-Date: Mon, 02 Feb 1991 13:00:57 +0400
-
-Hello, This is a test message.
-
-Yours truly,
-Administrator
-.
-> 250 KAA24894 Message accepted for delivery
-quit
-
-```
 
 ### Install & configure Postfix as SMTP Server
 
@@ -251,7 +221,39 @@ Now try the above mail sending with `telnet`
 > Install telnet if needed
 > yum -y install telnet
 > ```
-https://github.com/arthur7373/linux-training/blob/main/level3/3-6-Mailserver.md#smtp-session-example
+
+#### SMTP Session example
+Now try following example
+
+```bash
+telnet lt01.am 25
+> Trying 192.168.1.1...
+> Connected to lt01.am.
+> Escape character is '^]'.
+> 220 lt01.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
+helo lo
+> 250 yahoo.com Hello root@lt01.am [192.168.2.200], pleased to meet you
+mail from: user@yahoo.com
+> 250 user@yahoo.com... Sender ok
+rcpt to: tester@lt01.am     
+> 250 tester@lt00.am... Recipient ok
+data
+> 354 Enter mail, end with "." on a line by itself
+From: "TEST" <test@mail.com>
+To: "TEST" <test@mail.com>
+Subject: Test message
+Date: Mon, 02 Feb 1991 13:00:57 +0400
+
+Hello, This is a test message.
+
+Yours truly,
+Administrator
+.
+> 250 KAA24894 Message accepted for delivery
+quit
+
+```
+
 
 Try sending mail via terminal `mail` command 
 ```bash
