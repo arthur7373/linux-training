@@ -348,6 +348,6 @@ systemctl reload squid
 
 Check
 ```bash
-curl -v -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
 ```
 
