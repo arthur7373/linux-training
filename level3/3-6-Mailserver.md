@@ -88,8 +88,6 @@ mydomain = lt01.am
 myorigin = $mydomain
 # goto line 135: change
 inet_interfaces = all
-# goto line 138: change it if use only IPv4
-inet_protocols = ipv4
 # goto line 183: add
 mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
 # goto line 283: uncomment and specify your local network
