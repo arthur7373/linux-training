@@ -58,46 +58,42 @@ Create `linuxexam.am` domain zone
 Create master zone config file `/var/named/chroot/etc/named/linuxexam.am.zone`
 
 ```bash
-cat >> /var/named/chroot/etc/named/linuxexam.am.zone
-```
-
-> ```bash
-> zone "linuxexam.am." IN {
->         type master;
->         file "linuxexam.am.db";
-> };
-> ```
+cat << EOF1 >> /var/named/chroot/etc/named/linuxexam.am.zone
+ zone "linuxexam.am." IN {
+         type master;
+         file "linuxexam.am.db";
+ };
+EOF1
+ ```
 
 Include it in main config file `/var/named/chroot/etc/named.conf`
 
 ```bash
-cat  >> /var/named/chroot/etc/named.conf
+cat << EOF1 >> /var/named/chroot/etc/named.conf
+include "/etc/named/linuxexam.am.zone";
+EOF1
 ```
-> ```bash
-> include "/etc/named/linuxexam.am.zone";
-> ```
+
 
 Create master zone data file 
 `/var/named/chroot/var/named/linuxexam.am.db`
 
 ```bash
-cat >> /var/named/chroot/var/named/linuxexam.am.db
-```
-
-> ```bash
-> $TTL 1H
-> @       SOA     ns.linuxexam.am.     dns.linuxexam.am. ( 2021121100
->               				3H ; refresh
->               				1H ; retry
->               				1W ; expire
->               				1H ) ; minimum
->               	            		NS      ns.linuxexam.am.
->               	            		MX      0 mail
->               	             		A       10.10.1.1
-> www			      A       10.10.1.1
-> ns			      A       10.10.1.2
-> mail			      A       10.10.1.3
-> ```
+cat << EOF1 >> /var/named/chroot/var/named/linuxexam.am.db
+$TTL 1H
+@       SOA     ns.linuxexam.am.     dns.linuxexam.am. ( 2021121100
+               				3H ; refresh
+               				1H ; retry
+               				1W ; expire
+               				1H ) ; minimum
+               	            		NS      ns.linuxexam.am.
+               	            		MX      0 mail
+               	             		A       10.10.1.1
+ www			      A       10.10.1.1
+ ns			      A       10.10.1.2
+ mail			      A       10.10.1.3
+EOF1
+ ```
 
 > NOTE! Remember to put your server's IP address instead of `10.10.1.1` in both places
 
