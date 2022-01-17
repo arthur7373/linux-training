@@ -81,9 +81,9 @@ vi +95 /etc/postfix/main.cf
 
 ```bash	
 # goto line 95: uncomment and specify hostname
-myhostname = mail.srv.world
+myhostname = lt01.am
 # goto line 102: uncomment and specify domain name
-mydomain = srv.world
+mydomain = lt01.am
 # goto line 118: uncomment
 myorigin = $mydomain
 # goto line 135: change
