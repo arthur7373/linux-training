@@ -106,7 +106,7 @@ systemctl restart named-chroot
 Check
 
 ```bash
-host -t soa linuxexam.am 127.0.0.1
+host -t a linuxexam.am 127.0.0.1
 ```
 
 Now you should have local DNS server, 
