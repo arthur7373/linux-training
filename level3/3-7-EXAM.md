@@ -145,20 +145,19 @@ Create a separate virtual host configuration for `linuxexam.am` website
 /etc/httpd/conf.d/linuxexam.am.conf:
 
 ```bash
-cat > /etc/httpd/conf.d/linuxexam.am.conf 
-```
-> ```bash 
-> <VirtualHost *:8080> 
-> ServerName linuxexam.am
-> ServerAlias www.linuxexam.am
-> DocumentRoot /var/www/linuxexam.am
-> CustomLog /var/log/httpd/linuxexam.am-access.log combined
-> ErrorLog /var/log/httpd/linuxexam.am-error.log
->  <Directory /var/www/linuxexam.am>
->       Options -Indexes
->      AllowOverride ALL
->  </Directory>
-> </VirtualHost>
+cat << "EOF1" > /etc/httpd/conf.d/linuxexam.am.conf 
+<VirtualHost *:8080> 
+ServerName linuxexam.am
+ServerAlias www.linuxexam.am
+DocumentRoot /var/www/linuxexam.am
+CustomLog /var/log/httpd/linuxexam.am-access.log combined
+ErrorLog /var/log/httpd/linuxexam.am-error.log
+<Directory /var/www/linuxexam.am>
+       Options -Indexes
+      AllowOverride ALL
+  </Directory>
+ </VirtualHost>
+EOF1
 > ```
 
 Create virtual host website directory:  
@@ -186,8 +185,8 @@ netstat -nlpt | grep httpd
 
 Check
 ```bash
-links http://linuxexam.am:8080
-links http://www.linuxexam.am:8080/
+links http://linuxexam.am:8080/
+curl -v  http://www.linuxexam.am:8080/ | grep APACHE
 ```
 
 ### Install and configure NGINX Web Server
@@ -250,7 +249,7 @@ netstat -nlpt | grep nginx
 Check
 ```bash
 links http://linuxexam.am:8088
-links http://www.linuxexam.am:8088/
+curl -v  http://www.linuxexam.am:8088/ | grep NGINX
 ```
 
 ### Install and configure HAProxy
