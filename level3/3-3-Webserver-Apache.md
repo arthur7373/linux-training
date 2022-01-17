@@ -75,7 +75,9 @@ mkdir /var/www/lt01.am
 
 Put some file there as ‘index.html’ to be displayed as main page:
 ```bash
-cd /var/www/lt01.am ; wget ya.ru
+cat << EOF1 > /var/www/lt01.am/index.html
+HI this is APACHE page
+EOF1
 ```
 
 Restart Apache:
@@ -86,6 +88,7 @@ systemctl restart httpd
 Check
 ```bash
 links lt01.am
+curl -s http://lt01.am/ | grep APACHE 
 ```
 
 ### Access Control with .htaccess (http://www.htaccess-guide.com/)

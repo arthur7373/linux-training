@@ -301,7 +301,9 @@ Now you connect to `linuxexam.am` several times.
 You should see Apache and Nginx pages in rotation
 
 ```bash
-links linuxexam.am
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' 
 ```
 
 ### Install and configure Squid 
@@ -309,7 +311,12 @@ links linuxexam.am
 Install Squid:
 
 ```bash
-yum -y install squid 
+yum -y install squid
+```
+
+Enable and start Squid
+```bash
+systemctl enable --now squid
 ```
 
 Check.
@@ -320,7 +327,7 @@ tail -f /var/log/squid/access.log
 In another try opening this URL:
 
 ```bash
-curl -v -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected
 ```
 
 Now hide HTTP headers that reveal you are behind the proxy

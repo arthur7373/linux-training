@@ -252,11 +252,15 @@ Check the status of all related services:
 netstat -nlpt | grep -E '(haproxy|http|nginx)'
 ```
 
-Now you connect to `lt01.am` several times. You should see Apache and Nginx pages in rotation
+Now you connect to `lt01.am` several times. 
+You should see Apache and Nginx pages in rotation
 
 ```bash
-links lt01.am
+curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' 
 ```
+
 
 > NOTE: this is very simple configuration example. Production solution requires much more to configure as well as
 > additional services like `keepalived`, `vrrp`, etc., which are our of scope of this tutorial
