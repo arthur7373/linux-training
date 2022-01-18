@@ -31,7 +31,7 @@ You would be working mainly on below configuration files, to setup NFS server an
 
 Install NFS Package
 ```bash
-yum install nfs-utils libnfsidmap
+yum -y install nfs-utils libnfsidmap
 ```
 
 Enable and start NFS services
@@ -61,7 +61,7 @@ Modify /etc/exports and add the following
 (Change the IP range if needed for clients of that share):
 ```bash
 cat <<EOF1 >> /etc/exports
-/srv/nfsshare/sharedir 192.168.1.0/24(rw,sync,no_root_squash)
+/srv/nfsshare/sharedir 192.168.0.0/16(rw,sync,no_root_squash)
 EOF1
 ```
 Options meaning:
@@ -93,7 +93,7 @@ showmount -e
 
 Install NFS Package
 ```bash
-yum install nfs-utils libnfsidmap
+yum -y install nfs-utils libnfsidmap
 ```
 
 Enable and start NFS services
