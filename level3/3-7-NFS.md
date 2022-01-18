@@ -26,8 +26,6 @@ You would be working mainly on below configuration files, to setup NFS server an
 
 * /etc/exports : Main NFS config file, controls which file systems are exported to remote hosts and sets options.
 * /etc/fstab : Used to control what file systems including NFS directories are mounted when the system boots.
-* /etc/sysconfig/nfs : Used to control which ports the required RPC services run on.
-* /etc/hosts.allow, and /etc/hosts.deny : TCP wrapper, controls the access to some services, including NFS.
 
 ### Install and Configure NFS Server
 
