@@ -11,6 +11,15 @@ There are three main command line tools that can be used to configure and displa
 * `timedatectl` utility, which is new in Red Hat Enterprise Linux and is part of `systemd`.
 * `hwclock` utility for accessing the hardware clock.
 
+Set proper timezone
+```bash
+timedatectl list-timezones | grep Yerevan
+```
+
+```bash
+timedatectl set-timezone Asia/Yerevan
+```
+
 ### Install Chrony to Configure NTP Server for Time Synchronization.
 
 Install Chrony
