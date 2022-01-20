@@ -159,7 +159,7 @@ ErrorLog /var/log/httpd/linuxexam.am-error.log
   </Directory>
  </VirtualHost>
 EOF1
-> ```
+```
 
 Create virtual host website directory:  
 ```bash
@@ -305,7 +305,7 @@ You should see Apache and Nginx pages in rotation
 ```bash
 curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out ; \
 curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out ; \
-curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out ; \
 cat  /tmp/exam-haproxy.out
 ```
 
