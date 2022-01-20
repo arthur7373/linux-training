@@ -529,3 +529,11 @@ Generate mail log summary for today
 perl /usr/sbin/pflogsumm -d today /var/log/maillog >> /tmp/exam-mail.out ;\
 less /tmp/exam-mail.out
 ```
+
+
+### After you finish
+
+Present your results 
+```bash
+cat /tmp/exam* | less
+```
