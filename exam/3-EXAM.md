@@ -351,3 +351,175 @@ Check
 curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
 ```
 
+### Install and configure Mail server (Postfix, Dovecot)
+
+Install Postfix.
+
+```bash
+yum -y install postfix 
+```
+
+Configure Postfix
+
+```bash	
+# goto line 95: uncomment and specify hostname
+myhostname = linuxexam.am
+# goto line 102: uncomment and specify domain name
+mydomain = linuxexam.am
+# goto line 118: uncomment
+myorigin = $mydomain
+# goto line 135: change
+inet_interfaces = all
+# goto line 183: add
+mydestination = $myhostname, localhost.$mydomain, localhost, $mydomain
+# goto line 283: uncomment and specify your local network
+mynetworks = 127.0.0.0/8, 10.0.0.0/24
+# goto line 438: uncomment (use Maildir)
+home_mailbox = Maildir/
+
+# add following to the end of file
+
+# SMTP-Auth setting
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = private/auth
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = $myhostname
+smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permit_sasl_authenticated, reject
+```
+
+Enable and start Postfix:
+```bash
+systemctl enable --now postfix
+```
+
+Install Dovecot 
+```bash
+yum -y install dovecot
+```
+
+Configure Dovecot to provide SASL (Simple Authentication and Security Layer) capability to Postfix
+
+```bash
+nano +30 /etc/dovecot/dovecot.conf
+```
+
+```bash
+# add following after line 30
+listen = *
+```
+
+```bash
+nano +10 /etc/dovecot/conf.d/10-auth.conf
+```
+
+```bash
+# add following after line 10
+disable_plaintext_auth = no
+# go to line 100: and change as follows
+auth_mechanisms = plain login
+```
+
+```bash
+nano +30 /etc/dovecot/conf.d/10-mail.conf
+```
+```bash
+# add following after line 30
+mail_location = maildir:~/Maildir
+```
+
+```bash
+nano +107 /etc/dovecot/conf.d/10-master.conf
+```
+
+```bash
+# uncomment line 107-109 and add some lines as follows
+# Postfix smtp-auth
+  unix_listener /var/spool/postfix/private/auth {
+    mode = 0666
+    user = postfix
+    group = postfix
+  }
+```
+
+```bash
+nano +8 /etc/dovecot/conf.d/10-ssl.conf
+```
+
+```bash
+# change line 8 as follows (means SSL is not required)
+ssl = yes
+```
+
+Enable and start Dovecot:
+```bash
+systemctl enable --now dovecot
+```
+
+Install simple terminal mail client program (& telnet if needed)
+```bash
+yum -y install mailx telnet
+```
+
+Set environment variables to use Maildir:
+```bash
+echo 'export MAIL=$HOME/Maildir' >> /etc/profile.d/mail.sh
+```
+
+Add a user `exam`
+```bash
+useradd exam ;\
+passwd exam
+```
+
+```bash
+telnet linuxexam.am 25
+> Trying 192.168.1.1...
+> Connected to linuxexam.am.
+> Escape character is '^]'.
+> 220 linuxexam.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
+helo lo
+> 250 yahoo.com Hello root@linuxexam.am [192.168.2.200], pleased to meet you
+mail from: user@yahoo.com
+> 250 user@yahoo.com... Sender ok
+rcpt to: exam@linuxexam.am     
+> 250 exam@linuxexam.am... Recipient ok
+data
+> 354 Enter mail, end with "." on a line by itself
+From: "TEST" <test@mail.com>
+To: "TEST" <test@mail.com>
+Subject: Test message
+Date: Mon, 02 Feb 1991 13:00:57 +0400
+
+Hello, This is a test message.
+
+Yours truly,
+Administrator
+.
+> 250 KAA24894 Message accepted for delivery
+quit
+```
+
+Try sending mail via terminal `mail` command 
+```bash
+mail exam@linuxexam.am
+```
+
+Switch to `exam` user and check mail
+(type `q` to exit  `mail` program)
+```bash
+su - exam
+mail
+```
+
+Install `pflogsumm` which is the Postfix Log reporting tool.
+
+```bash
+yum -y install postfix-perl-scripts
+```
+
+Generate mail log summary for today
+```bash
+perl /usr/sbin/pflogsumm -d today /var/log/maillog | less
+```
+

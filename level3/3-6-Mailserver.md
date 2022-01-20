@@ -221,7 +221,7 @@ Now try the above mail sending with `telnet`
 > ```
 
 #### SMTP Session example
-Now try following example
+Try following example
 
 ```bash
 telnet lt01.am 25
@@ -234,7 +234,7 @@ helo lo
 mail from: user@yahoo.com
 > 250 user@yahoo.com... Sender ok
 rcpt to: tester@lt01.am     
-> 250 tester@lt00.am... Recipient ok
+> 250 tester@lt01.am... Recipient ok
 data
 > 354 Enter mail, end with "." on a line by itself
 From: "TEST" <test@mail.com>

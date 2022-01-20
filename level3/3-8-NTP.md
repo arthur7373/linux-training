@@ -1,15 +1,15 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
-## NTP : Configure NTP Server
-_(based on https://www.server-world.info/en/note?os=CentOS_8&p=ntp&f=1)_
+## NTP (Network Time Protocol), NTP Server
+_(partially based on https://www.server-world.info/en/note?os=CentOS_8&p=ntp&f=1)_
 
 ### Time configuration
 
 There are three main command line tools that can be used to configure and display information about the system date and time:
 
 * `date` traditional command.
-* `timedatectl` utility, which is new in Red Hat Enterprise Linux and is part of `systemd`.
 * `hwclock` utility for accessing the hardware clock.
+* `timedatectl` utility, which is new in Red Hat Enterprise Linux and is part of `systemd`.
 
 Set proper timezone
 ```bash
@@ -19,6 +19,8 @@ timedatectl list-timezones | grep Yerevan
 ```bash
 timedatectl set-timezone Asia/Yerevan
 ```
+
+Chrony is a different implementation of the network time protocol (NTP) than the network time protocol daemon (ntpd) that is able to synchronize the system clock faster and with better accuracy than ntpd.
 
 ### Install Chrony to Configure NTP Server for Time Synchronization.
 
