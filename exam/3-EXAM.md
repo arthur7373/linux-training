@@ -1,6 +1,6 @@
 # Linux Network Server (level 3) EXAM
 
-## Install following service on separate VM and present as you EXAM result
+## Install following service on separate VM and present as your EXAM result
 
 ### Before you start with exam task on new VM 
 Since `SELinux` and `firewalld` may cause problems, 
