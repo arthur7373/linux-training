@@ -301,9 +301,10 @@ Now you connect to `linuxexam.am` several times.
 You should see Apache and Nginx pages in rotation
 
 ```bash
-curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' ; \
-curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' ; \
-curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' 
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out ; \
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out ; \
+curl -s http://linuxexam.am/ | grep -E '(APACHE|NGINX)' >> /tmp/exam-haproxy.out
+cat  /tmp/exam-haproxy.out
 ```
 
 ### Install and configure Squid 
@@ -327,7 +328,7 @@ tail -f /var/log/squid/access.log
 In another try opening this URL:
 
 ```bash
-curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected >> /tmp/exam-squid.out
 ```
 
 Now hide HTTP headers that reveal you are behind the proxy
@@ -348,7 +349,7 @@ systemctl reload squid
 
 Check
 ```bash
-curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected"
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" >> /tmp/exam-squid.out
 ```
 
 ### Install and configure Mail server (Postfix, Dovecot)
