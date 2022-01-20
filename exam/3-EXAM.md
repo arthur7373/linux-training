@@ -106,7 +106,8 @@ systemctl restart named-chroot
 Check
 
 ```bash
-host -t a linuxexam.am 127.0.0.1 >> /tmp/exam-dns.out
+host -t a linuxexam.am 127.0.0.1 >> /tmp/exam-dns.out ;\
+cat /tmp/exam-dns.out
 ```
 
 Now you should have local DNS server, 
@@ -294,7 +295,8 @@ systemctl enable --now haproxy
 
 Check the status of all related services:
 ```bash
-netstat -nlpt | grep -E '(haproxy|http|nginx)' >> /tmp/exam-webservers.out
+netstat -nlpt | grep -E '(haproxy|http|nginx)' >> /tmp/exam-webservers.out ;\
+cat /tmp/exam-webservers.out
 ```
 
 Now you connect to `linuxexam.am` several times. 
