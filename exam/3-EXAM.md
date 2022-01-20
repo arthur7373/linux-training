@@ -106,7 +106,7 @@ systemctl restart named-chroot
 Check
 
 ```bash
-host -t a linuxexam.am 127.0.0.1
+host -t a linuxexam.am 127.0.0.1 >> /tmp/exam-dns.out
 ```
 
 Now you should have local DNS server, 
@@ -243,7 +243,7 @@ systemctl enable --now nginx
 Check that Nginx listens port 8088:
 
 ```bash
-netstat -nlpt | grep nginx
+netstat -nlpt | grep nginx 
 ```
 
 Check
@@ -294,7 +294,7 @@ systemctl enable --now haproxy
 
 Check the status of all related services:
 ```bash
-netstat -nlpt | grep -E '(haproxy|http|nginx)'
+netstat -nlpt | grep -E '(haproxy|http|nginx)' >> /tmp/exam-webservers.out
 ```
 
 Now you connect to `linuxexam.am` several times. 
