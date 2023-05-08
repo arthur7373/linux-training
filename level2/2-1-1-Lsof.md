@@ -15,23 +15,23 @@ Simply typing **lsof** will provide a list of all open files belonging to all ac
 Most columns are self explanatory.
 **FD** & **TYPE** might need explanation
 ```bash
-**FD** – file descriptor number or type. Some of the values of FDs are,
-◾`cwd` – Current Working Directory
-◾`pd` – Parent Directory
-◾`rtd` – Root Directory
-◾`txt` – Text file
-◾`mem` – File loaded in memory (mostly a shared library)
-◾`mmap` – Memory mapped device
-◾`NUMBER` – Represent the actual file descriptor. character after the number represents the mode in which the file is opened
+FD – file descriptor number or type. Some of the values of FDs are,
+◾cwd – Current Working Directory
+◾pd – Parent Directory
+◾rtd – Root Directory
+◾txt – Text file
+◾mem – File loaded in memory (mostly a shared library)
+◾mmap – Memory mapped device
+◾NUMBER – Represent the actual file descriptor. character after the number represents the mode in which the file is opened
 	**r** - read, **w** - write, **u** - read and write
 
 
-**TYPE** – type of the file:
-◾ `REG` – Regular File
-◾ `DIR` – Directory
-◾ `LINK` – Symlink
-◾ `INET` – network connection socket
-◾ `CHR` – Character special file
+TYPE – type of the file:
+◾ REG – Regular File
+◾ DIR – Directory
+◾ LINK – Symlink
+◾ INET – network connection socket
+◾ CHR – Character special file
 
 _(see `man lsof` for more info)_
 ```
