@@ -23,7 +23,7 @@ FD – file descriptor number or type. Some of the values of FDs are,
 ◾mem – File loaded in memory (mostly a shared library)
 ◾mmap – Memory mapped device
 ◾NUMBER – Represent the actual file descriptor. character after the number represents the mode in which the file is opened
-	**r** - read, **w** - write, **u** - read and write
+	r - read, w- write, u - read and write
 
 
 TYPE – type of the file:
@@ -33,7 +33,7 @@ TYPE – type of the file:
 ◾ INET – network connection socket
 ◾ CHR – Character special file
 
-_(see `man lsof` for more info)_
+(see `man lsof` for more info)
 ```
 
 ### PRACTICE
