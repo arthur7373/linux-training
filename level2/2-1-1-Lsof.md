@@ -14,7 +14,7 @@ Simply typing **lsof** will provide a list of all open files belonging to all ac
 
 Most columns are self explanatory.
 **FD** & **TYPE** might need explanation
-
+```bash
 **FD** – file descriptor number or type. Some of the values of FDs are,
 ◾`cwd` – Current Working Directory
 ◾`pd` – Parent Directory
@@ -34,6 +34,7 @@ Most columns are self explanatory.
 ◾ `CHR` – Character special file
 
 _(see `man lsof` for more info)_
+```
 
 ### PRACTICE
 
