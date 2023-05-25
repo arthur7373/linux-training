@@ -5,9 +5,8 @@
 ##  Advanced BASH Shell Scripting
 
 
-**Quick initial script example** 
+*Quick initial script example*
 
-#### PRACTICE
 ```bash
 #!/bin/bash
 if [ -z ${1} ]; then
@@ -39,11 +38,18 @@ Note: There should be no space around “=” sign
 The following script creates a variable called LIST and assigns the value “/usr/bin”. 
 Prefix the variable name with $, which will give the value stored in that variable.
 
-Example.1 Simple Bash Variable Assignment Usage
+#### PRACTICE
+
+*Example.1 Simple Bash Variable Assignment Usage*
+
+```bash
 $ cat  >sample.sh
 #!/bin/bash
 LIST="/usr/bin/"
 ls -l $LIST
+```
 
 Execute the above script, which will list the /usr/bin in long format.
-Task: Modify the script to work with 1-st positional parameter.
+
+**Task: Modify the script to work with 1-st positional parameter.**
+
