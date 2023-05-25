@@ -53,3 +53,5 @@ Execute the above script, which will list the /usr/bin in long format.
 
 **Task: Modify the script to work with 1-st positional parameter.**
 
+
+![img.png](img.png)
