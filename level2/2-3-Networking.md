@@ -75,6 +75,56 @@ ip a
 ```
 There is old, deprecated `ifconfig` command, that should be avoided to use.
 
+
+### Configure static IP manually 
+
+Create the config file `/etc/sysconfig/network-scripts/ifcfg-<devicename>`. 
+
+Let's assume you have new network interface with name `enp0s8`
+
+You need to create the file
+`/etc/sysconfig/network-scripts/ifcfg-enp0s8`
+
+Minimum information you need there is:
+```bash
+DEVICE="enp0s8"
+ONBOOT=yes
+IPADDR=10.11.12.13
+PREFIX=24
+NM_CONTROLLED="yes"
+```
+Setting `ONBOOT` to "yes" will enable interface to be UP on boot.
+Setting `NM_CONTROLLED` to "yes" will enable managing interface by NetworkManager.
+
+You could also add a Gateway address as below.
+```bash
+GATEWAY=10.11.12.1
+```
+More settings can be found in config file for interface `enp0s3` located:
+`/etc/sysconfig/network-scripts/ifcfg-enp0s3`
+
+
+The default gateway can also be added to `/etc/sysconfig/network` file like below:
+```bash
+NETWORKING=yes
+GATEWAY=10.11.12.1
+```
+
+Remember to restart the NetworkManager service:
+`systemctl restart NetworkManager`
+
+Other way is to bring some particular interface down and up
+(in **CentOS 8** You may need to install `yum install NetworkManager-initscripts-updown` )
+
+`ifdown enp0s8`
+
+`ifup enp0s8`
+
+The ip command can be used to verify the settings
+
+`ip a`
+
+
 ### ARP Table
 `arp` command allows to see current ARP table (`arp –an`)  
 It is old command and the new equivalent is: <br>
