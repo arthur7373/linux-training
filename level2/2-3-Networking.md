@@ -124,6 +124,101 @@ The ip command can be used to verify the settings
 
 `ip a`
 
+### Network interface configuration for Ubuntu
+
+Recent version of Ubuntu Linux have network interface configuration via **Netplan**
+Since Ubuntu 20.04 Netplan replaces the traditional method of configuring network interfaces using the `/etc/network/interfaces`
+(Although it is possible to switch back to old network setup also )
+https://linuxconfig.org/how-to-switch-back-networking-to-etc-network-interfaces-on-ubuntu-20-04-focal-fossa-linux
+but it is better to stay up-to date)
+
+Network interface configurations are to be in `/etc/netplan` directory in the for of .yaml files
+
+Example of configuration `/etc/netplan/00-installer-config.yaml`
+
+```bash
+network:
+  ethernets:
+    enp0s3:
+      dhcp4: true
+  version: 2
+```
+
+Let's add second interface `enp0s8` and assign static ip address.
+We need to add following section under `ethernets`
+
+```bash
+   enp0s8:
+      addresses:
+        - 10.11.12.10/24
+```
+
+
+Note! Yaml file should be strict in the format.
+
+Resulting file will have the following look:
+
+```bash
+network:
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      addresses:
+        - 10.11.12.10/24
+  version: 2
+```
+
+Now we need to apply changes.
+
+We can just run
+
+`netplan apply`
+
+but it might be more useful to track the changes:
+
+`netplan --debug apply` 
+
+Next we can check the the configuration:
+
+`ip a`
+
+#### Managing Ubuntu network config via Network Manager
+
+Although it's not default config, it's possible to manage Ubuntu network config via Network Manager
+In order to do that we need first install Network Manager
+
+`apt install network-manager`
+
+Next we need to tell Netplan that we wan to manage config via Network Manager. 
+This can be done by adding 
+```bash
+renderer: NetworkManager
+```
+line to .yaml config after `network:`
+
+(Default renderer is `renderer: networkd` but it can be omited as default)
+
+
+Resulting file should look like:
+```bash
+network:
+  renderer: NetworkManager
+  ethernets:
+    enp0s3:
+      dhcp4: true
+    enp0s8:
+      addresses:
+        - 10.11.12.10/24
+  version: 2
+```
+
+Next we apply changes:
+
+`netplan --debug apply` 
+
+And we can now use `nmtui` to manage interfaces
+
 
 ### ARP Table
 `arp` command allows to see current ARP table (`arp –an`)  
