@@ -382,9 +382,13 @@ On VM2 run:
 
 #### iftop
 
+Install `iftop`
 `yum install iftop`
 
+or
+
 `apt install iftop`
+
 
 Show traffic for particular interface:
 
@@ -392,9 +396,11 @@ Show traffic for particular interface:
 
 Do not resolve hostnames (-n) and port numbers (-N):
 
+
 `iftop -nN -i enp0s8`
 
 Use text interface:
+
 `iftop -t`
 
 
