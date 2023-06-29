@@ -380,3 +380,24 @@ On VM1 run:
 On VM2 run:
 * `ping -c2 10.10.10.10` <br>
 
+#### iftop
+
+`yum install iftop`
+
+`apt install iftop`
+
+Show traffic for particular interface:
+
+`iftop -i enp0s8`
+
+Do not resolve hostnames (-n) and port numbers (-N):
+
+`iftop -nN -i enp0s8`
+
+Use text interface:
+`iftop -t`
+
+
+Show traffic for specifi subnet
+
+`iftop -F 192.168.2.0/24`
