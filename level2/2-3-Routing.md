@@ -41,8 +41,10 @@ and VM2 will tell neighbours to connect directly otherwise.
 
 Now we need to define routes on VM1 and VM3 to see each other
 
-* VM1 `ip a a 10.1.11.0/24 via 10.1.10.1`
-* VM3 `ip a a 10.1.10.0/24 via 10.1.11.1`
+* VM1 
+  * `ip a a 10.1.11.0/24 via 10.1.10.1`
+* VM3 
+  * `ip a a 10.1.10.0/24 via 10.1.11.1`
 
 Check if it works
 
