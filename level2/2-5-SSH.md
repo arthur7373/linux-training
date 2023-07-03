@@ -19,12 +19,12 @@ SSH allows:
 
 
 Examples:<br>
-* `ssh student@172.16.1.145`
-* `ssh -l student 172.16.1.134 date`
-* `ssh root@172.16.1.145 ' echo "Hello Linux" > /tmp/hello' `
-* `scp -r student@172.16.1.83:/etc/sysconfig /tmp`
-* `scp  student@172.16.1.134:/bin/ls  root@172.16.1.145:/tmp`
-* `sftp 10.10.10.111`
+* `ssh student@10.1.10.1`
+* `ssh -l student 10.1.10.1 date`
+* `ssh student@10.1.10.1 ' echo "Hello Linux" > /tmp/hello' `
+* `scp -r student@10.1.10.1:/etc/sysconfig /tmp`
+* `scp  student@10.1.10.1:/bin/ls  student@10.1.10.2:/tmp`
+* `sftp 10.1.10.1`
 
 
 ### SSH Windows Clients
@@ -97,18 +97,20 @@ or just run a single command remotely.
 Also you can use sftp and scp commands as well - all that without password.
 
 ```bash
-ssh -i ~/.ssh/id_myserver 10.6.0.111
-ssh -i ~/.ssh/id_myserver student@10.6.0.111 /bin/date
-scp -i ~/.ssh/id_myserver student@10.6.0.111:/bin/ls  ./
-sftp -i ~/.ssh/id_myserver 10.6.0.111
+ssh -i ~/.ssh/id_myserver 10.1.10.1
+ssh -i ~/.ssh/id_myserver student@10.1.10.1 /bin/date
+scp -i ~/.ssh/id_myserver student@10.1.10.1:/bin/ls  ./
+sftp -i ~/.ssh/id_myserver 10.1.10.1
 ```
 
 #### PRACTICE
 
-1. Create keypair on one system and copy to another. Then try connecting without password.
+1. Create keypair on one system and copy to another. 
+Then try connecting without password.
 
 
-2. Try connecting from Windows to Linux using available Windows clients.
+2. Try connecting from Windows to Linux using available 
+Windows clients.
 
 
 3. Enter Windows `PowerShell`. 
@@ -152,7 +154,7 @@ It is not necessary (or even possible) to list every single address that may con
 ```bash
 # /etc/hosts.allow: list of hosts that are allowed to access the system.
 #                   See the manual pages hosts_access(5) and hosts_options(5).
-sshd: 127.0.0.1  10.10.10.10 
+sshd: 127.0.0.1  10.1.10.1 
 ```
 
 ```bash
@@ -189,7 +191,7 @@ AddressFamily inet  #  inet - means IPv4 only AddressFamily
 ```bash
 #ListenAddress 0.0.0.0
 #ListenAddress ::
-ListenAddress 172.16.0.1
+ListenAddress 10.1.10.1
 ```
 
 Restrict long login session and trun off root login
@@ -266,7 +268,7 @@ ssh -p 5502 stident@127.0.0.1
 You should be able to connect, but below variants should not work:
 
 ```bash
-ssh -p 5502 student@10.10.10.10
+ssh -p 5502 student@10.1.10.1
 ```
 
 ```bash
@@ -277,13 +279,13 @@ ssh -p 5502 root@127.0.0.1
 2. Add per-user access config:
 
 ```bash
-AllowUsers  student@127.0.0.1  *@10.10.10.*  specialuser
+AllowUsers  student@127.0.0.1  *@10.1.10.*  specialuser
 ```
 
 You should now be able to connect, with below variants:
 
 ```bash
-ssh -p 5502 student@10.10.10.10
+ssh -p 5502 student@10.1.10.1
 ```
 
 ```bash
@@ -334,7 +336,7 @@ Add to your following to the line of you public key, before "**ssh-rsa ...**"
 in `~/.ssh/authorized_keys` file: 
 
 ```bash
-from="127.0.0.1,10.10.10.*",command="w" ssh-rsa ...
+from="127.0.0.1,10.1.10.*",command="w" ssh-rsa ...
 ```
 
 Now try connecting:  
@@ -377,7 +379,7 @@ if [ -n "$SSH_ORIGINAL_COMMAND" ]; then
     fi
 fi
 ```
-> NOTE: Allowed command in the above script specifically ends with `\ `, 
+> NOTE: Allowed **ls** command in the above script specifically ends with `\ `, 
 > which means, there should be a space after the command (for options/arguments):
 > 
 > `^ls\ `
@@ -387,7 +389,7 @@ fi
 
 2. Modify `~/.ssh/authorized_keys` file:
 ```bash
-from="127.0.0.1,10.10.10.*",command="/opt/checkssh" ssh-rsa ...
+from="127.0.0.1,10.1.10.*",command="/opt/checkssh" ssh-rsa ...
 ```
 
 3. Try run 
@@ -397,6 +399,7 @@ from="127.0.0.1,10.10.10.*",command="/opt/checkssh" ssh-rsa ...
 `ssh student@127.0.0.1 ls -l /tmp`
 
 The same way other restricted commands can be specified (like `rsync`, discussed below).  
+
 
 ### Rsync
 
@@ -508,7 +511,7 @@ Syntax is like:<br>
 1. Mount remote directory via ssh link
 ```bash
 mkdir /opt/sshfs
-sshfs student@10.10.10.11:/tmp/rs1  /opt/sshfs -o reconnect
+sshfs student@10.1.10.1:/tmp/rs1  /opt/sshfs -o reconnect
 df -h
 ```
 > To set other UID/GID on copied files we can add:<br>
@@ -607,8 +610,8 @@ where you will see you IP:
 
 `fail2ban-client set sshd unbanip <IP address>`
 
-8. Create whitelist of you subnets with the following option added to `/etc/fail2ban/jail.local`:
-```
+8. Create whitelist of your subnets with the following option added to `/etc/fail2ban/jail.local`:
+```bash
 ignoreip = 127.0.0.1/8 192.168.0.0/16 10.0.0.0/8
 ```
 
