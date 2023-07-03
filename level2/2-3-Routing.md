@@ -36,7 +36,8 @@ Check if it works
 On VM2 run following to block **icmp redirects** since all interfaces are in one LAN, 
 and VM2 will tell neighbours to connect directly otherwise.
 
-* VM2 - `iptables -A OUTPUT -p icmp -m icmp --icmp-type redirect -j DROP`
+* VM2
+  * `iptables -A OUTPUT -p icmp -m icmp --icmp-type redirect -j DROP`
 
 Now we need to define routes on VM1 and VM3 to see each other
 
@@ -46,13 +47,12 @@ Now we need to define routes on VM1 and VM3 to see each other
 Check if it works
 
 * VM1
+  * `ping 10.1.11.2`
+  * `mtr 10.1.11.2`
 
-`ping 10.1.11.2`  
-`mtr 10.1.11.2`
 * VM3
-
-`ping 10.1.10.2`  
-`mtr 10.1.10.2`
+  * `ping 10.1.10.2`
+  * `mtr 10.1.10.2`
 
 VM2 now acts as router and redirects/forwards ip packets between hosts.
 It is important to understand that apart from routing itself 
@@ -63,7 +63,8 @@ Check that setting (on recent Linux versions it is enabled = set to **1**):
 
 we can now diasble it:
 
-VM2 `echo 0 >/proc/sys/net/ipv4/ip_forward`
+* VM2 
+  * `echo 0 >/proc/sys/net/ipv4/ip_forward`
 
 Note that pings from VM1 to VM3 and vice versa will stop !
 
