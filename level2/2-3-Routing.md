@@ -59,9 +59,10 @@ It is important to understand that apart from routing itself
 PACKET FORWARDING is controlled by additional kernel setting `/proc/sys/net/ipv4/ip_forward`
 
 Check that setting (on recent Linux versions it is enabled = set to **1**):
+
 `cat /proc/sys/net/ipv4/ip_forward`
 
-we can now diasble it:
+we can now disable it:
 
 * VM2 
   * `echo 0 >/proc/sys/net/ipv4/ip_forward`
