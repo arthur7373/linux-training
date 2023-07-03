@@ -9,14 +9,14 @@ IP address/Routing scheme is as follows.
 
 Assign IP addresses to network interfaces (use `nmtui` for easy config)
 
-* VM1 enp0s8 
+* VM1  
   * IP `10.1.10.2/24`
 
-* VM2 enp0s8 
+* VM2  
   * IP1 `10.1.10.1/24`
   * IP2 `10.1.11.1/24`
 
-* VM3 enp0s8 
+* VM3  
   * IP `10.1.11.2/24`
 
 
@@ -45,11 +45,11 @@ Now we need to define routes on VM1 and VM3 to see each other
 
 Check if it works
 
-* VM1 - 
+* VM1
 
 `ping 10.1.11.2`  
 `mtr 10.1.11.2`
-* VM3 - 
+* VM3
 
 `ping 10.1.10.2`  
 `mtr 10.1.10.2`
