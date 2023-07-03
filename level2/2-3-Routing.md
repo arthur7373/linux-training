@@ -58,6 +58,13 @@ sysctl -p /usr/lib/sysctl.d/50-default.conf
 ```
 
 
+#### Task
+
+Make static routes on VM1 and VM3 permanent, so they persist after reboot. 
+Use `nmtui` for that.
+
+
+
 ### Network Traffic Monitor Tools
 
 **tcpdump** - basic tool to troubleshoot network.<br>
