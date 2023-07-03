@@ -22,10 +22,15 @@ Assign IP addresses to network interfaces (use `nmtui` for easy config)
 
 Check if it works
 
-* VM1 - `ping 10.1.10.1`
-* VM2 - `ping 10.1.10.2`
-* VM2 - `ping 10.1.11.2`
-* VM3 - `ping 10.1.11.1`
+* VM1
+  * `ping 10.1.10.1`
+  
+* VM2 
+  * `ping 10.1.10.2`
+  * `ping 10.1.11.2`
+  
+* VM3 
+  * `ping 10.1.11.1`
 
 
 On VM2 run following to block **icmp redirects** since all interfaces are in one LAN, 
