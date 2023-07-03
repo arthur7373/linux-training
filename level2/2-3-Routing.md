@@ -5,20 +5,25 @@
 ### PRACTICE with routing
 
 We need 3 VMs (VM1, VM2, VM3) with second Host-Only network interface (most probably **enp0s8**).
-IP address/Routing scheme is as follows:
+IP address/Routing scheme is as follows.
+
+Assign IP addresses to network interfaces (use `nmtui` for easy config)
 
 VM1 enp0s8 IP - `10.1.10.2/24`
 VM2 enp0s8 IP1 - `10.1.10.1/24`, IP2 - `10.1.11.1/24`
 VM3 enp0s8 IP - `10.1.11.2/24`
 
-Assign IP addresses to network interfaces and check if it works
+
+Check if it works
 
 * VM1 - `ping 10.1.10.1`
 * VM2 - `ping 10.1.10.2`
 * VM2 - `ping 10.1.11.2`
 * VM3 - `ping 10.1.11.1`
 
-On VM2 run following to block icm redirects since all interfaces are in one LAN
+
+On VM2 run following to block **icmp redirects** since all interfaces are in one LAN, 
+and VM2 will tell neighbours to connect directly otherwise.
 
 * VM2 - `iptables -A OUTPUT -p icmp -m icmp --icmp-type redirect -j DROP`
 
