@@ -159,6 +159,7 @@ On VM2 run:
 #### iftop
 
 Install `iftop`
+
 `yum install iftop`
 
 or
