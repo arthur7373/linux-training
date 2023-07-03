@@ -87,7 +87,7 @@ echo  'net.ipv4.ip_forward = 1'  >>  /usr/lib/sysctl.d/50-default.conf
 sysctl -p /usr/lib/sysctl.d/50-default.conf
 ```
 
-* Ubuntu version
+* Ubuntu/Debian version
 ```bash
 echo  'net.ipv4.ip_forward = 1'  >> /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
@@ -160,11 +160,12 @@ On VM2 run:
 
 Install `iftop`
 
+CentOS/RHEL: 
 `yum install iftop`
 
-or
-
+Ubuntu/Debian: 
 `apt install iftop`
+
 
 
 Show traffic for particular interface:
