@@ -9,9 +9,15 @@ IP address/Routing scheme is as follows.
 
 Assign IP addresses to network interfaces (use `nmtui` for easy config)
 
-VM1 enp0s8 IP - `10.1.10.2/24`
-VM2 enp0s8 IP1 - `10.1.10.1/24`, IP2 - `10.1.11.1/24`
-VM3 enp0s8 IP - `10.1.11.2/24`
+* VM1 enp0s8 
+  * IP `10.1.10.2/24`
+
+* VM2 enp0s8 
+  * IP1 `10.1.10.1/24`
+  * IP2 `10.1.11.1/24`
+
+* VM3 enp0s8 
+  * IP `10.1.11.2/24`
 
 
 Check if it works
