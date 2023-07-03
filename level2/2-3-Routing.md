@@ -42,9 +42,9 @@ and VM2 will tell neighbours to connect directly otherwise.
 Now we need to define routes on VM1 and VM3 to see each other
 
 * VM1 
-  * `ip a a 10.1.11.0/24 via 10.1.10.1`
+  * `ip r a 10.1.11.0/24 via 10.1.10.1`
 * VM3 
-  * `ip a a 10.1.10.0/24 via 10.1.11.1`
+  * `ip r a 10.1.10.0/24 via 10.1.11.1`
 
 Check if it works
 
@@ -57,10 +57,17 @@ Check if it works
   * `mtr 10.1.10.2`
 
 VM2 now acts as router and redirects/forwards ip packets between hosts.
+
+#### PACKET FORWARDING
 It is important to understand that apart from routing itself 
 PACKET FORWARDING is controlled by additional kernel setting `/proc/sys/net/ipv4/ip_forward`
 
-Check that setting (on recent Linux versions it is enabled = set to **1**):
+* **1** means enabled 
+* **0** means disabled
+
+(NOTE! Default setting differs depending on Linux distribution version)
+
+Check current setting: 
 
 `cat /proc/sys/net/ipv4/ip_forward`
 
@@ -69,23 +76,31 @@ we can now disable it:
 * VM2 
   * `echo 0 >/proc/sys/net/ipv4/ip_forward`
 
-Note that pings from VM1 to VM3 and vice versa will stop !
+You can notice that pings (in fact any packet transfer between subnets) from VM1 to VM3 and vice versa will stop !
 
-If we want to make this setting permanent we need to do:
+If we want to make this setting **permanent**, so they persist after reboot
+we need to do:
+
+* CentOS/RHEL version
 ```bash
 echo  'net.ipv4.ip_forward = 1'  >>  /usr/lib/sysctl.d/50-default.conf
 sysctl -p /usr/lib/sysctl.d/50-default.conf
 ```
 
+* Ubuntu version
+```bash
+echo  'net.ipv4.ip_forward = 1'  >> /etc/sysctl.conf
+sysctl -p /etc/sysctl.conf
+```
 
-#### Task
+#### TASK
 
-Make static routes on VM1 and VM3 permanent, so they persist after reboot. 
+Make static routes on VM1 and VM3 **permanent**, so they persist after reboot. 
 Use `nmtui` for that.
 
 
 
-### Network Traffic Monitor Tools
+### Network Traffic Analysis and Monitoring Tools
 
 **tcpdump** - basic tool to troubleshoot network.<br>
 **iftop** - interactive interface monitor tool.
@@ -155,8 +170,7 @@ Show traffic for particular interface:
 
 `iftop -i enp0s8`
 
-Do not resolve hostnames (-n) and port numbers (-N):
-
+Disable resolving hostnames (-n) and port numbers (-N):
 
 `iftop -nN -i enp0s8`
 
@@ -164,7 +178,12 @@ Use text interface:
 
 `iftop -t`
 
+Display bandwidth rates in bytes/sec instead of bits/sec
 
-Show traffic for specify subnet
+`iftop -B`
+
+Show traffic for specific subnet
 
 `iftop -F 10.1.10.0/24`
+
+More info about `iftop` can be found in `man iftop`
