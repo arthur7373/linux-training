@@ -454,10 +454,9 @@ other lines will be present in output
 Remove comments (lines starting with ‘#’ - ^#) and empty lines (^$) from output:  
 `sed '/^#\|^$/d' /etc/rsyslog.conf` 
 
-d command causes specified lines: 
-^# - starting with ‘#’  
-or (\|) 
-^$ - empty line (^- line start, $ - line end) 
+**d** command causes specified lines: <br>
+**^#** - starting with **‘#’** or (\|) <br>
+**^$** - empty line (^- line start, $ - line end) 
 to be deleted/removed from output, 
 other lines will be present in output 
 
