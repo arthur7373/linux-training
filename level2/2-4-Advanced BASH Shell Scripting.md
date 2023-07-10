@@ -434,13 +434,14 @@ To replace all occurrences we should add ‘g’ to make replacement global:
 
 `cat /etc/passwd | sed -e 's/:/<*>/g'  `
 
+
 Another useful examples with SED: 
 
 Output lines 5-7 
 `sed -n '5,7p' /etc/group`
 
--n causes not to output each processed lines 
-p command specifies print (output) specified line range: 5-7 
+**-n** causes not to output each processed lines<br>
+**p** command specifies print (output) specified line range: 5-7 
 
 
 Output all lines except 1-20 
