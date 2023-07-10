@@ -127,3 +127,7 @@ up arrow will not give you echo
 $PS1 Main prompt string for command line 
 export PS1="[\@] \u@\h> " 
 $PS2 Second prompt string 
+
+
+
+![](../images/bash/01.jpg)
