@@ -25,6 +25,7 @@ do
     echo ""
 done
 EOF1
+chmod +x ~/ex1.sh 
 ```
 
 ### Variables
@@ -51,6 +52,7 @@ cat  > ~/sample.sh  << "EOF1"
 LIST="/usr/bin/"
 ls -l $LIST
 EOF1
+chmod +x ~/sample.sh
 ```
 
 Execute the above script, which will list the /usr/bin in long format.
@@ -67,12 +69,13 @@ you will not get any warning or error message. Instead, it will display a blank 
 
 
 ```bash
-cat > var1.sh << "EOF1"
+cat > ~/var1.sh << "EOF1"
 #!/bin/bash 
 echo "Variable value is: $VAR1" 
 VAR1="LINUX" 
 echo "Variable value is: $VAR1" 
 EOF1
+chmod +x ~/var1.sh
 ```
 
 Initially the variable will have a blank value, after assigning, you can get your values.  
