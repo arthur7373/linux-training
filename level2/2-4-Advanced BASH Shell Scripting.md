@@ -274,19 +274,23 @@ The function definition must precede the first call to it.
 
 
 Bash function syntax variants: 
-```bash
-function_name () { 
-commands... 
-} 
-```
+>
+> function_name () {
+> 
+> commands... 
+> 
+> } 
+>
 
 or
 
-```bash
-function function_name { 
-commands... 
-} 
-```
+>
+> function function_name { 
+> 
+> commands... 
+> 
+> } 
+
 
 Most other programming languages have the concept of a return value for functions, a means for the 
 function to send data back to the original calling location. Bash functions don't allow us to do this.  
@@ -297,6 +301,7 @@ Examples
 ```bash
 cat > ~/f1.sh << "EOF1"
 #!/bin/bash 
+
 somef () {  
 echo "We learn $1" 
 } 
@@ -312,11 +317,19 @@ chmod +x ~/f1.sh
 
 ```bash
 cat > ~/f2.sh << "EOF1"
-#!/bin/bash 
-linefile () { 
+#!/bin/bash
+
+if [ -z ${1} ]; then
+echo "Usage: $0 <filename>"
+exit
+fi
+
+linefile () {
 cat $1 | wc -l 
 } 
-NUML=$(linefile $1) 
+
+NUML=$(linefile $1)
+
 echo The file $1 has $NUML lines in it.
 EOF1
 chmod +x ~/f2.sh
