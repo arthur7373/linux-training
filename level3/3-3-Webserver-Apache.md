@@ -51,22 +51,23 @@ Which means include any `*.conf` files from `/etc/httpd/conf.d`
 
 Create a separate virtual host configuration file /etc/httpd/conf.d/lt01.am.conf:
 
+
 ```bash
-cat > /etc/httpd/conf.d/lt01.am.conf 
+cat  > /etc/httpd/conf.d/lt01.am.conf << "EOF1"
+<VirtualHost *:80> 
+ServerName lt01.am
+ServerAlias www.lt01.am
+DocumentRoot /var/www/lt01.am
+CustomLog /var/log/httpd/lt01.am-access.log combined
+ErrorLog /var/log/httpd/lt01.am-error.log
+ <Directory /var/www/lt01.am>
+      Options -Indexes
+      AllowOverride ALL
+ </Directory>
+</VirtualHost>
+EOF1
+
 ```
-> ```bash 
-> <VirtualHost *:80> 
-> ServerName lt01.am
-> ServerAlias www.lt01.am
-> DocumentRoot /var/www/lt01.am
-> CustomLog /var/log/httpd/lt01.am-access.log combined
-> ErrorLog /var/log/httpd/lt01.am-error.log
->  <Directory /var/www/lt01.am>
->       Options -Indexes
->      AllowOverride ALL
->  </Directory>
-> </VirtualHost>
-> ```
 
 Create virtual host website directory:  
 ```bash
@@ -75,9 +76,10 @@ mkdir /var/www/lt01.am
 
 Put some file there as ‘index.html’ to be displayed as main page:
 ```bash
-cat << EOF1 > /var/www/lt01.am/index.html
+cat  > /var/www/lt01.am/index.html << "EOF1"
 HI this is APACHE page
 EOF1
+
 ```
 
 Restart Apache:
@@ -86,10 +88,11 @@ systemctl restart httpd
 ```
 
 Check
-```bash
-links lt01.am
-curl -s http://lt01.am/ | grep APACHE 
-```
+
+`links lt01.am`
+
+`curl -s http://lt01.am/ | grep APACHE`
+
 
 ### Access Control with .htaccess (http://www.htaccess-guide.com/)
 
@@ -110,6 +113,7 @@ allow from 127.
 #allow from 192.168. 
 options +indexes
 EOF2
+
 ```
 
 Now try opening it
@@ -139,6 +143,7 @@ Now we can create an index file
 cat << EOF1 > /var/www/lt01.am/closed/index.html
 <h2> THIS IS INDEX OF CLOSED DIR </h2>
 EOF1
+
 ```
 
 Try to open it again
@@ -152,6 +157,7 @@ We can add handling of HTTP protocols errors, like 404 - Not found
 cat << EOF3 >> /var/www/lt01.am/closed/.htaccess
 ErrorDocument 404 http://ping.eu
 EOF3
+
 ```
 
 Now if we try non existing URL, we will be redirected to `ping.eu`
@@ -173,6 +179,7 @@ AuthUserFile /etc/httpd/conf.d/.htpasswd
 AuthType Basic
 require valid-user
 EOF4
+
 ```
 
 Create user ‘test123’ and set the password 
@@ -217,6 +224,7 @@ Now we can create an PHP index file
 cat << EOF1 > /var/www/lt01.am/index.php
 <?php echo "<h3>HI THIS PHP INDEX</h3>"; ?>
 EOF1
+
 ```
 
 Check: 
@@ -243,11 +251,9 @@ mysqladmin -u root password '123456'
 > NOTE: we do this for testing, but in production it should be done via `mysql_secure_installation`
 
 Check MySQL.  Create mysqltest.php
-```bash
-nano /var/www/lt01.am/mysqltest.php
-```
 
 ```bash
+cat > /var/www/lt01.am/mysqltest.php << "EOF1"
 <?php
 $user = "root";
 $password = "123456";
@@ -267,6 +273,8 @@ try {
 }
 
 ?>
+EOF1
+
 ```
 
 Check: 
@@ -281,6 +289,7 @@ CREATE DATABASE tester;
 GRANT ALL PRIVILEGES ON tester.* TO tester@localhost IDENTIFIED BY 'test555' WITH GRANT OPTION;
 flush privileges;
 EOF4
+
 ```
 
 Check again: 
@@ -299,15 +308,15 @@ openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key
 
 Put certificates at their place:
 ```bash
-mv lt01.am.crt /etc/pki/tls/certs
+mv lt01.am.crt /etc/pki/tls/certs ;\
 mv lt01.am.key /etc/pki/tls/private
 ```
 
 ### Create SSL Virtual Host
 
 ```bash
-cat <<EOF4  > /etc/httpd/conf.d/lt01.am-ssl.conf 
- <VirtualHost *:443>
+cat <<EOF1  > /etc/httpd/conf.d/lt01.am-ssl.conf 
+<VirtualHost *:443>
         SSLEngine on
         SSLCertificateFile /etc/pki/tls/certs/lt01.am.crt
         SSLCertificateKeyFile /etc/pki/tls/private/lt01.am.key
@@ -320,7 +329,8 @@ cat <<EOF4  > /etc/httpd/conf.d/lt01.am-ssl.conf
         ErrorLog logs/lt01.am-ssl_error_log
         TransferLog logs/lt01.am-ssl_access_log
 </VirtualHost>
-EOF4
+EOF1
+
 ```
 
 Restart Apache: 
@@ -329,18 +339,29 @@ systemctl restart httpd
 ```
 
 Redirect 80 port to 443 (SSL)
-```bash
-/etc/httpd/conf.d/lt01.am.conf
-```
 
-> ```bash
-> <VirtualHost *:80>
-> ServerName www.lt01.am 
-> ServerAlias lt01.am
+Add following line to  `/etc/httpd/conf.d/lt01.am.conf`
 > Redirect permanent  /  https://www.lt01.am/
-> …
-> </VirtualHost>
-> ```
+
+Following command will REPLACE previous config file.
+
+```bash
+cat  > /etc/httpd/conf.d/lt01.am.conf << "EOF1"
+<VirtualHost *:80> 
+ServerName lt01.am
+ServerAlias www.lt01.am
+Redirect permanent  /  https://www.lt01.am/
+DocumentRoot /var/www/lt01.am
+CustomLog /var/log/httpd/lt01.am-access.log combined
+ErrorLog /var/log/httpd/lt01.am-error.log
+ <Directory /var/www/lt01.am>
+      Options -Indexes
+      AllowOverride ALL
+ </Directory>
+</VirtualHost>
+EOF1
+
+```
 
 Restart Apache: 
 ```bash
@@ -350,13 +371,14 @@ systemctl restart httpd
 
 ### Hardening Apache
 
-```bash
-ServerTokens Prod
-ServerSignature Off 
-```
+* Following options are to be set
 
-Change
+`ServerTokens Prod` 
 
+`ServerSignature Off`
+
+
+* Change
 ```bash
 AddType application/x-httpd-php .php 
 ```
@@ -368,15 +390,15 @@ AddHandler php5-script .php .php~
 AddType text/html .php .php~
 ```
 
-Remove Indexes from Options 
 
-Hide PHP version (X-Powered-By) in php.ini
+* Remove `Indexes` from Options 
+
+* Hide PHP version (X-Powered-By) in `php.ini`
 (it could be located in different places /etc/php.ini, /etc/php5/apache2/php.ini, ) 
 > expose_php = Off
 
-> Reduce Timeout:		Timeout 45
+* Reduce Timeout:		
+> Timeout 45
 
-Limit big requests:	
+* Limit big requests:	
 > LimitRequestBody 1048576
-
-

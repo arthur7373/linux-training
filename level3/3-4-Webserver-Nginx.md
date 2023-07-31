@@ -54,7 +54,7 @@ Now you should have running Apache webserver on port 8080, and Nginx on port 80
 
 Create virtual host config file for our domain `lt01.am`
 ```bash
-cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
 server {
 listen *:80;
 access_log /var/log/nginx/lt01.am-access.log;
@@ -76,6 +76,7 @@ root /var/www/lt01.am;
 }
 }
 EOF1
+
 ```
 Ensure SELinux is tuned off (to allow redirection from Nginx to Apache): 
 ```bash
@@ -113,7 +114,7 @@ links lt01.am/inf.php
 We need to change configuration of our virtual host as follows
 
 ```bash
-cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
 server {
 listen *:80;
 access_log /var/log/nginx/lt01.am-access.log;
@@ -125,6 +126,7 @@ root /var/www/lt01.am-nginx;
 }
 }
 EOF1
+
 ```
 
 Create new directory for Nginx virtual host:
@@ -135,9 +137,10 @@ mkdir /var/www/lt01.am-nginx
 
 Put some index page there:
 ```bash
-cat << EOF1 > /var/www/lt01.am-nginx/index.html
+cat << "EOF1" > /var/www/lt01.am-nginx/index.html
 HI this is NGINX page
 EOF1
+
 ```
 
 Restart Nginx: 
@@ -186,7 +189,7 @@ listen       [::]:8088 default_server;
  
 Replace file `/etc/nginx/conf.d/lt01.am.conf` with another port:
 ```bash
-cat << EOF1 > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
 server {
 listen *:8088;
 access_log /var/log/nginx/lt01.am-access.log;
@@ -198,6 +201,7 @@ root /var/www/lt01.am-nginx;
 }
 }
 EOF1
+
 ```
 
 Restart Nginx:
@@ -222,7 +226,7 @@ Move default HAProxy config and create simple configuration.
 
 ```bash
 mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-orig ;\
-cat << EOF1 > /etc/haproxy/haproxy.cfg
+cat << "EOF1" > /etc/haproxy/haproxy.cfg
 # define frontend ( any name is OK for [http-in] )
 frontend http-in
     # listen 80 port
@@ -240,6 +244,7 @@ backend backend_servers
     server             node01 127.0.0.1:8080 check
     server             node02 127.0.0.1:8088 check
 EOF1
+
 ```
 
 Enable and start HAProxy
