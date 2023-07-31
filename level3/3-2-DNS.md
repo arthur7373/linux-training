@@ -192,17 +192,19 @@ EOF1
 ```bash
 cat  > /var/named/chroot/var/named/lt01.am.db  << "EOF1"
 $TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. ( 2023090100
-                            3H ; refresh
-                            1H ; retry
-                            1W ; expire
-                            1H ) ; minimum
-                            NS      ns.lt01.am.
-                            MX      0 mail
-                            A       10.10.1.1
-www                         A       10.10.1.1
-ns                          A       10.10.1.2
-mail                        A       10.10.1.3
+@       SOA     ns.lt01.am.     dns.lt01.am. (
+                          2023090100 ; serial
+                          3H ; refresh
+                          1H ; retry
+                          1W ; expire
+                          1H ; minimum
+                          )
+                          NS      ns.lt01.am.
+                          MX      0 mail
+                          A       10.10.1.1
+www                       A       10.10.1.1
+ns                        A       10.10.1.2
+mail                      A       10.10.1.3
 EOF1
 
 ```
@@ -276,11 +278,13 @@ EOF1
 ```bash
 cat  > /var/named/chroot/var/named/10.10.1.rev.db  << "EOF1"
 $TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. (2023090100
+@       SOA     ns.lt01.am.     dns.lt01.am. (
+                          2023090100 ; serial
                           3H ; refresh
                           1H ; retry
                           1W ; expire
-                          1H ) ; minimum
+                          1H ; minimum
+                          )
                           NS		ns.lt01.am.
 1                         PTR		www.lt01.am.
 2                         PTR		ns.lt01.am.
