@@ -143,14 +143,21 @@ cat > ~/mkuniq.sh << "EOF1"
 # Create an array "INPUT" from all positional parameters. 
 INPUT=( 1 2 3 4 11 12 3 4 55 6 77 77 55 9 3) 
 # 
+echo "Initial array is:"
+for VAR1 in ${INPUT[@]}; do 
+    echo $VAR1 
+done
+echo
 # Create another array "UNIQ" from the output of the 3 command pipe grouped togehter. 
 # "tr" replaces spaces with newlines, so each element is now on separate line. 
 # We operate with lines by sorting them with "sort" and then removing duplicates with "uniq" 
 UNIQ=( $(echo ${INPUT[@]} | tr ' ' '\n' | sort | uniq) ) 
 # 
+echo "Modified array is:"
 # Output each value from new array 
-for VAR in ${UNIQ[@]}; do 
-    echo $VAR 
+for VAR2 in ${UNIQ[@]}; do 
+
+    echo $VAR2 
 done
 EOF1
 chmod +x ~/mkuniq.sh
