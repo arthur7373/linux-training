@@ -45,20 +45,30 @@ After several below examples you will quickly get the idea of _here document_ us
 
 ```bash
 cat  > ~/ex1.sh  << "EOF1"
+
 #!/bin/bash
+
 if [ -z ${1} ]; then
 echo "Usage: $0 <number>"
 exit
 fi
-echo "How do you like it:"
-for (( i=1; i<=${1}; i++ ))
-do
-    for (( j=1; j<=i;  j++ ))
-    do
-     echo -n "$i"
-    done
-    echo ""
-done
+
+if [ $1 -eq $1 2>/dev/null ]
+then
+        echo "How do you like it:"
+                for (( i=1; i<=${1}; i++ ))
+                do
+                        for (( j=1; j<=i;  j++ ))
+                        do
+                        echo -n "$i"
+                        done
+                        echo ""
+                done
+else
+ echo "$1 is not a number"
+ exit
+fi
+
 EOF1
 chmod +x ~/ex1.sh
 
