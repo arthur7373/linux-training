@@ -127,19 +127,25 @@ _ARRAY=(value1 value2 ... valueN)_
 
 Contents of an array element is available as  _${ARRAY[valueN]}_
 
-Example:
+Simple array example:
 
 ```bash
 cat > ~/array.sh << "EOF1"
 AR=( zero one two three four five ) # define the array 
-echo ${AR[2]} # get the 2-nd element 
-echo ${AR[*]} # get the whole array 
+
+echo "Whole array is:"
+echo ${AR[*]}  # get the whole array 
+echo 
+echo "3-rd element is:"
+echo ${AR[2]} # get the 3-rd element 
 EOF1
 chmod +x ~/array.sh
 
 ```
 
-Simple script
+
+Advanced example working with arrays:
+
 
 ```bash
 cat > ~/mkuniq.sh << "EOF1"
