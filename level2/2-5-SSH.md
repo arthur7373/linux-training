@@ -29,9 +29,10 @@ Examples:<br>
 
 ### SSH Windows Clients
 
-Some free SSH clients for Windows are (plus many commercial ones, like: SecureCRT,Xshell,...):
-* PuTTY (http://www.putty.org/) <br><br>
-* MobaXterm (http://mobaxterm.mobatek.net/) - Enhanced terminal for Windows with X11 server, tabbed SSH client, network tools and much more<br><br>
+Some free SSH/SCP/SFTP clients for Windows are (plus many commercial ones, like: SecureCRT,...):
+* PuTTY (https://www.putty.org/) <br><br>
+* Xshell/XFTP (https://www.netsarang.com/ru/free-for-home-school/) - Now is free for non-commercial use. <br><br>
+* MobaXterm (https://mobaxterm.mobatek.net/) - Enhanced terminal for Windows with X11 server, tabbed SSH client, network tools and much more<br><br>
 * Windows 10 (_from ver.1803_), OpenSSH Client has been implemented as a Windows 
 feature _(if not can be added via “Optional features” (start typing in search “optional”…)_
 

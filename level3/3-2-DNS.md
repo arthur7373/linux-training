@@ -6,10 +6,9 @@ Basic knowledge of DNS is essential for this part.
 
 Some URLs:
 
-* `https://www.dnstree.com/`
-* `https://simpledns.plus/lookup-dg`
-* `http://www.kloth.net/services/dig.php`
-* `http://dns.squish.net/`
+* http://www.kloth.net/services/dig.php
+* https://simpledns.plus/lookup-dg
+* http://dns.squish.net/
 
 
 
