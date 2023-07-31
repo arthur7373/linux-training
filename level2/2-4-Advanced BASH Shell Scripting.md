@@ -201,8 +201,10 @@ cat > ~/trap.sh << "EOF1"
 #!/bin/bash 
 trap 'echo " Ctrl-C IGNORED" ' 2 
 trap 'echo " Ctrl-\ IGNORED" ' 3 
-while true ; do 
+echo
 echo 'I will sleep for 500 seconds'
+echo 
+while true ; do 
 echo 'Try to stop me with Ctrl-C, Ctrl-\' 
 sleep 500 
 done
