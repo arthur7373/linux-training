@@ -6,7 +6,7 @@
 
 
 
-#### Here Documents 
+### Here Documents 
 
 _Here document_ is useful advanced Bash scripting technique, 
 that allows to specify multiple lines of input for a command. 
