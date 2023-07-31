@@ -41,7 +41,6 @@ After that we also add **chmod** command to make script executable.
 
 After several below examples you will quickly get the idea of _here document_ usage.
 
-
 *Quick initial script example*
 
 ```bash
