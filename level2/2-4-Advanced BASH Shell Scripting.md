@@ -25,7 +25,8 @@ do
     echo ""
 done
 EOF1
-chmod +x ~/ex1.sh 
+chmod +x ~/ex1.sh
+
 ```
 
 ### Variables
