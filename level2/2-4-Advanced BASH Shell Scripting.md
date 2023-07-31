@@ -7,9 +7,9 @@
 
 *Quick initial script example*
 
-`cat > ex1.sh`
 
 ```bash
+cat << EOF1 > ~/ex1.sh
 #!/bin/bash
 if [ -z ${1} ]; then
 echo "Usage: $0 number of loops"
@@ -24,6 +24,7 @@ do
     done
     echo ""
 done
+EOF1
 ```
 
 ### Variables
