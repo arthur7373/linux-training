@@ -130,9 +130,13 @@ Contents of an array element is available as  _${ARRAY[valueN]}_
 Example:
 
 ```bash
+cat > ~/array.sh << "EOF1"
 AR=( zero one two three four five ) # define the array 
 echo ${AR[2]} # get the 2-nd element 
 echo ${AR[*]} # get the whole array 
+EOF1
+chmod +x ~/array.sh
+
 ```
 
 Simple script
