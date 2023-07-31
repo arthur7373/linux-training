@@ -208,6 +208,7 @@ sleep 500
 done
 EOF1
 chmod +x ~/trap.sh
+
 ```
 
 After running the above script you **will not be able to stop it.** 
