@@ -48,7 +48,7 @@ After several below examples you will quickly get the idea of _here document_ us
 cat  > ~/ex1.sh  << "EOF1"
 #!/bin/bash
 if [ -z ${1} ]; then
-echo "Usage: $0 number of loops"
+echo "Usage: $0 <number>"
 exit
 fi
 echo "How do you like it:"
