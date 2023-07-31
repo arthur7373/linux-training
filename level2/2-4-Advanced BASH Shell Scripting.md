@@ -54,6 +54,7 @@ LIST="/usr/bin/"
 ls -l $LIST
 EOF1
 chmod +x ~/sample.sh
+
 ```
 
 Execute the above script, which will list the /usr/bin in long format.
@@ -77,6 +78,7 @@ VAR1="LINUX"
 echo "Variable value is: $VAR1" 
 EOF1
 chmod +x ~/var1.sh
+
 ```
 
 Initially the variable will have a blank value, after assigning, you can get your values.  
@@ -135,9 +137,8 @@ echo ${AR[*]} # get the whole array
 
 Simple script
 
-`cat > ./mkuniq` 
-
 ```bash
+cat > ~/mkuniq.sh << "EOF1"
 #!/bin/bash 
 # Create an array "INPUT" from all positional parameters. 
 INPUT=( 1 2 3 4 11 12 3 4 55 6 77 77 55 9 3) 
@@ -150,7 +151,10 @@ UNIQ=( $(echo ${INPUT[@]} | tr ' ' '\n' | sort | uniq) )
 # Output each value from new array 
 for VAR in ${UNIQ[@]}; do 
     echo $VAR 
-done 
+done
+EOF1
+chmod +x ~/mkuniq.sh
+
 ```
 
 ##### Task1: 
