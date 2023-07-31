@@ -31,13 +31,13 @@ In examples below "EOF1" delimiter string is used, but it can be other as well.
 > is being delivered to the command as-is.
 
 
-#### How we use _here documents_ in this part
+#### How we use _here documents_ below
 
 We start with here document, since all below examples of script code 
-use this technique for giving input to **cat** command to create named file 
-containig particular script.
+use this technique for giving input to ` cat ` command to create some file 
+containing particular script.
 
-After that we also add **chmod** command to make it executable.
+After that we also add **chmod** command to make script executable.
 
 After several below examples you will quickly get the idea of _here document_ usage.
 
@@ -97,7 +97,7 @@ Execute the above script, which will list the /usr/bin in long format.
 
 **Task: Modify the script to work with 1-st positional parameter.**
 
-### Bash Variable Scope – Local and Global 
+#### Bash Variable Scope – Local and Global 
 
 In Bash, variables do not have to be declared. When you access the variable which is not used so far, 
 you will not get any warning or error message. Instead, it will display a blank value. 
@@ -157,7 +157,7 @@ The following table lists some important Bash internal variables that can be red
 The following table lists some important special characters:  
 ![](../images/bash/bash02.jpg)
 
-#### Arrays
+### Arrays
 
 _ARRAY=(value1 value2 ... valueN)_ 
 
@@ -218,7 +218,7 @@ Modify script to:
 1. create array “INPUT” from all positional parameters 
 2. output usage if no parameters are given 
 
-#### Signal Traps 
+### Signal Traps 
 
 Bash has an internal trap command to reassign the signal actions, which can be useful in scripts. 
 The format of the trap command is:  _trap 'commands'  signals_ 
@@ -260,7 +260,7 @@ or
 
 
 
-#### Functions
+### Functions
 
 Functions in Bash allow us to easily re-use code making the code easier to manage and read. 
 When your scripts are getting a little more complex it’s good to spend a little bit of time thinking about
@@ -294,27 +294,33 @@ But you may give values to the function the same way you do that for script – 
 
 Examples
 
-`cat > f1.sh`
-
 ```bash
+cat > ~/f1.sh << "EOF1"
 #!/bin/bash 
 somef () {  
 echo "We learn $1" 
 } 
 
 somef Linux 
-somef Unix 
+somef Unix
+EOF1
+chmod +x ~/f1.sh
+
 ```
 
-`cat > f2.sh` 
+
 
 ```bash
+cat > ~/f2.sh << "EOF1"
 #!/bin/bash 
 linefile () { 
 cat $1 | wc -l 
 } 
 NUML=$(linefile $1) 
-echo The file $1 has $NUML lines in it. 
+echo The file $1 has $NUML lines in it.
+EOF1
+chmod +x ~/f2.sh
+
 ```
 
 Functions allow to have local variables, which will be available only within this function: 
@@ -322,9 +328,9 @@ _local var_name=<var_value>_
 
 Example of variable scope 
 
-`cat > f3.sh`
- 
+
 ```bash
+cat > ~/f3.sh << "EOF1"
 #!/bin/bash 
 var_change () { 
 local VAR1='LOCAL 1' 
@@ -340,6 +346,9 @@ echo "Before function call: VAR2 is $VAR2"
 var_change 
 echo "After function call: VAR1 is $VAR1" 
 echo "After function call: VAR2 is $VAR2" 
+EOF1
+chmod +x ~/f3.sh
+
 ```
 
 * RECOMMENDATION: It’s best to always use local variables within functions.  
@@ -347,9 +356,9 @@ Think before using global variables within function.
 
 Let’s change the previous script to have functions 
 
-`cat > f4.sh `
 
 ```bash
+cat > ~/f4.sh << "EOF1"
 #!/bin/bash 
 mytrap1() 
 { 
@@ -365,6 +374,9 @@ while true ; do
 echo 'Try to stop me with Ctrl-C, Ctrl-\' 
 sleep 5 
 done 
+EOF1
+chmod +x ~/f4.sh
+
 ```
  
 
@@ -390,6 +402,7 @@ Example of a shell script  that calculates the average of all command line param
 `cat > aver.sh `
 
 ```bash
+cat > ~/aver.sh << "EOF1"
 #!/bin/bash 
 if [[ $# = 0 ]] 
 then echo "Usage: $0 num1, num2 ..." 
@@ -417,6 +430,9 @@ done
 ((AV=sum/m)) 
 echo "For $* " 
 echo  “Average is $AV” 
+EOF1
+chmod +x ~/aver.sh
+
 ```
 
 
