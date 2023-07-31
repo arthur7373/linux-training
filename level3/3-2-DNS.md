@@ -170,7 +170,7 @@ cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
 zone "lt01.am." IN {
          type master;
          file "lt01.am.db";
- };
+};
 EOF1
 
 ```
@@ -196,16 +196,16 @@ cat >> /var/named/chroot/var/named/lt01.am.db
 cat  > /var/named/chroot/var/named/lt01.am.db  << "EOF1"
 $TTL 1H
 @       SOA     ns.lt01.am.     dns.lt01.am. ( 2021121100
-               				3H ; refresh
-               				1H ; retry
-               				1W ; expire
-               				1H ) ; minimum
-               	            		NS      ns.lt01.am.
-               	            		MX      0 mail
-               	             		A       10.10.1.1
-www			      A       10.10.1.1
-ns			      A       10.10.1.2
-mail			      A       10.10.1.3
+                            3H ; refresh
+                            1H ; retry
+                            1W ; expire
+                            1H ) ; minimum
+                            NS      ns.lt01.am.
+                            MX      0 mail
+                            A       10.10.1.1
+www                         A       10.10.1.1
+ns                          A       10.10.1.2
+mail                        A       10.10.1.3
 EOF1
 
 ```
