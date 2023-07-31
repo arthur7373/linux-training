@@ -132,7 +132,7 @@ Simple array example:
 ```bash
 cat > ~/array.sh << "EOF1"
 AR=( zero one two three four five ) # define the array 
-
+echo 
 echo "Whole array is:"
 echo ${AR[*]}  # get the whole array 
 echo 
@@ -187,25 +187,27 @@ Modify script to:
 Bash has an internal trap command to reassign the signal actions, which can be useful in scripts. 
 The format of the trap command is:  _trap 'commands'  signals_ 
 
-Common example:
+Common use example:
 
-```bash
-trap ' ' 2 3 15 # sets do nothing when receiving 2 (INT, Ctrl+C), 3 (QUIT, Ctrl+\), 15 (TERM) signals. 
-trap 2 3 15 # recovers initial actions for 2,3,15 signals.
-```
+`trap ' ' 2 3 15 # sets do nothing when receiving 2 (INT, Ctrl+C), 3 (QUIT, Ctrl+\), 15 (TERM) signals.` 
+
+`trap 2 3 15 # recovers initial actions for 2,3,15 signals.`
+
 
 Simple script
 
-`cat > trap.sh` 
-
 ```bash
+cat > ~/trap.sh << "EOF1"
 #!/bin/bash 
 trap 'echo " Ctrl-C IGNORED" ' 2 
 trap 'echo " Ctrl-\ IGNORED" ' 3 
 while true ; do 
+echo 'I will sleep for 500 seconds'
 echo 'Try to stop me with Ctrl-C, Ctrl-\' 
-sleep 5 
-done 
+sleep 500 
+done
+EOF1
+chmod +x ~/trap.sh
 ```
 
 After running the above script you **will not be able to stop it.** 
