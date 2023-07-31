@@ -268,6 +268,7 @@ EOF1
 cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
 include "/etc/named/10.10.1.zone";
 EOF1
+
 ```
 
 3.Create master reverse zone data file `/var/named/chroot/var/named/10.10.1.rev.db`
@@ -285,6 +286,7 @@ $TTL 1H
 2                         PTR		ns.lt01.am.
 3                         PTR		mail.lt01.am.
 EOF1
+
 ```
 
 
@@ -331,6 +333,7 @@ masters { 192.168.1.1; };
  	masterfile-format text;
 };
 EOF1
+
 ```
 >
 
@@ -340,6 +343,7 @@ EOF1
 cat  >> /var/named/chroot/etc/named.conf << "EOF1"
 include "/etc/named/lt01.am.zone";
 EOF1
+
 ```
 
 
