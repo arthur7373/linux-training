@@ -168,8 +168,8 @@ to
 ```bash
 cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
 zone "lt01.am." IN {
-         type master;
-         file "lt01.am.db";
+        type master;
+        file "lt01.am.db";
 };
 EOF1
 
@@ -188,14 +188,11 @@ EOF1
 4.Create master zone data file 
 `/var/named/chroot/var/named/lt01.am.db`
 
-```bash
-cat >> /var/named/chroot/var/named/lt01.am.db
-```
 
 ```bash
 cat  > /var/named/chroot/var/named/lt01.am.db  << "EOF1"
 $TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. ( 2021121100
+@       SOA     ns.lt01.am.     dns.lt01.am. ( 2023090100
                             3H ; refresh
                             1H ; retry
                             1W ; expire
@@ -253,42 +250,42 @@ Create Reverse Zone    `1.10.10.in-addr.arpa.`
 
 1.Create master reverse zone config file `/var/named/chroot/etc/named/10.10.1.zone`
 
+
 ```bash
-cat >> /var/named/chroot/etc/named/10.10.1.zone
+cat  > /var/named/chroot/etc/named/10.10.1.zone  << "EOF1"
+zone "1.10.10.in-addr.arpa." IN {
+         type master;
+         file "10.10.1.rev.db";
+};
+EOF1
+
 ```
-> ```bash
-> zone "1.10.10.in-addr.arpa." IN {
->         type master;
->         file "10.10.1.rev.db";
-> };
-> ```
 
 2.Include it in main config file `/var/named/chroot/etc/named.conf`
 
+
 ```bash
-cat  >> /var/named/chroot/etc/named.conf
+cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
+include "/etc/named/10.10.1.zone";
+EOF1
 ```
-> ```bash
-> include "/etc/named/10.10.1.zone";
-> ```
 
 3.Create master reverse zone data file `/var/named/chroot/var/named/10.10.1.rev.db`
 
 ```bash
-cat >> /var/named/chroot/var/named/10.10.1.rev.db
+cat  > /var/named/chroot/var/named/10.10.1.rev.db  << "EOF1"
+$TTL 1H
+@       SOA     ns.lt01.am.     dns.lt01.am. (2023090100
+                          3H ; refresh
+                          1H ; retry
+                          1W ; expire
+                          1H ) ; minimum
+                          NS		ns.lt01.am.
+1                         PTR		www.lt01.am.
+2                         PTR		ns.lt01.am.
+3                         PTR		mail.lt01.am.
+EOF1
 ```
->```bash
-> $TTL 1H
-> @       SOA     ns.lt01.am.     dns.lt01.am. (2021121100
->           	                                      3H ; refresh
->          	                                      1H ; retry
->          	                                      1W ; expire
->          	                                      1H ) ; minimum
->                NS		ns.lt01.am.
->1		PTR		www.lt01.am.
->2		PTR		ns.lt01.am.
->3		PTR		mail.lt01.am.
->```
 
 
 4.Restart the service
@@ -324,28 +321,26 @@ On another server install bind-chroot and create configuration to get zone copy 
 
 1.Create slave zone config file `/var/named/chroot/etc/named/lt01.am.zone`
 
+
 ```bash
-cat >> /var/named/chroot/etc/named/lt01.am.zone
+cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
+zone "lt01.am." IN {
+        	type slave;
+masters { 192.168.1.1; };
+        	file "slaves/lt01.am.db";
+ 	masterfile-format text;
+};
+EOF1
 ```
->```bash
->zone "lt01.am." IN {
->        	type slave;
->masters { 192.168.1.1; };
->        	file "slaves/lt01.am.db";
-> 	masterfile-format text;
->};
->```
 >
 
 2.Include it in main config file `/var/named/chroot/etc/named.conf`
 
 ```bash
-cat  >> /var/named/chroot/etc/named.conf
+cat  >> /var/named/chroot/etc/named.conf << "EOF1"
+include "/etc/named/lt01.am.zone";
+EOF1
 ```
-
-> ```bash
-> include "/etc/named/lt01.am.zone";
-> ```
 
 
 3.Restart the service
