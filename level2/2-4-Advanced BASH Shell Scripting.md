@@ -9,7 +9,7 @@
 
 
 ```bash
-cat << EOF1 > ~/ex1.sh
+cat  > ~/ex1.sh  << "EOF1"
 #!/bin/bash
 if [ -z ${1} ]; then
 echo "Usage: $0 number of loops"
@@ -45,12 +45,12 @@ Prefix the variable name with $, which will give the value stored in that variab
 
 *Example.1 Simple Bash Variable Assignment Usage*
 
-`cat  >sample.sh`
-
 ```bash
+cat  > ~/sample.sh  << "EOF1"
 #!/bin/bash
 LIST="/usr/bin/"
 ls -l $LIST
+EOF1
 ```
 
 Execute the above script, which will list the /usr/bin in long format.
@@ -64,13 +64,15 @@ you will not get any warning or error message. Instead, it will display a blank 
 
 *Example 2. Blank values in bash variables* 
 
-`cat > var1.sh`
+
 
 ```bash
+cat > var1.sh << "EOF1"
 #!/bin/bash 
 echo "Variable value is: $VAR1" 
 VAR1="LINUX" 
 echo "Variable value is: $VAR1" 
+EOF1
 ```
 
 Initially the variable will have a blank value, after assigning, you can get your values.  
