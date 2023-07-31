@@ -5,8 +5,44 @@
 ##  Advanced BASH Shell Scripting
 
 
-*Quick initial script example*
 
+#### Here Documents 
+
+_Here document_ is useful advanced Bash scripting technique, 
+that allows to specify multiple lines of input for a command. 
+
+It can be used to specify long blocks of text or script code as input to some command.
+
+By using _here documents_ we can automate various tasks.
+
+_Here documents_ are specified using **<<** operator, 
+followed by a some **delimiter**, which can be any _unique_ string.
+
+The end of _here documents_ is specified by repeating the **delimiter** on the line without anything else.
+Because of that the **delimiter** should be unique string.
+
+In examples below "EOF1" delimiter string is used, but it can be other as well.
+
+> **Important note:**
+> 
+> As you may notice in examples below **EOF1** delimiter is double quoted,
+> which is not required for all cases, but enables protection for
+> _special characters_ ( like `$` ) not to be interpreted by bash, so the whole text block
+> is being delivered to the command as-is.
+
+
+#### How we use _here documents_ in this part
+
+We start with here document, since all below examples of script code 
+use this technique for giving input to **cat** command to create named file 
+containig particular script.
+
+After that we also add **chmod** command to make it executable.
+
+After several below examples you will quickly get the idea of _here document_ usage.
+
+
+*Quick initial script example*
 
 ```bash
 cat  > ~/ex1.sh  << "EOF1"
@@ -34,10 +70,10 @@ Bash variables - temporary storage for information
 Bash does not care about the type of variables. 
 Variables could store strings, characters or integers. 
 
-Variable names are uppercase by convention, but any symbols can be used.
+Variable names are uppercase by convention, but lowercase and other symbols can be used as well.
 
-Syntax:
-VARNAME=VALUE
+Syntax: **VARNAME=VALUE**
+
 Note: There should be no space around “=” sign 
 
 The following script creates a variable called LIST and assigns the value “/usr/bin”. 
@@ -217,42 +253,11 @@ After running the above script you **will not be able to stop it.**
 
 To stop it press `Ctrl-Z`
 
-and then run:  `kill -9 %1` 
+and then run:  
+`kill -9 %1` 
+or
+`kill -9 trap.sh`
 
-
-#### Here Documents 
-
-A here document  is a special-purpose code block.  
-It uses a form of I/O redirection to feed data to program/command. 
-A limit string delineates (frames) the command list. The special symbol _<<_ designates the limit string. 
-This has the effect of redirecting the output of a file into the _stdin_ of the program or command. 
-
-Example script
-
-`cat > here.sh` 
-
-```bash
-#!/bin/bash 
-mkdir  /tmp/here 
-PDIR="/tmp/here" 
-exec < /etc/passwd 
-while read VAR 
-do 
-UNM=`echo $VAR |awk -F":" '{print $1}'` 
-HM=`echo $VAR |awk -F":" '{print $6}'` 
-FNAME=`echo $VAR |awk -F":" '{print $5}'` 
-cat <<EOPF > $PDIR/$UNM.txt 
-Special file for: $FNAME 
-Home dir: $HM 
-EOPF 
-chmod 600 $PDIR/$UNM.txt 
-echo "Created file: $FNAME ($HM - $UNM)" 
-done 
-```
-
-An `exec < filename` command redirects the contents of filename to _stdin_. From that point on, all _stdin_ 
-comes from that file, rather than its normal source (usually keyboard input). This provides a method of 
-reading a file line by line and possibly parsing each line of input. 
 
 
 #### Functions
