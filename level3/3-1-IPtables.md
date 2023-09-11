@@ -510,7 +510,11 @@ applied against incoming/outgoing packets.
 Firewalld Basic Operation is available at:
 
 * https://www.redhat.com/sysadmin/beginners-guide-firewalld
-or
+<br>
+<br>
+* https://access.redhat.com/documentation/ru-ru/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/using-and-configuring-firewalld_configuring-and-managing-networking
+<br>
+<br>
 * https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
 
 
