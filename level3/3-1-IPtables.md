@@ -6,55 +6,67 @@ Linux kernel includes network firewall capabilities to filter packets (called **
 
 To use these capabilities different Linux distributions and versions use different tools.
 
-* **IPtables**
+* **IPtables/Nftables**
 * **Firewalld**
 * **Uncomplicated Firewall (ufw)**
 
 ### IPtables
 IPtables is initial tool to manage packet filtering, but newer Linux versions
-provide other "front-end" tools for `iptables`. 
+provide other "front-end" tools for `iptables`.
 
+Nftables is new tool meant to replace the aging iptables, but as of today most of distributions still keep `iptables`, while they have also already added `nftables`.
+We will shortly talk about 'nftables' later below.
+
+At the same time in modern Linux versions there exist distribution-dependent higher-level tools. 
 For example **CentOS 7/8** come with an alternative service called `firewalld`
 which fulfills this same purpose & **Ubuntu** versions now use `ufw` (Uncomplicated Firewall).
 
 Also CentOS versions may have `iptables` as special package/service, 
 with some predefined chains/rules.
 
-To have clear config for learning we can check and stop/disable such services if any:
+> WHAT YOU NEED TO UNDERSTAND AND REMEMBER IS THAT PACKET **FILTERING ITSELF** IS KERNEL-BASED FUNCTION - **NETFILTER**
+> ALL THE ABOVE TOOLS ARE JUST MEANS OF MANAGING THAT INSTRUMENT INSIDE LINUX KERNEL.
+
+Now let's ensure we have clear config for learning we can check and stop/disable such services if any:
+
+Check if we have have `iptables` service running/enabled:
 ```bash
-systemctl status iptables
+systemctl is-active iptables ;\
+systemctl is-enabled iptables
+```
+Disable/Stop it if needed:
+```bash
+systemctl --now disable iptables ;\
+systemctl is-active iptables ;\
+systemctl is-enabled iptables
 ```
 
+Also check if we have have `firewalld` service running/enabled:
 ```bash
-systemctl stop iptables
+systemctl is-active firewalld ;\
+systemctl is-enabled firewalld
+```
+Disable/Stop it if needed:
+```bash
+systemctl --now disable firewalld ;\
+systemctl is-active firewalld ;\
+systemctl is-enabled firewalld
 ```
 
-```bash
-systemctl disable iptables
-```
+And in case of Ubuntu we can do the same with `ufw`
 
 ```bash
-systemctl status firewalld
+systemctl is-active ufw ;\
+systemctl is-enabled ufw
+```
+Disable/Stop it if needed:
+```bash
+systemctl --now disable ufw ;\
+systemctl is-active ufw ;\
+systemctl is-enabled ufw
 ```
 
-```bash
-systemctl stop firewalld 
-```
-```bash
-systemctl disable firewalld 
-````
-
-```bash
-systemctl status ufw
-```
-
-```bash
-systemctl stop ufw 
-```
-
-```bash
-systemctl disable ufw 
-```
+Now we should have a clean initial configuration to start learning.
 
 First we will get understanding of `iptables`, since it's anyway remaining
 at the bottom of any modern netfilter-based Linux firewall.
@@ -396,6 +408,97 @@ To clear/drop all current rules in NAT table specify table name with `-t`
 iptables -F -t nat
 ```
 
+#### Nftables
+
+The `nftables` is developed by **Netfilter**, the same organization that currently maintains `iptables`. 
+It was created as a better variant than `iptables` and is very similar to it.
+It has some improvements, for example, with `nftables` you can create both IPv4 and IPv6 rules at one place and keep them in sync.
+(in case of `iptables` you had to do separate IPv6 rule config with separate tool `ip6tables`)
+
+`nftables` has been included in the Linux kernel since 2014, (since Linux kernel 3.13)
+
+it still slowly becomes more popular.
+Currently you can use both tools as you like.
+
+You can check if `nftables` is running/enabled as as service:
+```bash
+systemctl is-active nftables ;\
+systemctl is-enabled nftables
+```
+
+Remember that even if it is disabled as a service you can still use command tools from this package to manage kernel filter.
+The service itself only manages its configuration not the filter itself.
+
+Even more the rules you set with `netfilter` and `iptables` are to some extent managable by another tool.
+
+##### Syntax difference between iptables and nftables
+The syntax of `nftables` is different than syntax of `iptables`.
+
+But there is `iptables-translate` utility, which will accept `iptables` options and convert them to the `nftables` equivalent. 
+This is an easy way to see how the two syntaxes differ.
+
+Let’s see some examples so that you can see how these commands differ from each other.
+
+This command would block incoming connections from IP address `127.1.2.7`:
+```bash
+iptables-translate -A INPUT -s 127.1.2.7 -j DROP
+```
+You can now run the result of the above command.
+and check if that rule has been added:
+```bash
+iptables -nvL | grep '127.1.2.7'
+```
+
+Also we can remove it with `iptables`
+```bash
+iptables -D INPUT -s 127.1.2.7 -j DROP
+```
+
+and check if that rule has been removed:
+```bash
+iptables -nvL | grep '127.1.2.7'
+```
+
+More examples:
+
+Allow incoming SSH connections:
+```bash
+iptables-translate -A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+```
+You can now run the result of the above command.
+and check if that rule has been added:
+
+```bash
+iptables -nvL | grep '22'
+```
+
+You can notice warning:
+`table `filter' is incompatible, use 'nft' tool.`
+
+So you can use the `nft` tool
+```bash
+nft list ruleset
+```
+
+Or with more details:
+
+```bash
+nft list table ip filter
+```
+
+This demonstrates that in real life it is not so smooth to use one tool instead of another.
+This brings us to
+> IMPORTANT NOTE:
+> To prevent the different firewalling/packet filtering services/tools from influencing each other, 
+> run only one of them per Linux host, and disable the other services.
+
+
+More info:
+* https://access.redhat.com/documentation/ru-ru/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/getting-started-with-nftables_configuring-and-managing-networking
+* https://linuxhandbook.com/iptables-vs-nftables/
+* https://netfilter.org/projects/nftables/
+* https://habr.com/ru/companies/ruvds/articles/580648/>
+
 
 #### Firewalld
 
@@ -405,17 +508,9 @@ Actions are based on set of defined rules
 applied against incoming/outgoing packets.
 
 Firewalld Basic Operation is available at:
-```bash
-https://www.redhat.com/sysadmin/beginners-guide-firewalld
-```
-or
-```bash
-https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
-```
 
-> Since Linux kernel 3.13 there is replacement for `iptables` 
-> called `nftables`. It is controlled by `nft` command with different syntax
-> More info: 
-> * https://netfilter.org/projects/nftables/
-> * https://habr.com/ru/company/ruvds/blog/580648/
-> 
+* https://www.redhat.com/sysadmin/beginners-guide-firewalld
+or
+* https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
+
+
