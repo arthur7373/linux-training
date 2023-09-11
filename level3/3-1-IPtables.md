@@ -23,24 +23,38 @@ with some predefined chains/rules.
 To have clear config for learning we can check and stop/disable such services if any:
 ```bash
 systemctl status iptables
+```
 
+```bash
 systemctl stop iptables
+```
+
+```bash
 systemctl disable iptables
-````
+```
 
 ```bash
 systemctl status firewalld
+```
 
+```bash
 systemctl stop firewalld 
+```
+```bash
 systemctl disable firewalld 
 ````
 
 ```bash
 systemctl status ufw
+```
 
+```bash
 systemctl stop ufw 
+```
+
+```bash
 systemctl disable ufw 
-````
+```
 
 First we will get understanding of `iptables`, since it's anyway remaining
 at the bottom of any modern netfilter-based Linux firewall.
@@ -126,12 +140,19 @@ Last rule allows only those packets, which are parts of some already established
 Check:
 ```bash
 ping -c 2 8.8.8.8
+```
+
+```bash
 iptables -nvL 
 ```
+
 ping should work and you should see increase in number of 'pkts' for "RELATED,ESTABLISHED" chain
 
 ```bash
 ping -c 2 127.0.0.1
+```
+
+```bash
 iptables -nvL 
 ```
 ping should not work and you should see increase in number of packets for default INPUT 'polycy DROP'
@@ -147,7 +168,13 @@ iptables -F
 And check the difference:
 ```bash
 iptables -nvL
+```
+
+```bash
 ping -c2 8.8.8.8
+```
+
+```bash
 ping -c2 127.0.0.1
 ```
 
@@ -160,10 +187,19 @@ iptables -A INPUT -s 1.1.1.1 -j DROP
 Check:
 ```bash
 iptables -nvL
+```bash
 ping -c 2 8.8.8.8
+```
+
+```bash
 ping -c 2 8.8.4.4
+```
+
+```bash
 ping -c 2 1.1.1.1
 ```
+
+
 > * Can you explain why ping doesn't work, when we only restricted INPUT ?
 
 
@@ -175,8 +211,17 @@ iptables -F
 Check:
 ```bash
 iptables -nvL
+```
+
+```bash
 ping -c 2 8.8.8.8
+```
+
+```bash
 ping -c 2 8.8.4.4
+```
+
+```bash
 ping -c 2 1.1.1.1
 ```
 
@@ -190,8 +235,17 @@ iptables -A OUTPUT -d 1.1.1.1 -j DROP
 Check:
 ```bash
 iptables -nvL 
+```
+
+```bash
 ping -c 2 8.8.8.8
+```
+
+```bash
 ping -c 2 8.8.4.4
+```
+
+```bash
 ping -c 2 1.1.1.1
 ```
 
@@ -232,7 +286,7 @@ We can combine multiple options in rules, and also
 specify the network interface <br>(`-i` for _incoming_ , `-o` for outgoing).
 
 ```bash
-iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJECT --reject-with icmp-host-prohibited
+iptables -A OUTPUT -o lo -p icmp -d 127.1.2.3/24 --icmp-type echo-request -j REJECT --reject-with icmp-host-prohibited ;\
 iptables -A INPUT -i enp0s3 -p icmp -s 9.9.9.9 --icmp-type echo-reply -j DROP
 ```
 
@@ -245,6 +299,9 @@ iptables -A INPUT -i enp0s3 -p icmp -s 9.9.9.9 --icmp-type echo-reply -j DROP
 Try:
 ```bash
 ping -c 2 127.1.2.3
+```
+
+```bash
 ping -c 2 9.9.9.9
 ```
 
@@ -261,32 +318,42 @@ Here we allow only 1 SSH connection per IP address:
 iptables -A INPUT -p tcp --syn -d 127.0.0.1 --dport 22 -m connlimit --connlimit-above 1 -j REJECT 
 ```
 Now try connecting with ssh twice.
-
+Login first time:
 ```bash
 ssh student@127.0.0.1
+```
+Now connect second time:
+```bash
 ssh student@127.0.0.1
 ```
 
-But this will work both times, since we block only 127.0.0.1
+But below will work both times, since we block only 127.0.0.1
+
+Login first time:
 ```bash
 ssh student@127.0.0.2
+```
+Now connect second time:
+```bash
 ssh student@127.0.0.2
 ```
+
 
 
 Multiple ports can be blocked in ine rule with **multiport** module
 Here we block Microsoft-DS and Netbios ports for both TCP & UDP
 ```bash
-iptables -A FORWARD -p tcp -m multiport --dport 445,137,138,139  -j DROP
+iptables -A FORWARD -p tcp -m multiport --dport 445,137,138,139  -j DROP ;\
 iptables -A FORWARD -p udp -m multiport --dport 445,137,138,139  -j DROP
 ```
 
-Note that here FORWARD chain is used, so this is example of filtering **transit** traffic.
+Note that here *FORWARD* chain is used, so this is example of filtering **transit** traffic.
+
 
 Mac-based blocking is also possible with **mac** module:
 In this example we only accept traffic for TCP port 22 from mac 00:19:99:3C:AB:22 
 ```bash
-iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:19:99:3C:AB:22 -j ACCEPT
+iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:19:99:3C:AB:22 -j ACCEPT ;\
 iptables -A INPUT -p tcp --destination-port 22 -j REJECT
 ```
 
@@ -306,10 +373,20 @@ iptables -t nat -A POSTROUTING -d 127.200.0.0/16 -j SNAT --to-source 127.7.7.7
 Try connecting to localhost with different IPs to see the effect of NAT rules
 ```bash
 ssh student@127.100.0.1
-w
-ssh student@127.200.0.1
+```
+
+```bash
 w
 ```
+
+```bash
+ssh student@127.200.0.1
+```
+
+```bash
+w
+```
+
 You should see **student** logins from:
 * 127.5.5.5
 * 127.7.7.7
