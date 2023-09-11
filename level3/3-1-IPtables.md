@@ -396,6 +396,7 @@ To clear/drop all current rules in NAT table specify table name with `-t`
 iptables -F -t nat
 ```
 
+
 #### Firewalld
 
 **firewalld** is a zone-based firewall.
