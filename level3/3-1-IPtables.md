@@ -500,6 +500,7 @@ More info:
 * https://linuxhandbook.com/iptables-vs-nftables/
 * https://netfilter.org/projects/nftables/
 * https://habr.com/ru/companies/ruvds/articles/580648/>
+* https://www.server-world.info/en/note?os=Ubuntu_22.04&p=nftables&f=2
 
 
 #### Firewalld
@@ -517,4 +518,12 @@ Firewalld Basic Operation is available at:
 * https://access.redhat.com/documentation/ru-ru/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/using-and-configuring-firewalld_configuring-and-managing-networking
 * https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
 
+
+#### UFW
+
+UFW is also the frontend tool of nftables/iptables for Debian/Ubuntu.
+
+UFW Basic Operation is available at:
+
+* https://www.server-world.info/en/note?os=Ubuntu_22.04&p=ufw&f=1
 
