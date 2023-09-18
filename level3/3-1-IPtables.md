@@ -505,9 +505,11 @@ More info:
 #### Firewalld
 
 **firewalld** is a zone-based firewall.
-A zone is associated with at least one network interface.
-Actions are based on set of defined rules 
-applied against incoming/outgoing packets.
+
+Each zone contains several actions, based on set of defined rules. 
+Rules are applied against incoming/outgoing packets.
+
+Zone is associated with at least one network interface.
 
 Firewalld Basic Operation is available at:
 
