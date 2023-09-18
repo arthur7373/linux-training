@@ -199,6 +199,8 @@ iptables -A INPUT -s 1.1.1.1 -j DROP
 Check:
 ```bash
 iptables -nvL
+```
+
 ```bash
 ping -c 2 8.8.8.8
 ```
