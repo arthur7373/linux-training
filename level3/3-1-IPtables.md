@@ -527,6 +527,7 @@ UFW is also the frontend tool of nftables/iptables for Debian/Ubuntu.
 
 UFW Basic Operation is available at:
 
-
 * https://www.server-world.info/en/note?os=Ubuntu_22.04&p=ufw&f=1
+* https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-22-04
+* https://www.digitalocean.com/community/tutorials/ufw-essentials-common-firewall-rules-and-commands
 
