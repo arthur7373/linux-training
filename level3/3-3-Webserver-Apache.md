@@ -29,11 +29,11 @@ systemctl enable --now httpd
 ```
 
 #### PRACTICE
-* Now you have running Apache webserver, 
+* Now when you have running Apache webserver, 
 configure the system to use your local DNS server, 
-where you already have `lt01.am` zone.
-* Set current IP address of the server to `www.lt01.am` record in the DNS.
-* If you did everything correct you should be able to open it locally, with `links www.lt01.am`
+where you already have `lt01.am` zone (you should change `/etc/resolv.conf`).<br><br>
+* Set current IP address of the server to `www.lt01.am` record in the DNS.<br><br>
+* If you did everything correct you should be able to open it locally, with `links www.lt01.am`<br><br>
 * Now try also `links lt01.am`. Did it open? Why? How to fix it?
 
 
@@ -42,15 +42,15 @@ where you already have `lt01.am` zone.
 Default website location directory is:  `/var/www/html` 
 
 After installation Apache webserver is ready to use by default configuration.
-But it would be good to fix some parameters as we do in examples below (to ensure more security hardening for production environment). More info at: http://httpd.apache.org. 
+But it would be good to fix some parameters as we do in examples below (to ensure more security hardening for production environment). More info at: `http://httpd.apache.org`. 
+<br><br>
+Apache configuration is stored in: `/etc/httpd`<br><br>  
+Main config file is: `/etc/httpd/conf/httpd.conf` contains following lines:<br>
+`include conf.d/*.conf`
 
-Apache configuration is stored in: `/etc/httpd`.  
-Main config file is: `/etc/httpd/conf/httpd.conf` 
-contains following lines:  `include conf.d/*.conf`
 Which means include any `*.conf` files from `/etc/httpd/conf.d` 
 
-Create a separate virtual host configuration file /etc/httpd/conf.d/lt01.am.conf:
-
+Now create a separate virtual host configuration file /etc/httpd/conf.d/lt01.am.conf:
 
 ```bash
 cat  > /etc/httpd/conf.d/lt01.am.conf << "EOF1"
@@ -96,9 +96,12 @@ Check
 
 ### Access Control with .htaccess (http://www.htaccess-guide.com/)
 
-It is possible to restrict visitors by IP address. For this to be able 
-on per-directory basis, without restarting Apache, we have in the above VirtualHost configuration following option `AllowOverride ALL`.
-After that we can just create a `.htaccess` file in the directory we want to restrict access.
+It is possible to restrict visitors by IP address. 
+This function id enabled on per-directory basis 
+in the above VirtualHost configuration following option `AllowOverride ALL`.
+
+It allows (re)configure restrictions without restarting Apache.
+We can just create a `.htaccess` file in the directory we want to restrict access.
 
 Let us create a restricted subdirectory `closed`
 ```bash
@@ -124,15 +127,16 @@ links www.lt01.am/closed
 To access it you need to uncomment `#allow from 10.` line in `.htaccess`
 Remove hashtag and try again.
 
-Now you should be able to access the directory, but you will see it's file list, because we have
-`options +indexes` option. 
+Now you should be able to access the directory, and you will see it's file list, because we have
+`options +indexes` option.
 
 Try commenting it an open it again
 ```bash
 links www.lt01.am/closed
 ```
 
-You will not see the directory contents, but will be able to access files by the name:
+You will not see the directory contents. 
+But you can access files by the name:
 
 ```bash
 links www.lt01.am/closed/test.html
@@ -159,6 +163,7 @@ ErrorDocument 404 http://ping.eu
 EOF3
 
 ```
+(This way you can redirect visitor to some special page if they try to open the page, that doesn't exist)
 
 Now if we try non existing URL, we will be redirected to `ping.eu`
 ```bash
@@ -167,7 +172,7 @@ links www.lt01.am/closed/123
 
 #### Password protection
 
-Let us create another subdirectory `secure` and make it password-protected
+Let's create another subdirectory `secure` and make it password-protected
 ```bash
 mkdir -p /var/www/lt01.am/secure/docs ;\
 cat << EOF3 > /var/www/lt01.am/secure/index.html
@@ -186,6 +191,7 @@ Create user ‘test123’ and set the password
 ```bash
 htpasswd -c /etc/httpd/conf.d/.htpasswd  test123
 ```
+
 > NOTE: `-c` is needed only once to create the new file
 > To change password you will need to run:
 > ```bash
@@ -200,15 +206,17 @@ links www.lt01.am/secure/
 
 ### Installing PHP with database support
 
+Install required packages:
 ```bash
 yum -y install php php-common php-gd php-xml php-mbstring php-mysqlnd php-gd
 ```
+
 Restart Apache:
 ```bash
 systemctl restart httpd
 ```
 
-Create php script:   
+Create test php script:   
 ```bash
 echo '<?php phpinfo(); ?>' > /var/www/lt01.am/inf.php
 ```
@@ -217,7 +225,7 @@ Check:
 ```bash
 links http://www.lt01.am/inf.php
 ```
-> (PHP Fine tuning can be done in config files: `/etc/php.ini`, `/etc/php.d/`)
+> (PHP configuration can be done in config files: `/etc/php.ini`, `/etc/php.d/`)
 
 Now we can create an PHP index file 
 ```bash
@@ -311,6 +319,12 @@ Put certificates at their place:
 mv lt01.am.crt /etc/pki/tls/certs ;\
 mv lt01.am.key /etc/pki/tls/private
 ```
+
+> Nowadays there are several ways to get free production SSL certificate from CAa like `LetsEncrypt`.
+> They only give certificates for 3 month, so there should be some automated procedure to update it regularly.
+> This is done by scripts like `certbot` 
+> Unfortunately to try all the above, you should have real domain configured for your dns name and have real IP access from outside world.
+> That's why here we only use self-signed certificates (in fact note, they are of the same strength, just not known to Client/Browsers).
 
 ### Create SSL Virtual Host
 
