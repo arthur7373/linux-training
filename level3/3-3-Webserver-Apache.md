@@ -320,7 +320,7 @@ mv lt01.am.crt /etc/pki/tls/certs ;\
 mv lt01.am.key /etc/pki/tls/private
 ```
 
-> Nowadays there are several ways to get free production SSL certificate from CAa like `LetsEncrypt`.
+> Nowadays there are several ways to get free production SSL certificate from CAa like `LetsEncrypt` or `ZeroSSL`.
 > They only give certificates for 3 month, so there should be some automated procedure to update it regularly.
 > This is done by scripts like `certbot` 
 > Unfortunately to try all the above, you should have real domain configured for your dns name and have real IP access from outside world.
