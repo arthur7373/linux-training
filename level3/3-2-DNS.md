@@ -381,8 +381,8 @@ dig -t soa lt01.am @127.0.0.1
 
 2. Configure Master-Slave notification-based instant updates by configuring the following on Master server.
    1. Ensure NS records for the domain hav proper IP addresses for Master and Slave server 
-      1. ns.lt01.am - <IP address of Master server>
-      2. ns2.lt01.am - <IP address of Slave server>
+      1. ns.lt01.am - IP address of Master server
+      2. ns2.lt01.am - IP address of Slave server
    2. Add in `options { … }` section of `/var/named/chroot/etc/named.conf`
    `notify yes;`
       to activate sending notification of master zone changes to slaves. 
