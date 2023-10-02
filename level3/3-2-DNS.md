@@ -322,8 +322,7 @@ dig -x 10.10.1.1 @127.0.0.1
 
 ### Slave Zones
 
-On another server install bind-chroot and create configuration to get zone copy as Slave Zone.  
-(no numbers need to be changed below)
+On another server install bind-chroot and create configuration to get zone copy as Slave Zone.
 
 1.Create slave zone config file `/var/named/chroot/etc/named/lt01.am.zone`
 
@@ -339,15 +338,17 @@ masters { 192.168.1.1; };
 EOF1
 
 ```
->
 
-2.Include it in main config file `/var/named/chroot/etc/named.conf`
+2.Edit the file and to specify proper IP address for the Master server 
+instead of `192.168.1.1`
+
+
+3.Include that configuration in main config file `/var/named/chroot/etc/named.conf`
 
 ```bash
 cat  >> /var/named/chroot/etc/named.conf << "EOF1"
 include "/etc/named/lt01.am.zone";
 EOF1
-
 ```
 
 
@@ -357,11 +358,15 @@ systemctl restart named-chroot
 ```
 
 If no config errors made "Zone transfer" should take place
-and local file `/var/named/chroot/var/named/lt01.am.db` should appear.
+and local file `/var/named/chroot/var/named/slaves/lt01.am.db` should appear.
 
-Check if the slave zone data file `/var/named/chroot/var/named/lt01.am.db` was created
+Check if the slave zone data file `/var/named/chroot/var/named/slaves/lt01.am.db` was created
 ```bash
-ls -l /var/named/chroot/var/named/
+ls -l /var/named/chroot/var/named/slaves
+```
+
+```bash
+cat /var/named/chroot/var/named/slaves/lt01.am.db
 ```
 
 Check that our local service gives result from slave zone:
@@ -374,18 +379,26 @@ dig -t soa lt01.am @127.0.0.1
 
 1. Create configuration to get a Slave Zone copy for zone `1.10.10.in-addr.arpa`
 
-2. For Master server add in `options { … }` section of `/var/named/chroot/etc/named.conf`
-`notify yes;`
-   to activate sending notification of master zone changes to slaves.
-   Restart master and check result in slave `/var/named/chroot/var/named/data/named.run`.
+2. Configure Master-Slave notification-based instant updates by configuring the following on Master server.
+   1. Ensure NS records for the domain hav proper IP addresses for Master and Slave server 
+      1. ns.lt01.am - <IP address of Master server>
+      2. ns2.lt01.am - <IP address of Slave server>
+   2. Add in `options { … }` section of `/var/named/chroot/etc/named.conf`
+   `notify yes;`
+      to activate sending notification of master zone changes to slaves. 
+   3. Restart Master and check result in Slave `/var/named/chroot/var/named/data/named.run`.
 
 
 ### Advanced configuration:
-There are lots of other options for advanced BIND configuration. They can be used both in main 
-`options { … }`  part, as well as in each zone description 
-parts `zone lt01.am. IN { ... }`
+There are lots of other options for advanced BIND configuration. 
+Options can be specified both in main `options { … }` part, 
+as well as in each zone description parts `zone lt01.am. IN { ... }`
 
 Examples:
+Below we can see how to 
+   1. Hide BIND Version
+   2. Define limited functionality of recursion & zone transfer
+   3. Use ACLs for flexible configuration (which is useful in case you specify the same subnet multiple times in configuration) 
 ```
 acl local-ips   { 172.16.1.0/24; 192.168.0.0/16;  };  
 acl slave-ips   { 192.168.0.0/16; };  
@@ -402,7 +415,7 @@ options {
 	   };
 ```
 
-Check the BIND version 
+_HINT: You can try to find out the BIND version with:_
 ```bash
 dig chaos txt version.bind @127.0.0.1
 ```
