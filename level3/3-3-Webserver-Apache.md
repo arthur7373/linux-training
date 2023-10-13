@@ -259,52 +259,82 @@ mysqladmin -u root password '123456'
 
 > NOTE: we do this for testing, but in production it should be done via `mysql_secure_installation`
 
-Check MySQL.  Create mysqltest.php
+Simple check of how MySQL works with website.  
+
+Create new database and insert some data there
 
 ```bash
-cat > /var/www/lt01.am/mysqltest.php << "EOF1"
+mysql -u root --password=123456 << EOF3
+CREATE DATABASE example_database;
+USE example_database;
+CREATE TABLE example_database.todo_list (
+	item_id INT AUTO_INCREMENT,
+	content VARCHAR(255),
+	PRIMARY KEY(item_id)
+);
+INSERT INTO example_database.todo_list (content) VALUES ("First important item");
+INSERT INTO example_database.todo_list (content) VALUES ("Second important item");
+INSERT INTO example_database.todo_list (content) VALUES ("Third important item");
+INSERT INTO example_database.todo_list (content) VALUES ("Another important thing");
+EOF3
+
+```
+
+Check the data from that database
+
+```bash
+mysql -u root --password=123456 << EOF3
+USE example_database;
+SELECT * FROM example_database.todo_list;
+EOF3
+
+```
+
+Create mysqltest.php
+
+```bash
+cat > /var/www/lt01.am/mysqltest.php << "EOF3"
 <?php
 $user = "root";
 $password = "123456";
-$database = "mysql";
-$table = "user";
- 
+$database = "example_database";
+$table = "todo_list";
+
 try {
   $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
-  echo "<h2>TODO</h2><ol>";
-  foreach($db->query("SELECT user FROM $table;") as $row) {
-    echo "<li>" . $row['user'] ." - " $row['host'] ."</li>";
+  echo "<h4>MY TODO LIST</h4><ol>"; 
+  foreach($db->query("SELECT content FROM $table") as $row) {
+    echo "<li>" . $row['content'] . "</li>";
   }
   echo "</ol>";
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();
 }
-
 ?>
-EOF1
+EOF3
 
 ```
 
 Check: 
 ```bash
-links http://lt01.am/mysqltest.php
+curl http://lt01.am/mysqltest.php
 ```
 
-Create new MySQL user:
+Add data to database:
 ```bash
-mysql -u root -p <<EOF4
-CREATE DATABASE tester;
-GRANT ALL PRIVILEGES ON tester.* TO tester@localhost IDENTIFIED BY 'test555' WITH GRANT OPTION;
-flush privileges;
-EOF4
+mysql -u root --password=123456 << EOF3
+USE example_database;
+INSERT INTO example_database.todo_list (content) VALUES ("NEW ITEM");
+EOF3
 
 ```
 
 Check again: 
 ```bash
-links http://lt01.am/mysqltest.php
+curl http://lt01.am/mysqltest.php
 ```
+
 
 ### Configure ‘mod_ssl’ for Apache
 
