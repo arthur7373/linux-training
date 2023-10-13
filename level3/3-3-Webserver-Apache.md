@@ -61,6 +61,7 @@ DocumentRoot /var/www/lt01.am
 CustomLog /var/log/httpd/lt01.am-access.log combined
 ErrorLog /var/log/httpd/lt01.am-error.log
  <Directory /var/www/lt01.am>
+      DirectoryIndex index.php index.html
       Options -Indexes
       AllowOverride ALL
  </Directory>
@@ -310,8 +311,8 @@ links http://lt01.am/mysqltest.php
 Self-signed Certificate generation:
 
 ```bash
-openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key
- -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
+openssl req -x509 -batch -nodes -days 3650 -newkey rsa:4096 -keyout lt01.am.key -out lt01.am.crt -subj "/C=AM/ST=Yerevan/L=Yerevan/O=AITC/OU=Linux Training/CN=lt01.am"
+
 ```
 
 Put certificates at their place:
