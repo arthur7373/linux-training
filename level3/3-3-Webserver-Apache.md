@@ -365,14 +365,16 @@ cat <<EOF1  > /etc/httpd/conf.d/lt01.am-ssl.conf
         SSLEngine on
         SSLCertificateFile /etc/pki/tls/certs/lt01.am.crt
         SSLCertificateKeyFile /etc/pki/tls/private/lt01.am.key
-        <Directory /var/www/lt01.am >
-        AllowOverride All
-        </Directory>
-        DocumentRoot /var/www/lt01.am
         ServerName lt01.am
         ServerAlias www.lt01.am
+        DocumentRoot /var/www/lt01.am
         ErrorLog logs/lt01.am-ssl_error_log
         TransferLog logs/lt01.am-ssl_access_log
+        <Directory /var/www/lt01.am >
+        DirectoryIndex index.php index.html
+        Options -Indexes
+        AllowOverride All
+        </Directory>
 </VirtualHost>
 EOF1
 
