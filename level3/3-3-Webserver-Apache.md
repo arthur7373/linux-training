@@ -422,12 +422,22 @@ Check:
 ```bash
 curl http://lt01.am/mysqltest.php
 ```
+
+You will see the "301 Moved Permanently" message.
+Now to make curl follow it an get the ssl you need to run: 
+
+> NOTE: '--insecure' option is needed because we use self-signed certificate
+
+```bash
+curl --location --insecure http://lt01.am/mysqltest.php
+```
+
+
 ### Hardening Apache
 
-* Following options are to be set
+* In order to hide Apache version, the following options are to be set in configuration:
 
-`ServerTokens Prod` 
-
+`ServerTokens Prod`
 `ServerSignature Off`
 
 
