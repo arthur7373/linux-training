@@ -273,7 +273,7 @@ try {
   $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
   echo "<h2>TODO</h2><ol>";
   foreach($db->query("SELECT user FROM $table;") as $row) {
-    echo "<li>" . $row['user'] . "</li>";
+    echo "<li>" . $row['user'] ." - " $row['host'] ."</li>";
   }
   echo "</ol>";
 } catch (PDOException $e) {
