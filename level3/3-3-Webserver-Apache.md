@@ -402,6 +402,7 @@ DocumentRoot /var/www/lt01.am
 CustomLog /var/log/httpd/lt01.am-access.log combined
 ErrorLog /var/log/httpd/lt01.am-error.log
  <Directory /var/www/lt01.am>
+      DirectoryIndex index.php index.html
       Options -Indexes
       AllowOverride ALL
  </Directory>
@@ -415,7 +416,12 @@ Restart Apache:
 systemctl restart httpd 
 ```
 
+Now if you access the site at 80 port you will be automatically redirected to 443
 
+Check: 
+```bash
+curl http://lt01.am/mysqltest.php
+```
 ### Hardening Apache
 
 * Following options are to be set
