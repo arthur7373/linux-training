@@ -21,6 +21,21 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 ### Linux Terminal, CLI Basics
 
+> Լինուքսի յուրահատկությունը
+
+
+* Մեծատառի/փոքրատառի տարբերություն (LiNuX iS CaSe SeNsItIvE)
+  * Հրամանների և ծրագրերի անվանման մեջ 
+    * Command 
+    * COMMAND 
+  * Ֆայլերի և դիրեկտորիաների անվանման մեջ
+    * File
+    * FILE
+  * Օգտագործողների և խմբերի անվանման մեջ
+    * user
+    * User
+
+
 > Command Prompt
 
 **$** - User Prompt
@@ -90,8 +105,88 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 `.`-ով սկսվող ֆայլեր  
 
+> Հրամանների օրինակներ
+* `pwd` - ընթացիկ դիրեկտորիան
+* `cd` - փոխել ընթացիկ դիրեկտորիան
+* `touch` – ստեղծել դատարկ ֆայլ
+* `ls` - ֆայլերի ցուցակ
+
+
+`ls [options] <directory/file>`
+
+* `-l`     ընլայնված ցուցակ
+* `-a`  ցույց տալ բոլոր ֆալերը  (նեռարյալ .-ով սկսվող ֆալերը )
+* `-S`   դասավորել ֆայլերը ըստ չափի (–lS)
+* `-r`  Հակադարձ դասավորման կարգով (–lSr)
+* `-h`    Մարդու համար ավելի ընթեռնելի (ֆայլերի չափը k, M, G-ով)
+
+
+> Հրամանների օրինակներ
+
+* `cd /bin`
+* `pwd`
+* `ls -la`
+* `cd ~`
+* `ls -la`
+* `ls -la /bin`
+
+* `cp -r /etc  ~`
+* `mkdir ~/TEST`
+* `mv  ~/etc  ~/TEST`
+* `rm -r ~/TEST`
+
+
+> Հրամաններ
+
+* `cp <fromfile> <tofile>`   	Պատճենել ֆայլը 
+  * cp –r
+  
+* `mv <fromfile> <tofile>`	Տեղափոխել / վերանվանել ֆայլը
+
+* `rm <file>`  			Հեռացնել ֆայլ/դիրեկտորիա 
+  * `rm –r`
+  
+* `mkdir <newdir>`		 Ստեղծել դիրեկտորիա 
+* `alias <alias> <command>` Ստեղծել հրամանի կրճատում 
+* `which <command>` 		 Հրամանի գտնվելու վայրը
+
+
+> Հրամանների օրինակներ
+
+* `cd ~`
+* `pwd`
+* `touch f1`
+* `cp f1 f2`
+* `mv f2  f3`
+* `alias la='ls -la'`
+* `la`
+
+*`ls -l f*`
+* `rm -i f*`
+* `mkdir d1`
+* `rm -r d1`
+
 
 ### File Permissions
+
+![](../images/shell-course/permissions.png)
+
+
+![](../images/shell-course/permissions2.png)
+
+![](../images/shell-course/permissions3.png)
+
+![](../images/shell-course/permissions4.png)
+
+![](../images/shell-course/chmod.png)
+
+![](../images/shell-course/mc.png)
+
+![](../images/shell-course/umask.png)
+
+
+
+
 ### I/O Redirection, Pipes
 ### Text Editor
 ### Sourcing Scripts
