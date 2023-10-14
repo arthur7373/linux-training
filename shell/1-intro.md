@@ -21,10 +21,11 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 ### Linux Terminal, CLI Basics
 
-> Command prompt
+> Command Prompt
 
 **$** - User Prompt
-\**#** - ROOT Prompt
+
+**#** - ROOT Prompt
 
 > Command History 
 * Վերևի սլաքը (Up Arrow) նախորդ հրամանները
@@ -34,5 +35,10 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 * [Tab] [Tab]	լրացում բոլոր տարբերակների ցուցադրում
 
 > Movement:	
-* Ctrl-A – move to the beginning of line
-* Ctrl-E – move to the end of line
+* Ctrl-A – mտեղափոխել տողի սկիզբ
+* Ctrl-E – տեղափոխել տողի վերջ
+
+
+> Հրամանների կառուցվածք
+ 
+![](../images/shell-course/command-structure.png)
