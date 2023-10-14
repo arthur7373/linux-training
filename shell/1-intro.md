@@ -62,3 +62,45 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
   
 * sleep - delay for a specified time 
   * `sleep 2 ; echo Linux rules`
+
+
+### File Management Commands
+
+> Ֆայլերի անվանումը
+* Windows
+  * `C:\Program Files\Oracle\VirtualBox\VirtualBox.exe`
+
+* Linux/UNIX
+
+  * `/home/user1/docs/letter.txt`
+  * `/bin/ls`
+
+
+> Հատուկ անվանումներ
+* `/`   Գլխավոր դիրեկտորիան
+* `.`    Տվյալ դիրեկտորիան
+* `..`   Նախորդ (վերևի) դիրեկտորիան
+* `~`    Օգտագործողի անձնական դիրեկտորիան
+
+Օրինակներ՝
+
+`./a`        նույնն է ինչ   `a`
+
+`../home/student`  մեկ մակարդակ վերև և home/student
+
+`.`-ով սկսվող ֆայլեր  
+
+
+### File Permissions
+### I/O Redirection, Pipes
+### Text Editor
+### Sourcing Scripts
+### Variables
+### Positional Parameters
+### Error handling, Exit Status
+### Conditionals
+### Loops
+### Functions
+### Arrays
+### Text Processing Tools
+
