@@ -1,8 +1,7 @@
 # Shell programming in Linux
 
 
-## Linux Terminal 
-### Լինուքսի հրամանների տողը
+## Linux Terminal (Լինուքսի հրամանների տողը)
 
 Լինուքս համակարգ մուտքագրվելու համար պետք է տրամադրել անունը (username) և գաղտնաբառը (password):
 
