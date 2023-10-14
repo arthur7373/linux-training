@@ -19,4 +19,20 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 Այս դասընթացի ընթացքում մենք կաշխատենք երկրորդ տարբերակով:
 
+### Linux Terminal, CLI Basics
 
+> Command prompt
+
+**$** - User Prompt
+\**#** - ROOT Prompt
+
+> Command History 
+* Վերևի սլաքը (Up Arrow) նախորդ հրամանները
+
+> Filename/Command completion 	
+* [Tab]	հրամանի/ֆայլի լրացում
+* [Tab] [Tab]	լրացում բոլոր տարբերակների ցուցադրում
+
+> Movement:	
+* Ctrl-A – move to the beginning of line
+* Ctrl-E – move to the end of line
