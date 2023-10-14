@@ -42,3 +42,23 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 > Հրամանների կառուցվածք
  
 ![](../images/shell-course/command-structure.png)
+
+> Հրամանների օրինակներ
+
+* cal - display a calendar
+
+  * `cal`
+  * `cal 2 2015`
+  * `cal -m 2 2015`
+
+* date - display date
+
+  * `date`
+  * `date --help`
+  * `date +"%d-%m-%Y"`
+  
+* echo - display a line of text 
+  * `echo We learn shell`
+  
+* sleep - delay for a specified time 
+  * `sleep 2 ; echo Linux rules`
