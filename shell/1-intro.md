@@ -58,7 +58,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 > Հրամանների կառուցվածք
  
-![](../images/shell-course/command-structure.png)
+![](../images/shell-course/command-structure.png | width=150)
 
 > Հրամանների օրինակներ
 
