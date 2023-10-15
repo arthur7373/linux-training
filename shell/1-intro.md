@@ -210,11 +210,11 @@ Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրաման�
 
 > Օրինակ
 
-`ls /usr/bin | sort -r | less`
+`ls /usr/bin | sort -r`
 
 Նույնը չէ, ինչ հաջորդաբար կատարումը ;-ով
 
-`ls /usr/bin ; sort –r ; less`
+`ls /usr/bin ; sort –r `
 
 
 > Հրամանների համակցում
@@ -233,6 +233,84 @@ Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրաման�
     երկրորդ հրամանի մուտքին (stdin)
 
 _( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի կոդը (exit code) 0=OK)_
+
+
+<br><br>
+### Access files
+
+There are several tool to view text files contents.
+
+> **less** - view/browse text file page-by-page
+
+* **Enter/DOWNARROW**	– մեկ տող ներքև
+* **SPACE/PgDn**		– մեկ էկրան ներքև
+* **PgUp/b**			– մեկ էկրան վերև
+* **UPARROW**			– մեկ տող վերև
+* **/**					– որոնում
+* **Home**				– անցնել տեքստի սկիզբը
+* **End**				– անցնել տեքստի վերջը
+* **q**					– ելք
+
+> Օրինակներ
+ 
+`less /etc/services`
+`ls /usr/bin | sort -r | less`
+
+
+<br><br>
+
+> **cat** - output whole file to terminal
+
+> Օրինակներ
+ 
+`cat /etc/services`
+
+`cat /etc/services | sort -r `
+
+`cat /etc/services | sort -r | less`
+
+
+<br><br>
+
+> **head** - output some first lines (default 10) of file to terminal
+
+> Օրինակներ
+ 
+`head /etc/services`
+
+`head -1 /etc/services`
+
+`head -1 /etc/services > /tmp/h1`
+
+`head -1 /etc/services >> /tmp/h1`
+ 
+<br><br>
+
+> **tail** - output some last lines (default 10) of file to terminal
+
+> Օրինակներ
+ 
+`tail /etc/services`
+
+`tail -1 /etc/services`
+
+`tail -1 /etc/services > /tmp/s1`
+
+`tail -1 /etc/services >> /tmp/s1`
+
+<br><br>
+
+> **grep** - filter lines based on pattern
+
+> Օրինակներ
+ 
+`cat /etc/services | grep http `
+
+`ls /usr/bin | grep log`
+
+`ls /usr/bin | grep ^log`
+
+`ls /usr/bin | grep log$`
 
 
 <br><br>
