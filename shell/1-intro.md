@@ -19,6 +19,8 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 Այս դասընթացի ընթացքում մենք կաշխատենք երկրորդ տարբերակով:
 
+<br><br>
+
 ### Linux Terminal, CLI Basics
 
 > Լինուքսի յուրահատկությունը
@@ -78,6 +80,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 * sleep - delay for a specified time 
   * `sleep 2 ; echo Linux rules`
 
+<br><br>
 
 ### File Management Commands
 
@@ -166,6 +169,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 * `mkdir d1`
 * `rm -r d1`
 
+<br><br>
 
 ### File Permissions
 
@@ -184,6 +188,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 ![](../images/shell-course/umask.png)
 
+<br><br>
 
 ### I/O Redirection
 
@@ -216,7 +221,6 @@ Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրաման�
 
 `ls /usr/bin ; sort –r `
 
-
 > Հրամանների համակցում
 
 Հրամանները կարելի է համակցել հետևյալ կերպ՝
@@ -234,8 +238,8 @@ Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրաման�
 
 _( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի կոդը (exit code) 0=OK)_
 
-
 <br><br>
+
 ### Access files
 
 There are several tool to view text files contents.
@@ -256,7 +260,6 @@ There are several tool to view text files contents.
 `less /etc/services`
 `ls /usr/bin | sort -r | less`
 
-
 <br><br>
 
 > **cat** - output whole file to terminal
@@ -268,7 +271,6 @@ There are several tool to view text files contents.
 `cat /etc/services | sort -r `
 
 `cat /etc/services | sort -r | less`
-
 
 <br><br>
 
@@ -311,6 +313,18 @@ There are several tool to view text files contents.
 `ls /usr/bin | grep ^log`
 
 `ls /usr/bin | grep log$`
+
+<br><br>
+
+> **awk**  - extract sections/fields from each line of files
+
+> Օրինակներ
+
+`awk -F":" '{print $1}' /etc/passwd | grep ^s`
+
+`tail -10 /etc/passwd | awk -F":" '{print $3"--"$1}' | sort -n`
+
+`cat /etc/passwd | grep -E ^'(b|sy)' | awk -F":" '{print "User: "$3"  "$1}'`
 
 
 <br><br>
