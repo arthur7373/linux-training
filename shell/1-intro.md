@@ -403,7 +403,7 @@ $# - count/number of arguments
 
 This enables to pass some data to the script by means of positional parameters.
 
-> Positional parameters are 
+> Example of positional parameters
 
 ```bash
 cat  > ~/s2  << "EOF1"
@@ -436,6 +436,37 @@ Now try providing first positional parameter
 As you see we pass the data to the script, which changes how `ls` command works.
 
 
+Let's now pass more data. 
+We will provide options to `ls` via first positional paramater, 
+the directory to show via second and pattern to filter lines via third.
+
+```bash
+cat  > ~/s3  << "EOF1"
+#!/bin/bash
+ls ${1} ${2} | grep ${3}
+EOF1
+chmod +x ~/s3
+
+```
+
+First try running this script without parameters:
+
+```bash
+./s3
+```
+
+> EXPLAIN THE OUTPUT
+
+
+Now try providing need 3 positional parameters
+
+```bash
+./s3 -lh /bin log
+```
+
+```bash
+./s3 -r / l
+```
 
 
 ### Sourcing Scripts
