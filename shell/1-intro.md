@@ -710,6 +710,47 @@ Why?
 ### Error handling, Exit Status
 
 ### Loops
+
+
+
+```bash
+#!/bin/bash
+if [ -z $1 ]; then
+echo "Usage: $0 number of loops"
+exit
+fi
+clear
+COUNTER=0
+while [ $COUNTER -lt $1 ]
+do
+echo "State (for $1 seconds)"
+echo "second:$COUNTER" 
+echo "-- Users --"
+w
+echo "----------------"
+/bin/sleep 1
+clear
+COUNTER=`expr  $COUNTER + 1`
+done
+```
+
+
+
+
+```bash
+#!/bin/bash
+echo "How do you like it:"
+for (( i=1; i<=5; i++ ))
+do
+    for (( j=1; j<=i;  j++ ))
+    do
+     echo -n "$i"
+    done
+    echo ""
+done
+```
+
+
 ### Arrays
 ### Text Processing Tools
 
