@@ -185,10 +185,88 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 ![](../images/shell-course/umask.png)
 
 
+### I/O Redirection
+
+![](../images/shell-course/io-redir-1.jpg)
+
+![](../images/shell-course/io-redir-2.jpg)
 
 
-### I/O Redirection, Pipes
-### Text Editor
+> STDOUT - Standard output  		>     >> 
+ 
+* `ls /etc > ~/stdout`
+* `ls /etc >> ~/stdout`
+
+> STDERR - Standard error output		2>   2>> 
+* `ls /e > ~/stdout`
+* `ls /e > ~/stdout 2> ~/stderr`
+* `ls /e > ~/stdout 2> /dev/null`
+
+### Pipes
+
+Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրամանի STDIN-ին
+
+![](../images/shell-course/pipes-1.jpg)
+
+> Օրինակ
+
+`ls /usr/bin | sort -r | less`
+
+Նույնը չէ, ինչ հաջորդաբար կատարումը ;-ով
+
+`ls /usr/bin ; sort –r ; less`
+
+
+> Հրամանների համակցում
+
+Հրամանները կարելի է համակցել հետևյալ կերպ՝
+
+* **&&**	Logical AND 
+    եթե առաջին հրամանի ելքի կոդը (exit code) 0 է, կատարել երկրորդը
+
+* **||**	Logical OR
+    եթե առաջին հրամանի ելքի կոդը (exit code) 0 չէ, կատարել երկրորդը
+
+* **;**	Պարզապես կատարել հրամանները՝ մեկը մյուսի հետևից
+
+* **|**	Փոխանցել առաջին հրամանի ելքի տվյալները (stdout) 
+    երկրորդ հրամանի մուտքին (stdin)
+
+_( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի կոդը (exit code) 0=OK)_
+
+
+### Text Editors (Խմբագիրներ)
+
+* **vi /vim**	Standard UNIX editor
+* **nano**		Simple display-oriented text editor 
+* **mcedit** 	Midnight Commander internal editor
+* **joe** 		Joe editor
+* **gedit/kate** 	Graphical editors 
+
+
+#### Vim/Vi basics
+
+Vim/Vi is a very powerful editor Linux/Unix text editor. The reason to know it's basics is that it is initially available almost on any Linux/UNIX system.
+Even if any other editor will not be present or available to install Vi/Vim will be there to enable you editing text files.
+(to learn more than below basics you can type `vimtutor` and follow instructions)
+
+> Vim Modes
+* **Insert**	- Insert text by typing
+* **Execute**	- Execute commands within the editor
+* **Command**	- Perform different editing actions using single keystrokes
+* **Visual**	- Highlight or select text for copying, deleting, etc
+
+![](../images/shell-course/vim-modes.jpg)
+
+> Execute Mode Commands
+
+* **:q**	- Quit when no changes have been made after last save
+* **:q!**	- Quit ignoring changes made
+* **:wq**	- Save current file and quit
+* **:w {file name}** - Save file with specified name
+
+
+
 ### Sourcing Scripts
 ### Variables
 ### Positional Parameters
