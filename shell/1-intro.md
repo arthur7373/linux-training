@@ -359,11 +359,88 @@ Even if any other editor will not be present or available to install Vi/Vim will
 * **:wq**	- Save current file and quit
 * **:w {file name}** - Save file with specified name
 
+### Shell scripting basics
+
+> First line of Shell script should look like: 
+* `#!/bin/bash`
+* `#!/bin/sh`
+
+<br><br>
+
+*Simple script example*
+
+```bash
+cat  > ~/s1  << "EOF1"
+#!/bin/bash
+ls -l /usr/bin/
+EOF1
+chmod +x ~/s1
+
+```
+
+Let's first understand what was done above.
+
+We used method called _Here document_ to create the script and made it executable with `chmod`.
+The script itself is a single `ls` command, that outputs detailed (-l) contents of directory _/usr/bin/_
+
+
+Now try running this simple script:
+
+`./s1`
+
+<br><br>
+
+### Positional Parameters
+
+While running, shell scripts have access to special data from the environment:
+
+$0 or {$0} - The name of the script
+$1 or {$1} - The first argument sent to the script 
+$2 or {$2} - The second argument sent to the script
+...
+$* - all arguments as one
+$# - count/number of arguments
+
+This enables to pass some data to the script by means of positional parameters.
+
+> Positional parameters are 
+
+```bash
+cat  > ~/s2  << "EOF1"
+#!/bin/bash
+# Here we get the first positional parameter and provide it to "ls" command
+ls -l ${1}
+EOF1
+chmod +x ~/s2
+
+```
+
+Now try running this simple script:
+
+```bash
+./s2
+```
+
+> QUESTION: What directory did `ls` command list ?  Why ?
+
+Now try providing first positional parameter
+
+```bash
+./s2 /tmp
+```
+
+```bash
+./s2 /usr/sbin
+```
+
+As you see we pass the data to the script, which changes how `ls` command works.
+
+
 
 
 ### Sourcing Scripts
 ### Variables
-### Positional Parameters
+
 ### Error handling, Exit Status
 ### Conditionals
 ### Loops
