@@ -359,11 +359,18 @@ Even if any other editor will not be present or available to install Vi/Vim will
 * **:wq**	- Save current file and quit
 * **:w {file name}** - Save file with specified name
 
+<br><br>
+
 ### Shell scripting basics
 
 > First line of Shell script should look like: 
 * `#!/bin/bash`
 * `#!/bin/sh`
+
+After 2 special characters **#!**, 
+it should contain the path to the interpreter - program that will try to interpret the text line by line and do what is required.
+
+In case script don't have such first line, it will still work, but it will be interpreted by current shell and chances are, there will be some errors. 
 
 <br><br>
 
@@ -378,28 +385,28 @@ chmod +x ~/s1
 
 ```
 
-Let's first understand what was done above.
+Try running this simple script:
+
+`./s1`
+
+Let's now understand what was done above.
 
 We used method called _Here document_ to create the script and made it executable with `chmod`.
 The script itself is a single `ls` command, that outputs detailed (-l) contents of directory _/usr/bin/_
 
 
-Now try running this simple script:
-
-`./s1`
-
 <br><br>
 
 ### Positional Parameters
 
-While running, shell scripts have access to special data from the environment:
+During running, shell scripts have access to special data from the environment:
 
-$0 or {$0} - The name of the script
-$1 or {$1} - The first argument sent to the script 
-$2 or {$2} - The second argument sent to the script
+* **$0** or **{$0}** - The name of the script
+* **$1** or **{$1}** - The first argument sent to the script 
+* **$2** or **{$2}** - The second argument sent to the script
 ...
-$* - all arguments as one
-$# - count/number of arguments
+* **$*** - all arguments as one
+* **$#** - count/number of arguments
 
 This enables to pass some data to the script by means of positional parameters.
 
@@ -468,14 +475,241 @@ Now try providing need 3 positional parameters
 ./s3 -r / l
 ```
 
-
-### Sourcing Scripts
 ### Variables
 
-### Error handling, Exit Status
+Shell variables - temporary storage for information.
+
+Shell does not care about the type of variables. 
+Variables could store strings, characters or integers. 
+
+Variable names are uppercase by convention, but lowercase and other symbols can be used as well.
+
+Syntax: **VARNAME=VALUE**
+
+> Note: There should be no space around “=” sign 
+
+Prefix the variable name with **$**, gives the value stored in that variable.
+
+The following script creates a variable called **NAME** and assigns the value "HELLO STUDENT". 
+
+
+Example of simple variable assignment usage
+
+```bash
+cat  > ~/v1  << "EOF1"
+#!/bin/bash
+NAME="HELLO STUDENT"
+echo $NAME
+EOF1
+chmod +x ~/v1
+
+```
+
+Execute the above script, which will output the text to the terminal.
+
+**Task: Modify the script to output 1-st positional parameter after HELLO STUDENT.**
+
+<br><br>
+
+When you work in shell, there are already many defined shell variables.
+
+**Global variables** (also called **environment variables**) - available to all shells. 
+The `env` or `printenv` commands can be used to display environment variables. 
+
+**Local variables** are visible only within the block of code.  
+Using the `set` built-in command without any options will display a list of all variables 
+(including environment variables) and functions.  
+
+In a function, a local variable has meaning only within that function block. 
+
+```bash
+set | grep HIST
+```
+
+```bash
+set | grep NAME
+```
+
+```bash
+env | grep NAME
+```
+
+
 ### Conditionals
-### Loops
+
+Very frequently there is need to make decisions based on certain conditions. Conditions are expressions that after being evaluated return "yes" or "no" (i.e. true or false).
+
+Most used is **if** conditional
+
+Simple example is below:
+
+```bash
+cat  > ~/c1  << "EOF1"
+#!/bin/bash
+a=5
+b=30
+
+if [ $a -lt $b ]
+then
+        echo "$a < $b"
+fi
+EOF1
+chmod +x ~/c1
+
+```
+
+Execute the above script, which will output the text to the terminal.
+
+**Task: Modify the script to get 2 variables from 2 positional parameters**
+
+<br><br>
+Notice that in case **a** is NOT less that **b**, nothing is printed.
+Let's add that variant too.
+
+Edit the file and add 
+
+```bash
+else
+        echo "$a > $b"
+```
+before `fi` line
+
+
+if you run the above script without parameters you see output is not so pretty.
+Now let's add additional check if parameters are present.
+
+Add below code just after first line `#!/bin/bash`
+
+```bash
+if [[ $# < 2 ]] 
+then 
+  echo "Please provide 2 numbers as parameters"
+  echo "Usage: $0 num1, num2" 
+exit 
+fi 
+```
+
+Now you may notice that even thoigh we check for the number of parameters to be at least 2, 
+if we give non-numeric parameter it will give error.
+
+
+```bash
+./c1 aaa 1 
+```
+
+
+To implement checking if 1st parameter is numeric, add below code just after above check `#!/bin/bash`
+
+```bash
+if [ $1 -eq $1 2>/dev/null ]
+then
+echo -n
+else
+echo "$1 not number"
+exit
+fi
+```
+
+Now check if it works
+
+```bash
+./c1 aaa 1 
+```
+
+But second parameter still is not checked.
+
+```bash
+./c1 1 aaa 
+```
+
+**Task: Modify the script to check 2nd positional parameter as well**
+
+
 ### Functions
+
+We see that in above code we add the same part for checking 1st parameter, then 2nd.
+In case we don't want to repeat the same code twice, we can create a **function**.
+
+```bash
+cat  > ~/f1  << "EOF1"
+#!/bin/bash
+if [[ $# < 2 ]]
+then
+  echo "Please provide 2 numbers as parameters"
+  echo "Usage: $0 num1, num2 ..."
+exit
+fi
+
+isnumber () 
+{ 
+if [ $1 -eq $1 2>/dev/null ]
+then
+echo -n
+else
+echo "$1 not number"
+exit
+fi
+}
+
+
+a=${1}
+b=${2}
+
+isnumber $a
+isnumber $b
+
+if [ $a -lt $b ]
+then
+        echo "$a < $b"
+else
+        echo "$a > $b"
+
+fi
+
+EOF1
+chmod +x ~/f1
+
+```
+
+You can see that the above script `f1' works the same way as 'c1',
+but here we define and use function **isnumber**.
+
+
+Other example of function
+
+```bash
+cat > ~/f2 << "EOF1"
+#!/bin/bash 
+
+exf () {  
+echo "We learn $1" 
+} 
+
+exf Linux 
+exf Shell
+exf Programming in Linux
+exf Shell Programming in Linux
+
+EOF1
+chmod +x ~/f2
+
+```
+
+> Here you may understand that INSIDE function **$1** means NOT 
+> first parameter of the script, but first parameter of that function
+
+Now notice that in last 2 lines only first word is printed.
+Why?
+
+**Task: Modify the script to print complete lines.**
+**HINT: you need to use something else than $1** 
+
+
+### Sourcing Scripts
+
+### Error handling, Exit Status
+
+### Loops
 ### Arrays
 ### Text Processing Tools
 
