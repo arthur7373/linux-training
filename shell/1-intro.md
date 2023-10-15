@@ -263,7 +263,7 @@ There are several tool to view text files contents.
 
 <br><br>
 
-> **cat** - output whole file to terminal
+> **cat** - output whole file to STDOUT (default - terminal)
 
 > Օրինակներ
  
@@ -275,7 +275,7 @@ There are several tool to view text files contents.
 
 <br><br>
 
-> **head** - output some first lines (default 10) of file to terminal
+> **head** - output some first lines (default 10) of file STDOUT (default - terminal)
 
 > Օրինակներ
  
@@ -289,7 +289,7 @@ There are several tool to view text files contents.
  
 <br><br>
 
-> **tail** - output some last lines (default 10) of file to terminal
+> **tail** - output some last lines (default 10) of file STDOUT (default - terminal)
 
 > Օրինակներ
  
