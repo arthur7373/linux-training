@@ -59,10 +59,6 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 > Հրամանների կառուցվածք
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/command-structure.png width=50% height=50% >
- 
-
-
-![](../images/shell-course/command-structure.png "\| width=150" )
 
 > Հրամանների օրինակներ
 
@@ -177,29 +173,22 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 ### File Permissions
 
-![](../images/shell-course/permissions.png)
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
 
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions2.png width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions3.png width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions4.png width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/chmod.png width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/mc.png width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/umask.png width=50% height=50% >
 
-![](../images/shell-course/permissions2.png)
-
-![](../images/shell-course/permissions3.png)
-
-![](../images/shell-course/permissions4.png)
-
-![](../images/shell-course/chmod.png)
-
-![](../images/shell-course/mc.png)
-
-![](../images/shell-course/umask.png)
 
 <br><br>
 
 ### I/O Redirection
 
-![](../images/shell-course/io-redir-1.jpg)
-
-![](../images/shell-course/io-redir-2.jpg)
-
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-1.jpg width=50% height=50% >
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-2.jpg width=50% height=50% >
 
 > STDOUT - Standard output  		>     >> 
  
@@ -215,7 +204,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրամանի STDIN-ին
 
-![](../images/shell-course/pipes-1.jpg)
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/pipes-1.jpg width=50% height=50% >
 
 > Օրինակ
 
@@ -353,7 +342,7 @@ Even if any other editor will not be present or available to install Vi/Vim will
 * **Command**	- Perform different editing actions using single keystrokes
 * **Visual**	- Highlight or select text for copying, deleting, etc
 
-![](../images/shell-course/vim-modes.jpg)
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/vim-modes.jpg width=50% height=50% >
 
 > Execute Mode Commands
 
