@@ -174,12 +174,17 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 ### File Permissions
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
-
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions2.png width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions3.png width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions4.png width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/chmod.png width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/mc.png width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/umask.png width=50% height=50% >
 
 
@@ -188,6 +193,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 ### I/O Redirection
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-1.jpg width=50% height=50% >
+<br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-2.jpg width=50% height=50% >
 
 > STDOUT - Standard output  		>     >> 
@@ -199,6 +205,8 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 * `ls /e > ~/stdout`
 * `ls /e > ~/stdout 2> ~/stderr`
 * `ls /e > ~/stdout 2> /dev/null`
+
+<br><br>
 
 ### Pipes
 
