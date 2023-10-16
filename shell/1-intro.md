@@ -28,45 +28,61 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 * Մեծատառի/փոքրատառի տարբերություն (LiNuX iS CaSe SeNsItIvE)
   * Հրամանների և ծրագրերի անվանման մեջ 
+    * command
     * Command 
     * COMMAND 
-  * Ֆայլերի և դիրեկտորիաների անվանման մեջ
+  * Ֆայլերի և դիրեկտորիաների/ֆոլդերների անվանման մեջ
+    * file
     * File
     * FILE
   * Օգտագործողների և խմբերի անվանման մեջ
     * user
     * User
+    * USER
 
 
 > Command Prompt
+
+Տողային հարաման մուտքագրելու հրավերի օրինակներ.
 
 **$** - User Prompt
 
 **#** - ROOT Prompt
 
 > Command History 
+
+Նախորդ հրամանները հիշվում են, որ նորից նույնը չհավաքենք:
+
 * Վերևի սլաքը (Up Arrow) նախորդ հրամանները
 
 > Filename/Command completion 	
-* [Tab]	հրամանի/ֆայլի լրացում
-* [Tab] [Tab]	լրացում բոլոր տարբերակների ցուցադրում
 
-> Movement:	
-* Ctrl-A – mտեղափոխել տողի սկիզբ
+Հնարավոր է ամբողջությամբ չլրացնել հրամանի/ֆայլի անունը՝ համակարգը կարող է ամբողջացնել անունը
+
+* [Tab]	հրամանի/ֆայլի լրացում, եթե դա միակ տարբերակն է
+<br><br>
+* [Tab] [Tab] եթե մեկից ավել տարբերակ կա, ապա ցուցադրվում են բոլոր տարբերակները
+
+> Movement in command line
+
+Հրամանային տողում տեղաշարժ սլաքներից բացի	
+* Ctrl-A – տեղափոխել տողի սկիզբ
 * Ctrl-E – տեղափոխել տողի վերջ
 
 
-> Հրամանների կառուցվածք
+> Command structure
+
+Հրամանների կառուցվածք
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/command-structure.png width=50% height=50% >
 
 > Հրամանների օրինակներ
 
-* cal - display a calendar
+* id - display user information
 
-  * `cal`
-  * `cal 2 2015`
-  * `cal -m 2 2015`
+  * `id`
+  * `id --help`
+  * `id -n -u`
 
 * date - display date
 
@@ -75,7 +91,8 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
   * `date +"%d-%m-%Y"`
   
 * echo - display a line of text 
-  * `echo We learn shell`
+  * `echo We learn Linux`
+  * `echo "$LOGNAME" learns shell`
   
 * sleep - delay for a specified time 
   * `sleep 2 ; echo Linux rules`
@@ -108,7 +125,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 `.`-ով սկսվող ֆայլեր  
 
-> Հրամանների օրինակներ
+> Հիմնական հրամաններ
 * `pwd` - ընթացիկ դիրեկտորիան
 * `cd` - փոխել ընթացիկ դիրեկտորիան
 * `touch` – ստեղծել դատարկ ֆայլ
@@ -123,51 +140,67 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 * `-r`  Հակադարձ դասավորման կարգով (–lSr)
 * `-h`    Մարդու համար ավելի ընթեռնելի (ֆայլերի չափը k, M, G-ով)
 
-
-> Հրամանների օրինակներ
-
-* `cd /bin`
-* `pwd`
-* `ls -la`
-* `cd ~`
-* `ls -la`
-* `ls -la /bin`
-
-* `cp -r /etc  ~`
-* `mkdir ~/TEST`
-* `mv  ~/etc  ~/TEST`
-* `rm -r ~/TEST`
-
-
-> Հրամաններ
-
-* `cp <fromfile> <tofile>`   	Պատճենել ֆայլը 
-  * cp –r
-  
+* `cp <fromfile> <tofile>`   	Պատճենել ֆայլը
 * `mv <fromfile> <tofile>`	Տեղափոխել / վերանվանել ֆայլը
-
-* `rm <file>`  			Հեռացնել ֆայլ/դիրեկտորիա 
-  * `rm –r`
-  
+* `rm <file>`  			Հեռացնել ֆայլ/դիրեկտորիա
 * `mkdir <newdir>`		 Ստեղծել դիրեկտորիա 
 * `alias <alias> <command>` Ստեղծել հրամանի կրճատում 
-* `which <command>` 		 Հրամանի գտնվելու վայրը
+* `type <command>` 		 Հրամանի գտնվելու վայրը և այլ տեղեկություններ
 
 
 > Հրամանների օրինակներ
 
-* `cd ~`
-* `pwd`
-* `touch f1`
-* `cp f1 f2`
-* `mv f2  f3`
-* `alias la='ls -la'`
-* `la`
+```bash 
+cd /home ; pwd ; ls -la
+```
+```bash 
+cd ; ls -la /home
+```
+```bash 
+mkdir d1; cd d1 ; pwd; touch f1 ; ls f*
+```
+```bash 
+cp f1 f2 ; ls f*
+```
+```bash 
+mv f2 f3 ; ls f*
+```
+```bash 
+alias del='rm -i'
+```
+```bash 
+del f*
+```
+```bash 
+cd ~ ; rm -r d1
+```
 
-*`ls -l f*`
-* `rm -i f*`
-* `mkdir d1`
-* `rm -r d1`
+<hr>
+
+```bash 
+type cd
+```
+```bash 
+type id
+```
+
+<hr>
+
+```bash 
+cp -r /etc  ~`
+```
+```bash 
+mkdir ~/TEST`
+```
+```bash 
+mv  ~/etc  ~/TEST`
+```
+```bash 
+rm -r ~/TEST`
+```
+
+
+
 
 <br><br>
 
