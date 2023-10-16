@@ -99,7 +99,7 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 <br><br>
 
-### File Management Commands
+## File Management Commands
 
 > Ֆայլերի անվանումը
 * Windows
@@ -204,7 +204,7 @@ rm -r ~/TEST`
 
 <br><br>
 
-### File Permissions
+## File Permissions
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
 <br><br>
@@ -223,7 +223,7 @@ rm -r ~/TEST`
 
 <br><br>
 
-### I/O Redirection
+## I/O Redirection
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-1.jpg width=50% height=50% >
 <br><br>
@@ -241,7 +241,7 @@ rm -r ~/TEST`
 
 <br><br>
 
-### Pipes
+## Pipes
 
 Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրամանի STDIN-ին
 
@@ -274,7 +274,7 @@ _( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի 
 
 <br><br>
 
-### Access files
+## Access files
 
 There are several tool to view text files contents.
 
@@ -362,7 +362,7 @@ There are several tool to view text files contents.
 
 
 <br><br>
-### Text Editors (Խմբագիրներ)
+## Text Editors (Խմբագիրներ)
 
 * **vi /vim**	Standard UNIX editor
 * **nano**		Simple display-oriented text editor 
@@ -371,7 +371,7 @@ There are several tool to view text files contents.
 * **gedit/kate** 	Graphical editors 
 
 
-#### Vim/Vi basics
+### Vim/Vi basics
 
 Vim/Vi is a very powerful editor Linux/Unix text editor. The reason to know it's basics is that it is initially available almost on any Linux/UNIX system.
 Even if any other editor will not be present or available to install Vi/Vim will be there to enable you editing text files.
@@ -394,7 +394,7 @@ Even if any other editor will not be present or available to install Vi/Vim will
 
 <br><br>
 
-### Shell scripting basics
+## Shell scripting basics
 
 > First line of Shell script should look like: 
 * `#!/bin/bash`
@@ -430,7 +430,7 @@ The script itself is a single `ls` command, that outputs detailed (-l) contents 
 
 <br><br>
 
-### Positional Parameters
+## Positional Parameters
 
 During running, shell scripts have access to special data from the environment:
 
@@ -508,7 +508,7 @@ Now try providing need 3 positional parameters
 ./s3 -r / l
 ```
 
-### Variables
+## Variables
 
 Shell variables - temporary storage for information.
 
@@ -568,7 +568,7 @@ env | grep NAME
 ```
 
 
-### Conditionals
+## Conditionals
 
 Very frequently there is need to make decisions based on certain conditions. Conditions are expressions that after being evaluated return "yes" or "no" (i.e. true or false).
 
@@ -658,7 +658,7 @@ But second parameter still is not checked.
 **Task: Modify the script to check 2nd positional parameter as well**
 
 
-### Functions
+## Functions
 
 We see that in above code we add the same part for checking 1st parameter, then 2nd.
 In case we don't want to repeat the same code twice, we can create a **function**.
@@ -738,11 +738,11 @@ Why?
 **HINT: you need to use something else than $1** 
 
 
-### Sourcing Scripts
+## Sourcing Scripts
 
-### Error handling, Exit Status
+## Error handling, Exit Status
 
-### Loops
+## Loops
 
 
 
@@ -784,6 +784,6 @@ done
 ```
 
 
-### Arrays
-### Text Processing Tools
+## Arrays
+## Text Processing Tools
 
