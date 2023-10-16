@@ -97,7 +97,7 @@ echo "$LOGNAME" learns Shell Programming
 * sleep - delay for a specified time 
 
 ```bash
-echo -n "Learn " ; sleep 2 ; echo -n "Shell Programming " ; sleep 2 ; echo "in Linux" ; sleep 2
+echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
 ```
 
 
