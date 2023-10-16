@@ -134,6 +134,8 @@ echo -n "Learn " ; sleep 2 ; echo -n "Shell Programming " ; sleep 2 ; echo "in L
   * `/bin/ls`
 
 
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/linuxfs.png width=50% height=50% >
+
 > Հատուկ անվանումներ
 * `/`   Գլխավոր դիրեկտորիան
 * `.`    Տվյալ դիրեկտորիան
