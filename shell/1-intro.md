@@ -133,9 +133,12 @@ echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Pr
   * `/home/user1/docs/letter.txt`
   * `/bin/ls`
 
+```bash 
+ls /
+```
 
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/linuxfs.png width=20% height=20% >
 
+  
 > Հատուկ անվանումներ
 * `/`   Գլխավոր դիրեկտորիան
 * `.`    Տվյալ դիրեկտորիան
