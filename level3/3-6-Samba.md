@@ -47,10 +47,9 @@ passdb backend = tdbsam
 comment = Home Directories
 browseable = no
 writable = yes
-
+EOF1
 service nmb restart ;\
 service smb restart
-EOF1
 
 ```
 
@@ -74,17 +73,18 @@ Now let's add new share:
 * docs - public readonly resource
 
 ```bash
-mkdir -p /srv/samba/docs/testdir ;\
-echo "Test text"  >> /srv/docs/testdocument.txt ;\
+mkdir -p /opt/samba/docs/testdir ;\
+echo "Test text"  >> /opt/samba/docs/testfile.txt ;\
 cat << "EOF1" >> /etc/samba/smb.conf
 [docs]
-path = /srv/samba/docs
+path = /opt/samba/docs
 read only = yes
 guest ok = yes
 browsable = yes
 EOF1
 service nmb restart ;\
 service smb restart
+
 ```
 
 Try access the share again. You can see `docs` as well, but you will not be able to change anything there.
@@ -115,9 +115,8 @@ You should now see 3 shared resources:
 Now let's create new Samba user `smbtest`
 
 ```bash
-mkdir -p /srv/samba/smbtest ;\
-echo "Test text 2" > /srv/samba/smbtest/testfile2.txt ;\
-useradd -M -d /srv/samba/smbtest -s /usr/sbin/nologin smbtest ;\
+useradd -m -k /srv -d /opt/samba/smbtest -s /usr/sbin/nologin smbtest ;\
+echo "Test text 2" > /opt/samba/smbtest/testfile2.txt ;\
 smbpasswd -a smbtest ;\
 service nmb restart ;\
 service smb restart
@@ -129,7 +128,7 @@ Now try accessing with that new user `smbtest`
 smbclient //127.0.0.1/smbtest -U smbtest
 ```
 
-After connecting you shoule see `smb: \>` prompt.
+After connecting you should see `smb: \>` prompt.
 Try some commands. For example 
 ```bash
 ls
@@ -142,6 +141,22 @@ more testfile2.txt
 ```
 
 You can quit **smbclient** with `q` command.
+
+
+In order to access from Windows we first need to disconnect previous connection with other user.
+
+```bash
+net use /delete \\<ip address>
+```
+
+Check with: 
+
+```bash
+net use
+```
+
+Now we can connect with this user `smbtest`
+
 
 ### Mount Samba share
 
@@ -163,6 +178,4 @@ df -h | grep '/mnt'
 ```
 
 The same way it can be mounted remotely as well.
-
-
 
