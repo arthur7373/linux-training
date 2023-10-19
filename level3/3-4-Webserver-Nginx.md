@@ -225,7 +225,7 @@ yum -y install haproxy
 Move default HAProxy config and create simple configuration.
 
 ```bash
-mv /etc/haproxy/haproxy.cfg /etc/haproxy/haproxy.cfg-orig ;\
+mv /etc/haproxy/haproxy.cfg{,.backup} ;\
 cat << "EOF1" > /etc/haproxy/haproxy.cfg
 # define frontend ( any name is OK for [http-in] )
 frontend http-in

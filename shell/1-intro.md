@@ -7,7 +7,11 @@
 * Ծանո՞թ եք տերմինալի միջոցով Linux-ում աշխատելուն:
 * Եթե այո ի՞նչ ծրագրի միջոցով:
 * Ծանո՞թ եք SSH-ով միանալուն:
-
+  * Putty
+  * Xshell
+  * MobaXterm
+  * Windows Subsystem for Linux (WSL) in Windows 10/11
+  
 
 Լինուքս համակարգ մուտքագրվելու համար պետք է տրամադրել անունը (username) և գաղտնաբառը (password):
 
@@ -27,17 +31,17 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 * Մեծատառի/փոքրատառի տարբերություն (LiNuX iS CaSe SeNsItIvE)
   * Հրամանների և ծրագրերի անվանման մեջ 
-    * command
-    * Command 
-    * COMMAND 
+    * `command`
+    * `Command` 
+    * `COMMAND` 
   * Ֆայլերի և դիրեկտորիաների/ֆոլդերների անվանման մեջ
-    * file
-    * File
-    * FILE
+    * `file`
+    * `File`
+    * `FILE`
   * Օգտագործողների և խմբերի անվանման մեջ
-    * user
-    * User
-    * USER
+    * `user`
+    * `User`
+    * `USER`
 
 
 > Command Prompt
@@ -52,8 +56,8 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 > Movement in command line
 
 Հրամանային տողում տեղաշարժ սլաքներից բացի	
-* Ctrl-A – տեղափոխել տողի սկիզբ
-* Ctrl-E – տեղափոխել տողի վերջ
+* `Ctrl-A` – տեղափոխել տողի սկիզբ
+* `Ctrl-E` – տեղափոխել տողի վերջ
 
 
 > Command structure
