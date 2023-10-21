@@ -213,14 +213,22 @@ ls /
 * `-h`    Մարդու համար ավելի ընթեռնելի (ֆայլերի չափը k, M, G-ով)
 
 
+<hr> 
+
 > ՕԳՏԱԿԱՐ ԿԱՅՔ՝ 
 > https://explainshell.com/
-> հրամանների մանրամասն բացատրություն
-> * Բացեք կայքը և մուտքագրեք հրաման, օրինակ
->  ```bash
->  echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
->  ```
+> հրամանների մանրամասն բացատրություն: 
+> Բացեք կայքը և մուտքագրեք հրաման, օրինակ
+```bash
+id -n -u
+```
 
+կամ
+
+```bash
+echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
+```
+<hr> 
 
 > Հատուկ անվանումներ
 * `/`   Գլխավոր դիրեկտորիան
