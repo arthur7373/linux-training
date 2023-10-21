@@ -19,13 +19,37 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 Մուտքագրվելիս Լինուքս համակարգ հնարավոր է աշխատել հետևյալ տարբերակներից մեկով. 
 * Graphical User Interface (GUI)
-* Command Line Interface (CLI)/Terminal
+* Command Line Interface (CLI) / Terminal
 
 Այս դասընթացի ընթացքում մենք կաշխատենք երկրորդ տարբերակով:
 
 <br><br>
 
-### Linux Terminal, CLI Basics
+## Linux Terminal, CLI Basics
+
+> Ինչ է Terminal-ը
+
+Ծրագիր, որի ներսում գոծում է հրամանի տող (Command Line): 
+Հնարավոր է դա լինի հեռակա միացումով (remote connection/access):
+Այսինքն աշխատանքը իրականացվի ցանցով կապված մեկ այլ հեռակա համակարգի վրա:
+
+> Ինչ է Command Line Interface/Interpreter (CLI) / Shell 
+
+Ծրագիր, որը իրականացնում է հրամանի տողի աշխատանքը, 
+վերլուծում է (interpret) տողը ու կատարում հրամանը կամ հայտնում սխալի մասին:
+
+Հրամանները վերլուծվում են տող առ տող, այդ պատճառով ամեն մի հրամանը պետք է ավարտվի **[Enter]**-ով:
+** [Enter]**-ից հետո հրամանը այլևս հնարավոր չէ փոխել:
+
+> **#**  նշանը և դրանից հետո ամեն ինչը համարվում է comment և չի վերլուծվում:  
+
+CLI այլ կերպ նաև անվանվում է Shell: Լինում են տարբեր տեսակներ, ամենատարածվածը` **Bash**
+
+CLI/Shell/Bash աշխատում է ինտերակտիվ եղանակով, որը նաև անվանում են REPL 
+
+**Read**->**Evaluate**->**Print**->**Loop**  
+
+
 
 > Լինուքսի յուրահատկությունը
 
@@ -46,16 +70,25 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 > Command Prompt
 
-Տողային հարաման մուտքագրելու հրավերի օրինակներ.
+Տողային հարաման մուտքագրելու հրավեր:
+
+Օրինակներ.
 
 **$** - User Prompt
 
 **#** - ROOT Prompt
 
+Այս հրավերի տեսքը հնարավոր է փոխել, 
+սակայն հաճախ նշված նշանները պահպանվում են 
+և ավելանում է լրացուցիչ տեղեկություն, օրինակ՝ սերվերի, օգտագործողի, տվյալ դիրեկտորիայի անունները:
+
+`student@server:/usr/bin$`
+
+<br><br>
 
 > Movement in command line
 
-Հրամանային տողում տեղաշարժ սլաքներից բացի	
+Աջ/ձախ սլաքներից բացի հրամանային տողում տեղաշարժ 	
 * `Ctrl-A` – տեղափոխել տողի սկիզբ
 * `Ctrl-E` – տեղափոխել տողի վերջ
 
@@ -67,6 +100,30 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/command-structure.png width=50% height=50% >
 
 > Հրամանների օրինակներ
+
+
+* echo - display a line of text 
+```bash
+echo We learn Linux # this is a comment 
+```
+```bash
+# echo We learn Linux # this is a comment
+```
+
+```bash
+echo "$LOGNAME" learns Shell Programming
+```
+```bash
+echo My Shell is: "$SHELL"
+```
+
+* sleep - delay for a specified time 
+
+```bash
+echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
+```
+
+
 
 * id - display user information
 
@@ -91,19 +148,6 @@ date --help
 ```bash
 date +"%d-%m-%Y"
 ```
-* echo - display a line of text 
-```bash
-echo We learn Linux
-```
-```bash
-echo "$LOGNAME" learns Shell Programming
-```
-* sleep - delay for a specified time 
-
-```bash
-echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
-```
-
 
 > Command History 
 
@@ -112,7 +156,9 @@ echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Pr
 * Վերևի սլաքը (Up Arrow) նախորդ հրամանները
 * Որոնում նախորդ հրամաններում `Ctrl-R`
   * մուտքագրեք հրամանի սկիզբը
-  * Կրկնելով `Ctrl-R` հնարավոր է փնտրել նախորդ տարբերակները 
+  * Կրկնելով `Ctrl-R` հնարավոր է փնտրել նախորդ տարբերակները
+    * Օրինակ՝ սեղմեք `Ctrl-R` և հավաքեք ՝da`
+    * Կրկնեք `Ctrl-R`
   
 
 > Filename/Command completion 	
@@ -120,9 +166,11 @@ echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Pr
 Հնարավոր է ամբողջությամբ չլրացնել հրամանի/ֆայլի անունը՝ համակարգը կարող է ամբողջացնել անունը
 
 * `[Tab]`	հրամանի/ֆայլի լրացում, եթե դա միակ տարբերակն է
+  * Օրինակ՝ հավաքեք ՝sle` և `[Tab]`
+
 <br><br>
 * `[Tab] [Tab]` եթե մեկից ավել տարբերակ կա, ապա ցուցադրվում են բոլոր տարբերակները
-
+  * Օրինակ՝ հավաքեք ՝sl` և `[Tab] [Tab]`
 
 <br><br>
 
@@ -137,10 +185,28 @@ echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Pr
   * `/home/user1/docs/letter.txt`
   * `/bin/ls`
 
+
+### Ծանոթացում ֆայլային համակարգի կառուցվածքին
+
 ```bash 
 ls /
 ```
 
+Երբ մուտքագրվում եք / բացվում է Terminal-ը, հայտնվում եք ընթացիկ դիրեկտորիայում:
+
+> Հիմնական հրամաններ
+* `pwd` - ընթացիկ դիրեկտորիան
+* `cd` - փոխել ընթացիկ դիրեկտորիան
+* `ls` - ֆայլերի ցուցակ
+<hr>
+
+`ls [options] <directory/file>`
+
+* `-l`     ընլայնված ցուցակ
+* `-a`  ցույց տալ բոլոր ֆալերը  (նեռարյալ .-ով սկսվող ֆալերը )
+* `-S`   դասավորել ֆայլերը ըստ չափի (–lS)
+* `-r`  Հակադարձ դասավորման կարգով (–lSr)
+* `-h`    Մարդու համար ավելի ընթեռնելի (ֆայլերի չափը k, M, G-ով)
 
   
 > Հատուկ անվանումներ
@@ -158,25 +224,10 @@ ls /
 `../home/student`  մեկ մակարդակ վերև և home/student
 
 
+<hr>
 
 > Հիմնական հրամաններ
-* `pwd` - ընթացիկ դիրեկտորիան
-* `cd` - փոխել ընթացիկ դիրեկտորիան
-* `touch` – ստեղծել դատարկ ֆայլ
-* `ls` - ֆայլերի ցուցակ
-
-<hr>
-
-`ls [options] <directory/file>`
-
-* `-l`     ընլայնված ցուցակ
-* `-a`  ցույց տալ բոլոր ֆալերը  (նեռարյալ .-ով սկսվող ֆալերը )
-* `-S`   դասավորել ֆայլերը ըստ չափի (–lS)
-* `-r`  Հակադարձ դասավորման կարգով (–lSr)
-* `-h`    Մարդու համար ավելի ընթեռնելի (ֆայլերի չափը k, M, G-ով)
-
-<hr>
-
+* `touch`                    Ստեղծել դատարկ ֆայլ
 * `cp <fromfile> <tofile>`   	Պատճենել ֆայլը
 * `mv <fromfile> <tofile>`	Տեղափոխել / վերանվանել ֆայլը
 * `rm <file>`  			Հեռացնել ֆայլ/դիրեկտորիա
@@ -238,78 +289,8 @@ rm -r ~/TEST`
 
 
 
-
 <br><br>
 
-## File Permissions
-
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions2.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions3.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions4.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/chmod.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/mc.png width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/umask.png width=50% height=50% >
-
-
-<br><br>
-
-## I/O Redirection
-
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-1.jpg width=50% height=50% >
-<br><br>
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-2.jpg width=50% height=50% >
-
-> STDOUT - Standard output  		>     >> 
- 
-* `ls /etc > ~/stdout`
-* `ls /etc >> ~/stdout`
-
-> STDERR - Standard error output		2>   2>> 
-* `ls /e > ~/stdout`
-* `ls /e > ~/stdout 2> ~/stderr`
-* `ls /e > ~/stdout 2> /dev/null`
-
-<br><br>
-
-## Pipes
-
-Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրամանի STDIN-ին
-
-<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/pipes-1.jpg width=50% height=50% >
-
-> Օրինակ
-
-`ls /usr/bin | sort -r`
-
-Նույնը չէ, ինչ հաջորդաբար կատարումը ;-ով
-
-`ls /usr/bin ; sort -r`
-
-> Հրամանների համակցում
-
-Հրամանները կարելի է համակցել հետևյալ կերպ՝
-
-* **&&**	Logical AND 
-    եթե առաջին հրամանի ելքի կոդը (exit code) 0 է, կատարել երկրորդը
-
-* **||**	Logical OR
-    եթե առաջին հրամանի ելքի կոդը (exit code) 0 չէ, կատարել երկրորդը
-
-* **;**	Պարզապես կատարել հրամանները՝ մեկը մյուսի հետևից
-
-* **|**	Փոխանցել առաջին հրամանի ելքի տվյալները (stdout) 
-    երկրորդ հրամանի մուտքին (stdin)
-
-_( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի կոդը (exit code) 0=OK)_
-
-<br><br>
 
 ## Access files
 

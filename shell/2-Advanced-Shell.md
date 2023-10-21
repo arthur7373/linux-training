@@ -2,6 +2,86 @@
 
 
 
+## File Permissions
+
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions2.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions3.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions4.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/chmod.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/mc.png width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/umask.png width=50% height=50% >
+
+
+<br><br>
+
+## I/O Redirection
+
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-1.jpg width=50% height=50% >
+<br><br>
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/io-redir-2.jpg width=50% height=50% >
+
+> STDOUT - Standard output  		>     >> 
+ 
+* `ls /etc > ~/stdout`
+* `ls /etc >> ~/stdout`
+
+> STDERR - Standard error output		2>   2>> 
+* `ls /e > ~/stdout`
+* `ls /e > ~/stdout 2> ~/stderr`
+* `ls /e > ~/stdout 2> /dev/null`
+
+<br><br>
+
+## Pipes
+
+Pipeline - Մեկ հրամանի STDOUT-ը ուղարկել այլ հրամանի STDIN-ին
+
+<img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/pipes-1.jpg width=50% height=50% >
+
+> Օրինակ
+
+`ls /usr/bin | sort -r`
+
+Նույնը չէ, ինչ հաջորդաբար կատարումը ;-ով
+
+`ls /usr/bin ; sort -r`
+
+> Հրամանների համակցում
+
+Հրամանները կարելի է համակցել հետևյալ կերպ՝
+
+* **&&**	Logical AND 
+    եթե առաջին հրամանի ելքի կոդը (exit code) 0 է, կատարել երկրորդը
+
+* **||**	Logical OR
+    եթե առաջին հրամանի ելքի կոդը (exit code) 0 չէ, կատարել երկրորդը
+
+* **;**	Պարզապես կատարել հրամանները՝ մեկը մյուսի հետևից
+
+* **|**	Փոխանցել առաջին հրամանի ելքի տվյալները (stdout) 
+    երկրորդ հրամանի մուտքին (stdin)
+
+_( **echo $?**  - ցույց է տալիս վերջին հրամանի ելքի կոդը (exit code) 0=OK)_
+
+<br><br>
+
+
+
+
+
+
+
+
+
+
+
 ##  Advanced BASH Shell Scripting
 
 
