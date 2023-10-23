@@ -52,6 +52,26 @@ user's system, it is called an email client
 When it is a web interface used for interacting with the 
 incoming mail server, it is called **Webmail**. 
 
+### Prepare DNS configuration
+
+Before going to mail server, let's prepare the DNS system for that.
+
+#### Define separate domains for each student
+
+Each student should configure additional separate domain primary zone (lt02.am,lt03.am,lt04.am,...)
+Teacher will configure slave zones for each such domain.
+As a result teacher's DNS server will know about all that domains.
+
+All students need to setup their server DNS resolvers (/etc/resolv.conf) to use teacher's dns.
+
+#### Define hostname
+
+Set the hostname of each student to match appropriate separate domain (lt02.am,lt03.am,lt04.am,...).
+
+```bash
+hostnamectl set-hostname lt0X.am ; hostname 
+```
+
 
 ### Install & configure Postfix as SMTP Server
 
