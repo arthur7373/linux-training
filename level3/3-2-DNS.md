@@ -220,7 +220,61 @@ systemctl restart named-chroot
 
 ```bash
 host -t soa lt01.am 127.0.0.1
+```
+
+```bash
 dig -t soa lt01.am @127.0.0.1
+```
+
+
+### Configure the system to use your local DNS server 
+
+Let's configure the Linux server system to use our local DNS server we have just implemented. 
+Our goal is to have acces to both our local domains `lt01.am`, ... as well as the internet dns system. 
+
+In order to do that you should change `/etc/resolv.conf` and set `nameserver 127.0.0.1` before any other `nameserver` lines.
+
+But the problem is that in case of dynamic IP configuration via DHCP, that configuration will be overwritten next time it will be updated.
+
+To solve that issue we need to tweak configuration as follows.
+
+#### Set static DNS servers that they are not reset after each DHCP update
+
+1. Prevent `/etc/resolv.conf` from being overwritten by setting special _immutable_ attribute.
+
+```bash
+chattr +i /etc/resolv.conf
+```
+
+2. Change Network Manager configuration to prevent from overwriting DNS settings. 
+(to get more info on below run `man NetworkManager.conf` and search for `dns` and `rc-manager` in that manual)
+
+
+```bash
+nano /etc/NetworkManager/NetworkManager.conf
+```
+
+Under `[main]` section add following lines:
+
+```bash
+dns=none
+rc-manager=unmanaged
+```
+
+Restart NetworkManager 
+
+```bash
+systemctl restart NetworkManager
+```
+
+Check that your system now uses your DNS server (as you may note, the difference is that we don't specify the server `127.0.0.1` as last option)
+
+```bash
+host -t soa lt01.am
+```
+
+```bash
+dig -t soa lt01.am
 ```
 
 #### PRACTICE
@@ -369,10 +423,13 @@ ls -l /var/named/chroot/var/named/slaves
 cat /var/named/chroot/var/named/slaves/lt01.am.db
 ```
 
-Check that our local service gives result from slave zone:
+Check that our local service gives result from slave zone (no need to specify the server as `127.0.0.1` as we set it above in `/etc/resolv.conf`):
 ```bash
-host -t soa lt01.am 127.0.0.1
-dig -t soa lt01.am @127.0.0.1
+host -t soa lt01.am
+```
+
+```bash
+dig -t soa lt01.am
 ```
 
 #### PRACTICE

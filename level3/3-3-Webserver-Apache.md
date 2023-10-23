@@ -29,10 +29,7 @@ systemctl enable --now httpd
 ```
 
 #### PRACTICE
-* Now when you have running Apache webserver, 
-configure the system to use your local DNS server, 
-where you already have `lt01.am` zone (you should change `/etc/resolv.conf`).<br><br>
-* Set current IP address of the server to `www.lt01.am` record in the DNS.<br><br>
+* Now when you have running Apache webserver, set current IP address of your Linux server to `www.lt01.am` record in the BIND DNS server and restart BIND.<br><br>
 * If you did everything correct you should be able to open it locally, with `links www.lt01.am`<br><br>
 * Now try also `links lt01.am`. Did it open? Why? How to fix it?
 
