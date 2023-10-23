@@ -246,7 +246,7 @@ To solve that issue we need to tweak configuration as follows.
 chattr +i /etc/resolv.conf
 ```
 
-2. Change Network Manager configuration to prevent from overwriting DNS settings. 
+2. Change Network Manager configuration to prevent from overwriting DNS settings <br>
 (to get more info on below run `man NetworkManager.conf` and search for `dns` and `rc-manager` in that manual)
 
 
