@@ -58,15 +58,18 @@ Before going to mail server, let's prepare the DNS system for that.
 
 #### Define separate domains for each student
 
-Each student should configure additional separate domain **master** zone (lt02.am,lt03.am,lt04.am,...)
-according to: 
+Each student should have configured separate domain **master** zone (lt02.am,lt03.am,lt04.am,...)
+according to:<br> 
 https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#bind-configuration-for-master-zone
 
-And make sure you have configured the system to use your local DNS server 
-according to:
+Also make sure you have configured the system to use your local DNS server 
+according to:<br>
 https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#configure-the-system-to-use-your-local-dns-server
 
-Teacher will configure **slave** zones for each such domain.
+Teacher will configure **slave** zones for each such domain according to:<br>
+https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#slave-zones
+
+
 As a result teacher's DNS server will know about all that domains.
 
 All students need to change their server DNS resolvers to use teacher's DNS (specify teacher's IP in /etc/resolv.conf as first `nameserver`).
