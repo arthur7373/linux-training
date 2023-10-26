@@ -10,7 +10,7 @@ Some URLs:
 * https://simpledns.plus/lookup-dg
 * http://dns.squish.net/
 
-
+### Install additional DNS utilities
 
 We may need few DNS utilities:
 `dig [options] <domain/ip> <name-server>`
@@ -35,6 +35,9 @@ Use examples:
 `host 8.8.4.4 8.8.8.8`
 
 `dig -x 8.8.4.4 @8.8.8.8`
+
+
+### Install BIND & prepare chroot environment
 
 
 We will use BIND package for DNS server. BIND is free and one of the most widespread solution for implementation of Domain Name System (DNS) server.
@@ -81,18 +84,26 @@ firewall-cmd --add-port=53/udp ; \
 firewall-cmd --add-port=53/tcp
 ```
 
+Check if SELinux is on
 
-Turn off SELinux 
+```bash
+getenforce
+```
+
+Turn off SELinux if needed
+
 ```bash
 setenforce 0
 ```
 
-`nano /etc/sysconfig/selinux`
+Permanent changes need to be done in `/etc/sysconfig/selinux` file
 
 ```bash
 # SELINUX=enforcing
 SELINUX=disabled`
 ```
+
+### BIND basic configuration
 
 Main BIND config file is `/etc/named.conf`
 Also additional configs may be in: `/etc/named/`
@@ -130,8 +141,7 @@ Zone files are located in:
 > Don't forget to restart **bind-chroot** after each configuration change.
 
 
-
-1.Make few changes in default config.
+#### Make few changes in default config
 
 Default config listens only to `127.0.0.1` and serves only queries from `localhost`
 
@@ -153,6 +163,8 @@ to
 > allow-query     { any; }; 
 
 
+### BIND configuration for primary zone
+
 > Each student should create own domain zone:
 > lt0N.am  (N – student’s number assigned by trainer)
 > Trainer’s zone will be lt00.am,  
@@ -162,32 +174,8 @@ to
 > REMEMBER to include green part if bind-chroot is started 
 > and to omit it if bind-chroot is stopped)
 
-2.Create master zone config file `/var/named/chroot/etc/named/lt01.am.zone`
 
-
-```bash
-cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
-zone "lt01.am." IN {
-        type master;
-        file "lt01.am.db";
-};
-EOF1
-
-```
-
-3.Include it in main config file `/var/named/chroot/etc/named.conf`
-
-
-```bash
-cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
-include "/etc/named/lt01.am.zone";
-EOF1
-
-```
-
-4.Create master zone data file 
-`/var/named/chroot/var/named/lt01.am.db`
-
+#### Create master zone data file `/var/named/chroot/var/named/lt01.am.db`
 
 ```bash
 cat  > /var/named/chroot/var/named/lt01.am.db  << "EOF1"
@@ -209,14 +197,36 @@ EOF1
 
 ```
 
-5.Restart the service
+#### Create master zone config file `/var/named/chroot/etc/named/lt01.am.zone`
+
+```bash
+cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
+zone "lt01.am." IN {
+        type master;
+        file "lt01.am.db";
+};
+EOF1
+
+```
+
+#### Include it in main config file `/var/named/chroot/etc/named.conf`
+
+```bash
+cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
+include "/etc/named/lt01.am.zone";
+EOF1
+
+```
+
+
+#### Restart the `named-chroot` BIND service
 
 ```bash
 systemctl restart named-chroot
 ```
 
 
-6.Check
+#### Check
 
 ```bash
 host -t soa lt01.am 127.0.0.1
