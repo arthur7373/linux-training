@@ -62,10 +62,14 @@ Each student should configure additional separate domain **master** zone (lt02.a
 according to: 
 https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#bind-configuration-for-master-zone
 
+And make sure you have configured the system to use your local DNS server 
+according to:
+https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#configure-the-system-to-use-your-local-dns-server
+
 Teacher will configure **slave** zones for each such domain.
 As a result teacher's DNS server will know about all that domains.
 
-All students need to setup their server DNS resolvers (/etc/resolv.conf) to use teacher's dns.
+All students need to change their server DNS resolvers to use teacher's DNS (specify teacher's IP in /etc/resolv.conf as first `nameserver`).
 
 #### Define hostname
 
