@@ -66,7 +66,7 @@ Also make sure you have configured the system to use your local DNS server
 according to:<br>
 https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#configure-the-system-to-use-your-local-dns-server
 
-Teacher will configure **slave** zones for each such domain according to:<br>
+Teacher will configure **slave** zones for each such domain (lt02.am,lt03.am,lt04.am,...) according to:<br>
 https://github.com/arthur7373/linux-training/blob/main/level3/3-2-DNS.md#slave-zones
 
 
