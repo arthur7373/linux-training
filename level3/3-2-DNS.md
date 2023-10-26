@@ -163,7 +163,7 @@ to
 > allow-query     { any; }; 
 
 
-### BIND configuration for primary zone
+### BIND configuration for master zone
 
 > Each student should create own domain zone:
 > lt0N.am  (N – student’s number assigned by trainer)
