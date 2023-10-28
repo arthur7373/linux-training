@@ -110,9 +110,9 @@ Why ?
 
 From the above `getfacl` output you may notice:
 
-> user:student:-w- <br>
+> `user:student:-w-` <br>
 > ... <br>
-> other::r--
+> `other::r--`
 
 We see that even though all others have **r**, student is specifically  mentioned
 and thus should be added separately
