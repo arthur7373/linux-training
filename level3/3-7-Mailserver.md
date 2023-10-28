@@ -245,10 +245,12 @@ passwd tester
 ```
 
 Now try the above mail sending with `telnet`
-> ```
-> Install telnet if needed
-> yum -y install telnet
-> ```
+
+Install telnet if needed
+```bash
+yum -y install telnet
+```
+
 
 #### SMTP Session example
 Try following example
