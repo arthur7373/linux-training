@@ -1,7 +1,6 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
 ## ACL (Access Control Lists)
-_(partially based on https://www.server-world.info/en/note?os=CentOS_8&p=acl)_
 
 ### Check if ACL is present
 
@@ -224,3 +223,9 @@ tree -fpug /opt/project2
 
 As we learned there is much more that basic `rwx` permissions in modern Linuxes !
 
+More info
+
+* https://www.server-world.info/en/note?os=CentOS_8&p=acl
+* https://www.redhat.com/sysadmin/linux-access-control-lists
+* https://linuxdatahub.com/masks-in-acl-linux-explained-with-examples-access-control-lists-mask/
+* https://www.kryukov.biz/soderzhanie/sistema-bezopasnosti/posix-acl/setfacl/
