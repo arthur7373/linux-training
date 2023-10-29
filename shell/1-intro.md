@@ -466,6 +466,11 @@ Let's now understand what was done above.
 We used method called _Here document_ to create the script and made it executable with `chmod`.
 The script itself is a single `ls` command, that outputs detailed (-l) contents of directory _/usr/bin/_
 
+Check the contents of the script you created:
+
+```bash
+cat ~/s1
+```
 
 <br><br>
 
@@ -494,7 +499,7 @@ chmod +x ~/s2
 
 ```
 
-Now try running this simple script:
+Now try running this simple script without any parameter:
 
 ```bash
 ./s2
@@ -502,7 +507,7 @@ Now try running this simple script:
 
 > QUESTION: What directory did `ls` command list ?  Why ?
 
-Now try providing first positional parameter
+Now try providing one positional parameter
 
 ```bash
 ./s2 /tmp
@@ -516,7 +521,7 @@ As you see we pass the data to the script, which changes how `ls` command works.
 
 
 Let's now pass more data. 
-We will provide options to `ls` via first positional paramater, 
+We will provide options to `ls` via first positional parameter, 
 the directory to show via second and pattern to filter lines via third.
 
 ```bash
@@ -537,7 +542,7 @@ First try running this script without parameters:
 > EXPLAIN THE OUTPUT
 
 
-Now try providing need 3 positional parameters
+Now try providing all 3 positional parameters
 
 ```bash
 ./s3 -lh /bin log
@@ -549,7 +554,7 @@ Now try providing need 3 positional parameters
 
 ## Variables
 
-Shell variables - temporary storage for information.
+Shell variables are temporary storage for information.
 
 Shell does not care about the type of variables. 
 Variables could store strings, characters or integers. 
