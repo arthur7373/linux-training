@@ -606,14 +606,14 @@ cowsay Hi student
 It can draw different pictures and say the text you provide.
 
 
-3. Create a script to draw pictures with `cowsay`
+3. Create an alias `krya` to draw **turtle** saying what you will give as parameter.
    1. List of pictures are available with
    ```bash 
    cowsay -l
    ```
-   2. Read `man cowsay` and find the option to provide other picture file as parameter.
-   3. Your script should get 2 parameters: 1. name of picture 2. text to say
-   
+   2. Read `man cowsay` and find the option to provide **turtle** picture file as parameter.
+   3. Your alias should work like `krya Barev`
+4. Create the script which will do the same. 
 
 
 
@@ -813,6 +813,15 @@ Why?
 **Task: Modify the script to print complete lines.**
 **HINT: you need to use something else than $1** 
 
+
+#### PRATICE
+Based on previous use of funny `cowsay` program, create more flexible script `nkar` to get 2 parameters and provide to `cowsay`
+1. what picture to draw
+2. what text to say
+
+When ready it should work like `nkar elephant HELLO`
+
+![img.png](img.png)
 
 ## Sourcing Scripts
 
