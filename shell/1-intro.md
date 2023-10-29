@@ -255,6 +255,7 @@ echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Pr
 * `mkdir <newdir>`		 Ստեղծել դիրեկտորիա 
 * `alias <alias> <command>` Ստեղծել հրամանի կրճատում 
 * `type <command>` 		 Հրամանի գտնվելու վայրը և այլ տեղեկություններ
+* `stat <path-to-file>`  Տեղեկություններ ֆայլի մասին
 
 
 > Հրամանների օրինակներ
@@ -291,6 +292,10 @@ type cd
 ```
 ```bash 
 type id
+```
+
+```bash
+stat /usr/bin/id
 ```
 
 <hr>
@@ -584,7 +589,34 @@ chmod +x ~/v1
 
 Execute the above script, which will output the text to the terminal.
 
-**Task: Modify the script to output 1-st positional parameter after HELLO STUDENT.**
+**Task 1: Modify the script to output 1-st positional parameter after HELLO STUDENT.**
+
+**Task 2: Have fun with _cowsay_**
+
+1. Install `cowsay` program
+```bash
+yum -y install cowsay
+```
+
+2. Run it
+```bash
+cowsay Hi student
+```
+
+It can draw different pictures and say the text you provide.
+
+
+3. Create a script to draw pictures with `cowsay`
+   1. List of pictures are available with
+   ```bash 
+   cowsay -l
+   ```
+   2. Read `man cowsay` and find the option to provide other picture file as parameter.
+   3. Your script should get 2 parameters: 1. name of picture 2. text to say
+   
+
+
+
 
 <br><br>
 
