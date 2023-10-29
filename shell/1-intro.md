@@ -612,9 +612,10 @@ It can draw different pictures and say the text you provide.
    cowsay -l
    ```
    2. Read `man cowsay` and find the option to provide **turtle** picture file as parameter.
-   3. Your alias should work like `krya Barev`
+   3. Your alias should work like `krya BAREV`
 4. Create the script which will do the same. 
 
+![img.png](../images/shell-course/turtle.png)
 
 
 
@@ -821,7 +822,7 @@ Based on previous use of funny `cowsay` program, create more flexible script `nk
 
 When ready it should work like `nkar elephant HELLO`
 
-![img.png](img.png)
+![img.png](../images/shell-course/elephant.png)
 
 ## Sourcing Scripts
 
