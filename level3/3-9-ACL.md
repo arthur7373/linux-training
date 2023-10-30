@@ -1,6 +1,6 @@
 # Linux Network Server (level 3) <br /> Linux ցանցային սերվեր (փուլ 3)
 
-## ACL (Access Control Lists)
+## ACL (Access Control Lists) / Discretionary Access Control (DAC) 
 
 ### Check if ACL is present
 
@@ -21,6 +21,9 @@ Plus three other attributes SUID, SGID, Sticky Bit.
 
 However any modern Linux has now possibility to use additional ACLs (Access Control Lists), 
 which enable to manage more fine-grained control of who has access to what information.
+
+It is also called **D**iscretionary **A**ccess **C**ontrol (DAC).
+(DAC also may refer to _extended attributes_, used by SELinux and managed by `attr/getfattr/setfattr` tools, but that is out of scope of this part).
 
 ACLs enable to set **additional** permissions for file/directory to individual users or groups
 without changing the base ownership and permissions.
