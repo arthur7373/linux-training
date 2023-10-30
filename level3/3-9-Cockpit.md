@@ -6,6 +6,10 @@
 Cockpit is a web-based graphical interface for administrating Linux servers.
 It is available for most modern Linux versions.
 
+Cockpit provides a easy to use graphical interface to remote Linux servers.
+The interface enables admins to manage things like users/groups, 
+firewall settings, hardware info and more...
+
 
 ### Install and enable Cockpit 
 
