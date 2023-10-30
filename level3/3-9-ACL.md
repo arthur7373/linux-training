@@ -30,8 +30,76 @@ ACL is Linux kernel feature and is currently supported by many modern filesystem
 * XFS <br>
 ...
 
+### Install ACL & check it is working/enabled
 
-###  Prepare test environment
+With ACL (Access Control Lists) it's possible to set access permission to files or directories more strictly than standard permissions.
+
+In recent Linux versions acl package is already installed, but in case of need it can be installed with:
+
+`apt -y install acl`
+
+or
+
+`yum -y install acl`
+
+In order to use ACL, it should be enabled as a mount option for that mounted filesystem/partition. 
+Most probably it is already enabled by default. To check you can use following:
+(in case device name is different use `df -hT` or `lsblk` to find exact name)
+
+`tune2fs -l /dev/sda1 | grep "Default mount options"`
+
+If **acl** is present in default mount options then you can start using it.
+
+
+### Simple example
+
+Create test directory 
+```bash
+mkdir /opt/acltest
+```
+
+Check initial state
+
+```bash
+getfacl /opt/acltest
+```
+
+Nothing special yet.
+
+
+Now assign acl to `student`
+```bash
+setfacl -m u:student:rwx /opt/acltest
+```
+
+Check now
+
+```bash
+getfacl /opt/acltest
+
+```
+
+Now switch to user **student** (`su - student`) 
+and try creating something inside that dir.
+(you should notice additional "**+**" sign after permissions)
+
+```bash
+mkdir /opt/acltest/mydir ;\
+ls -la /opt ;\
+ls -la /opt/acltest
+
+```
+
+
+```bash
+touch /opt/acltest/myfile ;\
+ls -la /opt/acltest 
+
+```
+
+
+
+### More advanced examples - Prepare test environment 
 
 As `root` create a set of directories and files:
 
