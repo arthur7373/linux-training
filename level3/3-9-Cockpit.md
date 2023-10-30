@@ -16,6 +16,7 @@ systemctl enable --now cockpit.socket
 
 ```
 
+
 You may need to add following for firewalld if it is enabled
 
 
@@ -24,6 +25,14 @@ firewall-cmd --permanent --zone=public --add-service=cockpit ;\
 firewall-cmd --reload
 
 ```
+
+For Ubuntu/Debian you can run
+```bash
+apt update ;\
+apt -y install cockpit
+
+```
+
 
 That's it. 
 Now try access with web browser:
