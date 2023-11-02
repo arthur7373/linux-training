@@ -79,7 +79,7 @@ All students need to change their server DNS resolvers to use teacher's DNS (spe
 Set the hostname of each student to match appropriate separate domain (lt02.am,lt03.am,lt04.am,...).
 
 ```bash
-hostnamectl set-hostname lt0X.am ; hostname 
+hostnamectl set-hostname lt0x.am ; hostname 
 ```
 
 
@@ -111,9 +111,9 @@ vi +95 /etc/postfix/main.cf
 
 ```bash	
 # goto line 95: uncomment and specify hostname
-myhostname = lt01.am
+myhostname = lt0x.am
 # goto line 102: uncomment and specify domain name
-mydomain = lt01.am
+mydomain = lt0x.am
 # goto line 118: uncomment
 myorigin = $mydomain
 # goto line 135: change
@@ -256,17 +256,17 @@ yum -y install telnet
 Try following example
 
 ```bash
-telnet lt01.am 25
+telnet lt0x.am 25
 > Trying 192.168.1.1...
-> Connected to lt01.am.
+> Connected to lt0x.am.
 > Escape character is '^]'.
-> 220 lt01.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
+> 220 lt0x.am SMTP on Fri, 3 Aug 2001 10:38:06 +0400
 helo lo
-> 250 yahoo.com Hello root@lt01.am [192.168.2.200], pleased to meet you
+> 250 yahoo.com Hello root@lt0x.am [192.168.2.200], pleased to meet you
 mail from: user@yahoo.com
 > 250 user@yahoo.com... Sender ok
-rcpt to: tester@lt01.am     
-> 250 tester@lt01.am... Recipient ok
+rcpt to: tester@lt0x.am     
+> 250 tester@lt0x.am... Recipient ok
 data
 > 354 Enter mail, end with "." on a line by itself
 From: "TEST" <test@mail.com>

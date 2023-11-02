@@ -126,7 +126,7 @@ Install Apache and related stuff:
 For CentOS 8 first run this:  `dnf config-manager --set-enabled powertools`
 
 ```bash
-yum -y install httpd mod_ssl openssl elinks lynx
+yum -y install httpd mod_ssl openssl curl
 ```
 
 Change Apache default port from `80` to `8080`. 
@@ -186,8 +186,8 @@ netstat -nlpt | grep httpd
 
 Check
 ```bash
-links http://linuxexam.am:8080/
 curl -v  http://www.linuxexam.am:8080/ | grep APACHE
+
 ```
 
 ### Install and configure NGINX Web Server
@@ -195,6 +195,7 @@ curl -v  http://www.linuxexam.am:8080/ | grep APACHE
 Install Nginx:  
 ```bash
 yum -y install nginx
+
 ```
 
 Reconfigure Nginx to listen port `8088` instead `80`
@@ -222,6 +223,7 @@ root /var/www/linuxexam.am-nginx;
 }
 }
 EOF1
+
 ```
 
 Create new directory for Nginx virtual host:
@@ -235,22 +237,25 @@ Put some index page there:
 cat << EOF1 > /var/www/linuxexam.am-nginx/index.html
 HI this is NGINX page
 EOF1
+
 ```
 Enable & start Nginx: 
 ```bash
 systemctl enable --now nginx
+
 ```
 
 Check that Nginx listens port 8088:
 
 ```bash
 netstat -nlpt | grep nginx 
+
 ```
 
 Check
 ```bash
-links http://linuxexam.am:8088
 curl -v  http://www.linuxexam.am:8088/ | grep NGINX
+
 ```
 
 ### Install and configure HAProxy
@@ -271,6 +276,7 @@ Install HAProxy to configure Load Balancing Server.
 
 ```bash
 yum -y install haproxy
+
 ```
 
 Create simple configuration.
@@ -286,11 +292,13 @@ backend backend_servers
     server             node01 127.0.0.1:8080 check
     server             node02 127.0.0.1:8088 check
 EOF1
+
 ```
 
 Enable and start HAProxy
 ```bash
 systemctl enable --now haproxy
+
 ```
 
 Check the status of all related services:
@@ -315,19 +323,23 @@ Install Squid:
 
 ```bash
 yum -y install squid
+
 ```
 
 Enable and start Squid
 ```bash
 systemctl enable --now squid
+
 ```
 
 Check.
 In one terminal open this:  
 ```bash
 tail -f /var/log/squid/access.log
+
 ```
-In another try opening this URL:
+
+In another terminal try opening this URL:
 
 ```bash
 curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep detected ;\
@@ -345,24 +357,29 @@ request_header_access From deny all
 request_header_access Link deny all
 request_header_access Server deny all
 EOF4
+
 ```
+
 Reload Squid
 ```bash
 systemctl reload squid
+
 ```
 
 Check
 ```bash
 curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" ;\
 curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" >> /tmp/exam-squid.out
+
 ```
 
 ### Install and configure Mail server (Postfix, Dovecot)
 
-Install Postfix.
+Install Postfix
 
 ```bash
 yum -y install postfix 
+
 ```
 
 Configure Postfix
@@ -397,11 +414,13 @@ smtpd_recipient_restrictions = permit_mynetworks, permit_auth_destination, permi
 Enable and start Postfix:
 ```bash
 systemctl enable --now postfix
+
 ```
 
 Install Dovecot 
 ```bash
 yum -y install dovecot
+
 ```
 
 Configure Dovecot to provide SASL (Simple Authentication and Security Layer) capability to Postfix
@@ -527,7 +546,7 @@ yum -y install postfix-perl-scripts
 Generate mail log summary for today
 ```bash
 perl /usr/sbin/pflogsumm -d today /var/log/maillog >> /tmp/exam-mail.out ;\
-less /tmp/exam-mail.out
+cat /tmp/exam-mail.out
 ```
 
 

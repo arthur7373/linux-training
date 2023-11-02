@@ -10,6 +10,7 @@ Some URLs:
 * https://simpledns.plus/lookup-dg
 * http://dns.squish.net/
 
+
 ### Install additional DNS utilities
 
 We may need few DNS utilities:
@@ -42,6 +43,7 @@ Use examples:
 
 We will use BIND package for DNS server. BIND is free and one of the most widespread solution for implementation of Domain Name System (DNS) server.
 CentOS has special package for secure DNS server configuration `bind-chroot`.
+
 
 BIND Installation:
 ```bash
@@ -166,44 +168,51 @@ to
 ### BIND configuration for master zone
 
 > Each student should create own domain zone:
-> lt0N.am  (N – student’s number assigned by trainer)
-> Trainer’s zone will be lt00.am,  
-> Students zones: lt01.am, lt02.am, …
-> (here and below each student should change the number 1 
-> to his/her number assigned by trainer 
+> lt0x.am  (x – student’s number assigned by teacher)
+> Teacher’s zone will be lt01.am,  
+> Students zones: lt02.am, lt03.am, …
+> (here and below each student should change the number x 
+> to his/her number assigned by teacher 
 > REMEMBER to include green part if bind-chroot is started 
 > and to omit it if bind-chroot is stopped)
+> Also IP address `10.10.x.1` should be changed everywhere below to match the student's number. 
 
 
-#### Create master zone data file `/var/named/chroot/var/named/lt01.am.db`
+#### Create master zone data file `/var/named/chroot/var/named/lt0x.am.db`
+
+> IMPORTANT ! Before running command edit it and change `x` everywhere to match your domain & IP address.
 
 ```bash
-cat  > /var/named/chroot/var/named/lt01.am.db  << "EOF1"
+cat  > /var/named/chroot/var/named/lt0x.am.db  << "EOF1"
 $TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. (
+@       SOA     ns.lt0x.am.     dns.lt0x.am. (
                           2023090100 ; serial
                           3H ; refresh
                           1H ; retry
                           1W ; expire
                           1H ; minimum
                           )
-                          NS      ns.lt01.am.
+                          NS      ns.lt0x.am.
                           MX      0 mail
-                          A       10.10.1.1
-www                       A       10.10.1.1
-ns                        A       10.10.1.2
-mail                      A       10.10.1.3
+                          A       10.10.x.1
+www                       A       10.10.x.1
+ns                        A       10.10.x.1
+mail                      A       10.10.x.1
 EOF1
 
 ```
 
-#### Create master zone config file `/var/named/chroot/etc/named/lt01.am.zone`
+
+
+#### Create master zone config file `/var/named/chroot/etc/named/lt0x.am.zone`
+
+> IMPORTANT ! Before running command edit it and change `x` everywhere to match your domain & IP address.
 
 ```bash
-cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
-zone "lt01.am." IN {
+cat  > /var/named/chroot/etc/named/lt0x.am.zone  << "EOF1"
+zone "lt0x.am." IN {
         type master;
-        file "lt01.am.db";
+        file "lt0x.am.db";
 };
 EOF1
 
@@ -211,9 +220,12 @@ EOF1
 
 #### Include it in main config file `/var/named/chroot/etc/named.conf`
 
+> IMPORTANT ! Before running command edit it and change `x` everywhere to match your domain & IP address.
+
+
 ```bash
 cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
-include "/etc/named/lt01.am.zone";
+include "/etc/named/lt0x.am.zone";
 EOF1
 
 ```
@@ -229,18 +241,25 @@ systemctl restart named-chroot
 #### Check
 
 ```bash
-host -t soa lt01.am 127.0.0.1
+host -t ns lt0x.am 127.0.0.1
 ```
 
 ```bash
-dig -t soa lt01.am @127.0.0.1
+host -t a lt0x.am 10.10.x.1
 ```
 
+```bash
+dig -t soa lt0x.am @127.0.0.1
+```
+
+```bash
+dig -t mx lt0x.am @10.10.x.1
+```
 
 ### Configure the system to use your local DNS server 
 
 Let's configure the Linux server system to use our local DNS server we have just implemented. 
-Our goal is to have access to both our local domains `lt01.am`, ... as well as the internet dns system. 
+Our goal is to have access to both our local domains `lt02.am`, ... as well as the internet dns system. 
 
 In order to do that you should change `/etc/resolv.conf` and set `nameserver 127.0.0.1` before any other `nameserver` lines.
 
@@ -250,11 +269,15 @@ To solve that issue we need to tweak configuration as follows.
 
 #### Set static DNS servers that they are not reset after each DHCP update
 
-1. Prevent `/etc/resolv.conf` from being overwritten by setting special _immutable_ attribute.
+1. Create static `/etc/resolv.conf` config and prevent it from being overwritten by setting special _immutable_ attribute.
 
 ```bash
+mv /etc/resolv.conf /tmp ;\
+echo `nameserver 127.0.0.1` >/etc/resolv.conf ;\
 chattr +i /etc/resolv.conf
+
 ```
+
 
 2. Change Network Manager configuration to prevent from overwriting DNS settings <br>
 (to get more info on below run `man NetworkManager.conf` and search for `dns` and `rc-manager` in that manual)
@@ -280,48 +303,40 @@ systemctl restart NetworkManager
 Check that your system now uses your DNS server (as you may note, the difference is that we don't specify the server `127.0.0.1` as last option)
 
 ```bash
-host -t soa lt01.am
+host -t soa lt0x.am
 ```
 
 ```bash
-dig -t soa lt01.am
+dig -t soa lt0x.am
 ```
 
 #### PRACTICE
 
-1.Add new A resource record in your zone `lt01.am`.
+Add second nameserver record for slave DNS server, you will configure below.
 
-> ```bash
-> type:   A 
-> name:   stat
-> value:  10.10.1.50 
-> ```
+* new NS resource record in your zone `lt0x.am.` 
+  * type:		NS 
+  * value:	ns2.lt0x.am.
 
-> ```bash
-> type:   A 
-> name:   ns2
-> value:  10.10.10.11
-> ```
-
-2.Add new NS resource record in your zone `lt01.am`.
-> ```bash 
-> type:		NS
-> value:	ns2.lt01.am.
-> ```
+* new A resource record for `ns2`
+  * name:   ns2 
+  * type:   A 
+  * value:  10.10.x.10
 
 
 ### Reverse Zones
 
-Create Reverse Zone    `1.10.10.in-addr.arpa.`
+Create Reverse Zone    `x.10.10.in-addr.arpa.`
 
-1.Create master reverse zone config file `/var/named/chroot/etc/named/10.10.1.zone`
+1.Create master reverse zone config file `/var/named/chroot/etc/named/10.10.x.zone`
 
+> IMPORTANT ! Before running command edit it and change `x` everywhere to match your domain & IP address.
 
 ```bash
-cat  > /var/named/chroot/etc/named/10.10.1.zone  << "EOF1"
-zone "1.10.10.in-addr.arpa." IN {
+cat  > /var/named/chroot/etc/named/10.10.x.zone  << "EOF1"
+zone "x.10.10.in-addr.arpa." IN {
          type master;
-         file "10.10.1.rev.db";
+         file "10.10.x.rev.db";
 };
 EOF1
 
@@ -332,27 +347,29 @@ EOF1
 
 ```bash
 cat  >> /var/named/chroot/etc/named.conf  << "EOF1"
-include "/etc/named/10.10.1.zone";
+include "/etc/named/10.10.x.zone";
 EOF1
 
 ```
 
-3.Create master reverse zone data file `/var/named/chroot/var/named/10.10.1.rev.db`
+3.Create master reverse zone data file `/var/named/chroot/var/named/10.10.x.rev.db`
+
+> IMPORTANT ! Before running command edit it and change `x` everywhere to match your domain & IP address.
 
 ```bash
-cat  > /var/named/chroot/var/named/10.10.1.rev.db  << "EOF1"
+cat  > /var/named/chroot/var/named/10.10.x.rev.db  << "EOF1"
 $TTL 1H
-@       SOA     ns.lt01.am.     dns.lt01.am. (
+@       SOA     ns.lt0x.am.     dns.lt0x.am. (
                           2023090100 ; serial
                           3H ; refresh
                           1H ; retry
                           1W ; expire
                           1H ; minimum
                           )
-                          NS		ns.lt01.am.
-1                         PTR		www.lt01.am.
-2                         PTR		ns.lt01.am.
-3                         PTR		mail.lt01.am.
+                          NS		ns.lt0x.am.
+1                         PTR		www.lt0x.am.
+2                         PTR		ns.lt0x.am.
+3                         PTR		mail.lt0x.am.
 EOF1
 
 ```
@@ -365,24 +382,23 @@ systemctl restart named-chroot
 
 5.Check
 ```bash
-host 10.10.1.1 127.0.0.1
-dig -x 10.10.1.1 @127.0.0.1
+host 10.10.x.1 127.0.0.1 ;\
+dig -x 10.10.x.1 @127.0.0.1
 ```
 
 #### PRACTICE
 
-1.Add new PTR resource record in your zone `1.10.10.in-addr.arpa.`
-> ```bash 
-> type:		PTR
-> name:  		50
-> value:		stat.lt01.am.
-> ```
+1. Add new PTR resource record in your zone `x.10.10.in-addr.arpa.`
+
+  * type:		PTR
+  * name:       10
+  * value:	    ns2.lt0x.am.
 
 2.Add new NS resource record in your zone `1.10.10.in-addr.arpa.`
-> ```bash 
-> type:		NS
-> value:	ns2.lt01.am.
-> ```
+
+  * type:		NS
+  * value:	    ns2.lt0x.am.
+
 
 ### Slave Zones
 
@@ -392,26 +408,22 @@ On another server install bind-chroot and create configuration to get zone copy 
 
 
 ```bash
-cat  > /var/named/chroot/etc/named/lt01.am.zone  << "EOF1"
-zone "lt01.am." IN {
+cat  > /var/named/chroot/etc/named/lt0x.am.zone  << "EOF1"
+zone "lt0x.am." IN {
         	type slave;
-masters { 192.168.1.1; };
-        	file "slaves/lt01.am.db";
+masters { 10.10.x.1; };
+        	file "slaves/lt0x.am.db";
  	masterfile-format text;
 };
 EOF1
 
 ```
 
-2.Edit the file and to specify proper IP address for the Master server 
-instead of `192.168.1.1`
-
-
-3.Include that configuration in main config file `/var/named/chroot/etc/named.conf`
+2.Include that configuration in main config file `/var/named/chroot/etc/named.conf`
 
 ```bash
 cat  >> /var/named/chroot/etc/named.conf << "EOF1"
-include "/etc/named/lt01.am.zone";
+include "/etc/named/lt0x.am.zone";
 EOF1
 ```
 
@@ -422,43 +434,72 @@ systemctl restart named-chroot
 ```
 
 If no config errors made "Zone transfer" should take place
-and local file `/var/named/chroot/var/named/slaves/lt01.am.db` should appear.
+and local file `/var/named/chroot/var/named/slaves/lt0x.am.db` should appear.
 
-Check if the slave zone data file `/var/named/chroot/var/named/slaves/lt01.am.db` was created
+Check if the slave zone data file `/var/named/chroot/var/named/slaves/lt0x.am.db` was created
 ```bash
 ls -l /var/named/chroot/var/named/slaves
 ```
 
 ```bash
-cat /var/named/chroot/var/named/slaves/lt01.am.db
+cat /var/named/chroot/var/named/slaves/lt0x.am.db
 ```
 
 Check that our local service gives result from slave zone (no need to specify the server as `127.0.0.1` as we set it above in `/etc/resolv.conf`):
 ```bash
-host -t soa lt01.am
+host -t soa lt0x.am
 ```
 
 ```bash
-dig -t soa lt01.am
+dig -t soa lt0x.am
 ```
 
 #### PRACTICE
 
-1. Create configuration to get a Slave Zone copy for zone `1.10.10.in-addr.arpa`
+1. Create configuration to get a Slave Zone copy for zone `x.10.10.in-addr.arpa`
 
 2. Configure Master-Slave notification-based instant updates by configuring the following on Master server.
    1. Ensure NS records for the domain hav proper IP addresses for Master and Slave server 
-      1. ns.lt01.am - IP address of Master server
-      2. ns2.lt01.am - IP address of Slave server<br><br>
+      1. ns.lt0x.am - IP address of Master server
+      2. ns2.lt0x.am - IP address of Slave server<br><br>
    2. Activate sending of instant zone change notification from master to slaves, by addind in section `options { … }` of `/var/named/chroot/etc/named.conf`
    the option `notify yes;`<br><br>
    3. Restart Master and check result in Slave `/var/named/chroot/var/named/data/named.run`.
+
+### Additional slave zones for centralized DNS 
+
+Teacher will create additional slave zones for each student's domain
+
+1. Add third nameserver record for teacher's slave DNS server
+
+* new NS resource record in your zone `lt0x.am.` 
+  * type:		NS 
+  * value:	ns3.lt0x.am.
+
+* new A resource record for `ns3`
+  * name:   ns3 
+  * type:   A 
+  * value:  10.10.x.111
+  
+2. Add new PTR resource record in your zone `x.10.10.in-addr.arpa.`
+
+* new PTR resource record in your zone `lt0x.am.` 
+  * type:		PTR
+  * name:       111
+  * value:	    ns3.lt0x.am.
+  
+
+> Now teacher will configure slave zones for each domain.
+> 
+> Then can need to change your `/etc/resolv.conf` to point to teacher's IP address.
+>
+> As a result your server will "know" about all student's domains !
 
 
 ### Advanced configuration:
 There are lots of other options for advanced BIND configuration. 
 Options can be specified both in main `options { … }` part, 
-as well as in each zone description parts `zone lt01.am. IN { ... }`
+as well as in each zone description parts `zone lt0x.am. IN { ... }`
 
 Examples:
 Below we can see how to 
@@ -466,7 +507,7 @@ Below we can see how to
    2. Define limited functionality of recursion & zone transfer
    3. Use ACLs for flexible configuration (which is useful in case you specify the same subnet multiple times in configuration) 
 ```
-acl local-ips   { 172.16.1.0/24; 192.168.0.0/16;  };  
+acl local-ips   { 172.16.1.0/24; 192.168.0.0/16; 10.0.0.0/8; };  
 acl slave-ips   { 192.168.0.0/16; };  
 options {
 	version "GO AWAY";	// Hide BIND Version

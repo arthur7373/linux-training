@@ -16,7 +16,7 @@ Edit below lines in `/etc/httpd/conf/httpd.conf`
 Listen 8080
 ```
 
-Edit below lines in `/etc/httpd/conf.d/lt01.am.conf` 
+Edit below lines in `/etc/httpd/conf.d/lt0x.am.conf` 
 ```bash
 #<VirtualHost *:80> 
 <VirtualHost *:8080> 
@@ -45,21 +45,21 @@ systemctl enable --now nginx
 #### PRACTICE
 Now you should have running Apache webserver on port 8080, and Nginx on port 80
 
-* Change Apache configuration to work on another port - 8888. After that you should be able to access `http://lt01.am:8888/`
+* Change Apache configuration to work on another port - 8888. After that you should be able to access `http://lt0x.am:8888/`
 * Change it back to 8080
 
 ### Nginx configuration as front end reverse proxy of Apache web server
 
 ![img_2.png](img_2.png)
 
-Create virtual host config file for our domain `lt01.am`
+Create virtual host config file for our domain `lt0x.am`
 ```bash
-cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt0x.am.conf
 server {
 listen *:80;
-access_log /var/log/nginx/lt01.am-access.log;
-error_log /var/log/nginx/lt01.am-error.log;
-server_name lt01.am www.lt01.am;
+access_log /var/log/nginx/lt0x.am-access.log;
+error_log /var/log/nginx/lt0x.am-error.log;
+server_name lt0x.am www.lt0x.am;
 # Redirect to backend
 location / {
 proxy_pass http://127.0.0.1:8080/;
@@ -72,7 +72,7 @@ proxy_read_timeout 180;
 }
 # Serve static pages with nginx
 location ~* \.(jpg|jpeg|gif|png|ico|css|bmp|swf|js|html|txt)$ {
-root /var/www/lt01.am;
+root /var/www/lt0x.am;
 }
 }
 EOF1
@@ -94,19 +94,19 @@ netstat -nlpt | grep nginx
 
 Check the logs of both Nginx & Apache (open in different terminals to see simultaneously): 
 ```bash
-tail -f /var/log/nginx/lt01.am-access.log
-tail -f /var/log/httpd/lt01.am-access.log
+tail -f /var/log/nginx/lt0x.am-access.log
+tail -f /var/log/httpd/lt0x.am-access.log
 ```
 
 Now try opening some URLs at Nginx and you should see in above both logs redirection to Apache server. 
 ```bash
-links lt01.am
-links lt01.am/inf.php
+links lt0x.am
+links lt0x.am/inf.php
 ```
 
 > REMINDER: the above will work only if: 
-> * you have local DNS server, with properly configured zone `lt01.am` 
- and A record `lt01.am` pointing to your server's IP address
+> * you have local DNS server, with properly configured zone `lt0x.am` 
+ and A record `lt0x.am` pointing to your server's IP address
 > * and your `/etc/resolv.conf` refers to `nameserver 127.0.0.1`
 
 ### Nginx configuration as standalone server
@@ -114,15 +114,15 @@ links lt01.am/inf.php
 We need to change configuration of our virtual host as follows
 
 ```bash
-cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt0x.am.conf
 server {
 listen *:80;
-access_log /var/log/nginx/lt01.am-access.log;
-error_log /var/log/nginx/lt01.am-error.log;
-server_name lt01.am www.lt01.am;
+access_log /var/log/nginx/lt0x.am-access.log;
+error_log /var/log/nginx/lt0x.am-error.log;
+server_name lt0x.am www.lt0x.am;
 # Redirect to backend
 location / {
-root /var/www/lt01.am-nginx;
+root /var/www/lt0x.am-nginx;
 }
 }
 EOF1
@@ -132,12 +132,12 @@ EOF1
 Create new directory for Nginx virtual host:
 
 ```bash
-mkdir /var/www/lt01.am-nginx
+mkdir /var/www/lt0x.am-nginx
 ```
 
 Put some index page there:
 ```bash
-cat << "EOF1" > /var/www/lt01.am-nginx/index.html
+cat << "EOF1" > /var/www/lt0x.am-nginx/index.html
 HI this is NGINX page
 EOF1
 
@@ -151,8 +151,8 @@ systemctl restart nginx
 
 Now try opening some Nginx URL and Apache URL. You should see appropriate logs. 
 ```bash
-links lt01.am
-links lt01.am:8080
+links lt0x.am
+links lt0x.am:8080
 ```
 
 
@@ -167,7 +167,7 @@ This example is based on the environment like follows.
         |                     |                      |
         |10.10.10.10:80       |10.10.10.10:8080      |10.10.10.10:8088
 +-------+--------+   +--------+---------+   +--------+---------+
-|   [ lt01.am ]  |   | [ lt01.am:8080 ] |   | [ lt01.am:8088 ] |
+|   [ lt0x.am ]  |   | [ lt0x.am:8080 ] |   | [ lt0x.am:8088 ] |
 |     HAProxy    |   | Apache Server #1 |   |  Nginx Server#2  |
 +----------------+   +------------------+   +------------------+
 
@@ -187,17 +187,17 @@ listen       8088 default_server;
 listen       [::]:8088 default_server;
 ```
  
-Replace file `/etc/nginx/conf.d/lt01.am.conf` with another port:
+Replace file `/etc/nginx/conf.d/lt0x.am.conf` with another port:
 ```bash
-cat << "EOF1" > /etc/nginx/conf.d/lt01.am.conf
+cat << "EOF1" > /etc/nginx/conf.d/lt0x.am.conf
 server {
 listen *:8088;
-access_log /var/log/nginx/lt01.am-access.log;
-error_log /var/log/nginx/lt01.am-error.log;
-server_name lt01.am www.lt01.am;
+access_log /var/log/nginx/lt0x.am-access.log;
+error_log /var/log/nginx/lt0x.am-error.log;
+server_name lt0x.am www.lt0x.am;
 # Redirect to backend
 location / {
-root /var/www/lt01.am-nginx;
+root /var/www/lt0x.am-nginx;
 }
 }
 EOF1
@@ -257,13 +257,13 @@ Check the status of all related services:
 netstat -nlpt | grep -E '(haproxy|http|nginx)'
 ```
 
-Now you connect to `lt01.am` several times. 
+Now you connect to `lt0x.am` several times. 
 You should see Apache and Nginx pages in rotation
 
 ```bash
-curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' ; \
-curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' ; \
-curl -s http://lt01.am/ | grep -E '(APACHE|NGINX)' 
+curl -s http://lt0x.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://lt0x.am/ | grep -E '(APACHE|NGINX)' ; \
+curl -s http://lt0x.am/ | grep -E '(APACHE|NGINX)' 
 ```
 
 
