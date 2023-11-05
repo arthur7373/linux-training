@@ -24,6 +24,11 @@ SSH-ով միանալու պարագայում գաղտնաբառի փոխարե
 
 <br><br>
 
+## Linux VM remote access
+
+**Oracle VM VirtualBox** միջավայրում միացրեք **Ubuntu-22.04** վիրտուալ մեքենան
+
+
 ## Linux Terminal, CLI Basics
 
 > Ինչ է Terminal-ը
@@ -110,7 +115,7 @@ echo We learn Linux # this is a comment
 ```
 
 ```bash
-echo "$LOGNAME" learns Shell Programming
+echo "$USER" learns Shell Programming
 ```
 ```bash
 echo My Shell is: "$SHELL"
@@ -119,7 +124,8 @@ echo My Shell is: "$SHELL"
 * sleep - delay for a specified time 
 
 ```bash
-echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2
+echo ; echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "Shell Programming in Linux" ; sleep 2 ; echo 
+
 ```
 
 
