@@ -628,3 +628,22 @@ Modify the above command, to remove also lines starting with **$**
 
 
 
+
+
+
+* `type <command>` 		 Հրամանի գտնվելու վայրը և այլ տեղեկություններ
+* `stat <path-to-file>`  Տեղեկություններ ֆայլի մասին
+
+<hr>
+
+```bash 
+type cd
+```
+
+```bash 
+type id
+```
+
+```bash
+stat /usr/bin/id
+```
