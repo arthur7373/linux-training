@@ -128,7 +128,6 @@ echo ; echo -n "Be patient " ; sleep 2 ; echo -n "to learn " ; sleep 2 ; echo "S
 
 ```
 
-
 * id - display user information
 
 ```bash
