@@ -1,6 +1,5 @@
 # Shell programming in Linux
 
-
 ## Linux Terminal (Լինուքսի հրամանների տողը)
 
 > Ներածական հարցեր թեմայի վերաբերյալ 
