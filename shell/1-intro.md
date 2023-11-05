@@ -114,7 +114,6 @@ echo We learn Linux # this is a comment
 # echo We learn Linux # this is a comment
 ```
 
-
 ```bash
 echo "$USER" learns Shell Programming
 ```
