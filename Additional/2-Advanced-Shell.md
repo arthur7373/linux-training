@@ -2,6 +2,126 @@
 
 
 
+<br><br>
+
+
+## Access files
+
+There are several tool to view text files contents.
+
+> **less** - view/browse text file page-by-page
+
+* **Enter/DOWNARROW**	– մեկ տող ներքև
+* **SPACE/PgDn**		– մեկ էկրան ներքև
+* **PgUp/b**			– մեկ էկրան վերև
+* **UPARROW**			– մեկ տող վերև
+* **/**					– որոնում
+* **Home**				– անցնել տեքստի սկիզբը
+* **End**				– անցնել տեքստի վերջը
+* **q**					– ելք
+
+> Օրինակներ
+ 
+`less /etc/services`
+`ls /usr/bin | sort -r | less`
+
+<br><br>
+
+> **cat** - output whole file to STDOUT (default - terminal)
+
+> Օրինակներ
+ 
+`cat /etc/services`
+
+`cat /etc/services | sort -r `
+
+`cat /etc/services | sort -r | less`
+
+<br><br>
+
+> **head** - output some first lines (default 10) of file STDOUT (default - terminal)
+
+> Օրինակներ
+ 
+`head /etc/services`
+
+`head -1 /etc/services`
+
+`head -1 /etc/services > /tmp/h1`
+
+`head -1 /etc/services >> /tmp/h1`
+ 
+<br><br>
+
+> **tail** - output some last lines (default 10) of file STDOUT (default - terminal)
+
+> Օրինակներ
+ 
+`tail /etc/services`
+
+`tail -1 /etc/services`
+
+`tail -1 /etc/services > /tmp/s1`
+
+`tail -1 /etc/services >> /tmp/s1`
+
+<br><br>
+
+> **grep** - filter lines based on pattern
+
+> Օրինակներ
+ 
+`cat /etc/services | grep http `
+
+`ls /usr/bin | grep log`
+
+`ls /usr/bin | grep ^log`
+
+`ls /usr/bin | grep log$`
+
+<br><br>
+
+> **awk**  - extract sections/fields from each line of files
+
+> Օրինակներ
+
+`awk -F":" '{print $1}' /etc/passwd | grep ^s`
+
+`tail -10 /etc/passwd | awk -F":" '{print $3"--"$1}' | sort -n`
+
+`cat /etc/passwd | grep -E ^'(b|sy)' | awk -F":" '{print "User: "$3"  "$1}'`
+
+
+
+
+
+## Midnight Commander
+
+Midnight Commander - visual file manager
+
+
+```bash
+sudo apt install mc
+```
+
+
+
+* TAB          տեղափոխվել պանելների միջև 
+* Esc Enter         տանել ընտրված ֆայլի անունը հրամանի տող 
+* Esc A 	    տանել ընտրված ֆայլի ճանապարհը հրամանի տող 
+* Esc H 	    հրամանի տողի պատմություն 
+* Esc P 	    նախորդ հրաման 
+* Ctrl  O            թաքցնել/ցույց տալ պանելները 
+* Esc 9 -> File -> Chmod 
+* Esc 9 -> File -> Advanced Chown
+* F10 = Esc 0 = exit      ելք 
+
+
+
+
+
+
+
 ## File Permissions
 
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
