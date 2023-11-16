@@ -625,7 +625,7 @@ It can draw different pictures and say the text you provide.
    3. Your alias should work like `krya BAREV`
 
 
-![img.png](../images/shell-course/turtle.png)
+![img.png](../../shell/shell-course/turtle.png)
 
 4. Create the **script** which will do the same as **alias**. 
 
@@ -832,7 +832,7 @@ Based on previous use of funny `cowsay` program, create more flexible script `nk
 
 When ready it should work like `nkar elephant HELLO`
 
-![img.png](../images/shell-course/elephant.png)
+![img.png](../../shell/shell-course/elephant.png)
 
 ## Sourcing Scripts
 
