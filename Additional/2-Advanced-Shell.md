@@ -12,150 +12,6 @@ Some important variables
 
 
 
-### Signal Traps 
-
-Bash has an internal trap command to reassign the signal actions, which can be useful in scripts. 
-The format of the trap command is:  _trap 'commands'  signals_ 
-
-Common use example:
-
-`trap ' ' 2 3 15 # sets do nothing when receiving 2 (INT, Ctrl+C), 3 (QUIT, Ctrl+\), 15 (TERM) signals.` 
-
-`trap 2 3 15 # recovers initial actions for 2,3,15 signals.`
-
-
-Simple script
-
-```bash
-cat > ~/trap.sh << "EOF1"
-#!/bin/bash 
-trap 'echo " Ctrl-C IGNORED" ' 2 
-trap 'echo " Ctrl-\ IGNORED" ' 3 
-echo
-echo 'I will sleep for 500 seconds'
-echo 'Try to stop me with Ctrl-C, Ctrl-\' 
-echo 
-while true ; do 
-sleep 500 
-done
-EOF1
-chmod +x ~/trap.sh
-
-
-After running the above script you **will not be able to stop it.** 
-
-To stop it press `Ctrl-Z`
-
-and then run:  
-`kill -9 %1` 
-or
-`kill -9 trap.sh`
-
-
-
-## Text Processing Tools
-
-<br><br>
-
-> **awk**  - extract sections/fields from each line of files
-
-> Օրինակներ
-
-`awk -F":" '{print $1}' /etc/passwd | grep ^s`
-
-`tail -10 /etc/passwd | awk -F":" '{print $3"--"$1}' | sort -n`
-
-`cat /etc/passwd | grep -E ^'(b|sy)' | awk -F":" '{print "User: "$3"  "$1}'`
-
-
-
-### Advanced Text Processing - AWK 
-
-Awk is a full-featured text processing language very useful in shell scripts.  
-It is ideal for handling structured text files where data can be viewed as organized into consistent 
-chunks, such as rows and columns. 
-
-
-Awk main principle is – _**'pattern { action }'**_  
-
-**_pattern_** – if present causes to select only lines containing that pattern, 
-after that  **_{ action }_** is applied to that lines. 
-
-Awk breaks each processed line into **_fields_** - by default delimited by whitespace. 
-
-Strong quoting and curly brackets enclose blocks of awk code - **_'{   }'_**.   
-**$1** is field #1, **$2** is field #2, etc.
-
-**awk '{print $1 $5 $6}' $filename** # Prints fields #1, #5, and #6 of file $filename. 
-**awk '{print $0}' $filename** # Prints the entire file! 
-
-Awk can be used to parse many system administration files. However, many of these files do not have 
-whitespace as a separator. as an example, the password file uses colons. You can easily change the 
-field separator character to be a colon using the "-F" command line option. The following command will 
-print out list of user accounts:  
-
-`awk -F":" '{print $1}' /etc/passwd`
-
-Exmaple
-
-`cat /etc/passwd | awk -F":" '/nologin$/ {print $1"-"$5}'`
-
-
-##### Task:
-Modify the above command, to narrow selection by only lines starting with s  
-
-#### Advanced Text Processing – SED 
-
-Sed is a very useful **S**tream **ED**itor.  
-It's ideal for batch-editing files or for creating shell scripts to modify existing files in powerful ways. 
-It's rather complex for quick full understanding, so below are only few use cases.
-
-One of sed's most useful commands is the _**substitution**_ command. 
-
-Following command takes a stream from pipe and replaces first occurrence of `:` on each line to `<*>`: 
-
-`cat /etc/passwd | sed -e 's/:/<*>/' `
-
-To replace all occurrences we should add `g` to make replacement global: 
-
-`cat /etc/passwd | sed -e 's/:/<*>/g'  `
-
-
-Another useful examples with SED: 
-
-Output lines `5-7` 
-
-`sed -n '5,7p' /etc/group`
-
-**-n** causes not to output each processed lines<br>
-**p** command specifies print (output) specified line range: 5-7 
-
-
-Output all lines except `1-20` 
-
-`sed '1,20d' /etc/group`
-
-**d** command causes specified line range: 
-`1-20` to be deleted/removed from output, 
-other lines will be present in output 
-
-Remove comments (lines starting with '#' - `^#`) and empty lines `^$` from output:  
-
-`sed '/^#\|^$/d' /etc/rsyslog.conf` 
-
-**d** command causes specified lines: <br>
-**^#** - starting with **#** <br>
-or **\\|** <br>
-**^$** - empty line (**^**- line start, **$** - line end) 
-to be deleted/removed from output, 
-other lines will be present in output. 
-
-
-##### Task: 
-Modify the above command, to remove also lines starting with **$** 
-
-
-
 
 
 
@@ -493,6 +349,9 @@ chmod +x ~/f3.sh
 * RECOMMENDATION: It’s best to always use local variables within functions.  
 Think before using global variables within function. 
 
+
+
+
 Let’s change the previous script to have functions 
 
 
@@ -518,64 +377,6 @@ chmod +x ~/f4.sh
 
 ```
  
-
-#### Arithmetic Expansion. Double-Parentheses Construct. 
-
-Arithmetic operations in Bash can be done in several ways. 
-
-1. ‘Old’ ways were using let  
-`let a="1+6" ;echo $a `
-
-2. or expr 
-`b=`expr 2 + 5` ; echo $b` 
-3. Newer versions of Bash have other way: double parentheses. 
-**(( ... ))** construct permits arithmetic expansion and evaluation. 
-In its simplest form, _a=$(( 5 + 3 ))_ would set a to 5 + 3, or 8. 
-However, this double-parentheses construct is also a mechanism for allowing C-style manipulation of 
-variables in Bash, for example increments like (( var++ )) or (( var+=5 )). 
-`$ z=$((4+3)); echo $z `
-
-
-Example of a shell script  that calculates the average of all command line parameters 
-
-`cat > aver.sh `
-
-```bash
-cat > ~/aver.sh << "EOF1"
-#!/bin/bash 
-if [[ $# = 0 ]] 
-then echo "Usage: $0 num1, num2 ..." 
-exit 
-fi 
-(( m= 0 )) 
-isnumber () 
-{ 
-if [ $1 -eq $1 2>/dev/null ] 
-then  
-((m+=1)) 
-else echo "$1 is not a number" 
- exit $? 
-fi 
-} 
-(( sum=0 )) 
-for i in $* 
-do 
-if  isnumber $i 
-then  
-((sum+=$i)) 
-fi 
-done 
-
-((AV=sum/m)) 
-echo "For $* " 
-echo  “Average is $AV” 
-EOF1
-chmod +x ~/aver.sh
-
-```
-
-
-
 
 
 
