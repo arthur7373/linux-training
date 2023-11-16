@@ -1,6 +1,17 @@
 # Shell programming in Linux
 
 
+
+Some important variables
+
+![img.png](shell-course/bash01.jpg)
+
+![img.png](shell-course/bash02.jpg)
+
+
+
+
+
 ### Signal Traps 
 
 Bash has an internal trap command to reassign the signal actions, which can be useful in scripts. 
