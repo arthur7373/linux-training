@@ -7,6 +7,6 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shell" />
-    <orderEntry type="module" module-name="trainart" />
+    <orderEntry type="module" module-name="linux1" />
   </component>
 </module>

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../linux1/.idea/linux1.iml" filepath="$PROJECT_DIR$/../linux1/.idea/linux1.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/linux_training.iml" filepath="$PROJECT_DIR$/.idea/linux_training.iml" />
       <module fileurl="file://$PROJECT_DIR$/../shell/.idea/shell.iml" filepath="$PROJECT_DIR$/../shell/.idea/shell.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../trainart/.idea/trainart.iml" filepath="$PROJECT_DIR$/../trainart/.idea/trainart.iml" />
     </modules>
   </component>
 </project>
