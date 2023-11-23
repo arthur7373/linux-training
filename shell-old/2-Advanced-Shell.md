@@ -4,6 +4,8 @@
 
 ## File Permissions
 
+
+
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions.png width=50% height=50% >
 <br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/permissions2.png width=50% height=50% >
@@ -17,7 +19,6 @@
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/mc.png width=50% height=50% >
 <br><br>
 <img src=https://github.com/arthur7373/linux-training/blob/main/images/shell-course/umask.png width=50% height=50% >
-
 
 <br><br>
 
