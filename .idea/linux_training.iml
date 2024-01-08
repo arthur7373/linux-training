@@ -8,5 +8,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="shell" />
     <orderEntry type="module" module-name="linux1" />
+    <orderEntry type="module" module-name="pythonProject" />
   </component>
 </module>
