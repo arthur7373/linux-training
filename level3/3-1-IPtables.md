@@ -2,19 +2,23 @@
 
 ## Linux firewall, packet filtering, iptables 
 
-Linux kernel includes network firewall capabilities to filter packets (called **netfilter**).
+Linux firewall mechanism is implemented in Linux kernel in form of network firewall capabilities to filter packets (called **netfilter**).
 
-To use these capabilities different Linux distributions and versions use different tools.
+But it also involves additional components - tools to configure and manage it.
+Different Linux distributions and versions use different tools.
+Also some tools function on top of others.
 
 * **IPtables/Nftables**
 * **Firewalld**
 * **Uncomplicated Firewall (ufw)**
 
 ### IPtables
-IPtables is initial tool to manage packet filtering, but newer Linux versions
+IPtables was basic tool to manage packet filtering, but newer Linux versions
 provide other "front-end" tools for `iptables`.
 
-Nftables is new tool meant to replace the aging iptables, but as of today most of distributions still keep `iptables`, while they have also already added `nftables`.
+Nftables is new tool meant to replace the aging iptables. 
+Some distributions today are already moved to `nftables` and enable it by default. 
+Others still keep enabled `iptables`, but have also already `nftables` present, which you need to enable manually.
 We will shortly talk about 'nftables' later below.
 
 At the same time in modern Linux versions there exist distribution-dependent higher-level tools. 
