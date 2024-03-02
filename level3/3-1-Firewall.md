@@ -110,7 +110,7 @@ iptables -nvL
 ```
 
 
-![img.png](img.png)
+![iptables.png](iptables.png)
 
 
 Basic chains are:
