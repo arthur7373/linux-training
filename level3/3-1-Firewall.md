@@ -534,6 +534,7 @@ So you can use the `nft` tool
 nft list ruleset
 ```
 
+
 Or with more details:
 
 ```bash
