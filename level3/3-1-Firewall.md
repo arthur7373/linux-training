@@ -104,14 +104,18 @@ Now we should have a clean initial configuration to start learning.
 First we will get understanding of `iptables`, since it's anyway remaining
 at the bottom of any modern netfilter-based Linux firewall.
 
-This command will give the list of all current active **chains** & **rules**. 
+When a packet passes through `iptables`, it passes a set of **chains**. 
+Each chain contains set of **rules**.
+Decisions what to do with packet is made by those **rules**.
+
+Below command will give the list of all current active **chains** & **rules**. 
 ```bash
 iptables -nvL
 ```
 
+(taken from: https://jensd.be/343/linux/forward-a-tcp-port-to-another-ip-or-port-using-nat-with-iptables)
 
-![iptables.png](iptables.png)
-
+![iptables_chains.png](iptables_chains.png)
 
 Basic chains are:
 
@@ -121,7 +125,7 @@ Basic chains are:
 * FORWARD - for packets **transiting** between two network interfaces.
 
 
-* OUTPUT - for packets going going **out** from network interface to outside.
+* OUTPUT - for packets going **out** from network interface to outside.
 
 For each chain a sequence of **rules** with appropriate **actions** can be defined.
 
