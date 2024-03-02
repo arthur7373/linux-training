@@ -457,6 +457,11 @@ It has some improvements, for example, with `nftables` you can create both IPv4 
 `nftables` has been included in the Linux kernel since 2014, (since Linux kernel 3.13)
 and  it still slowly becomes more popular.
 
+Nftables scheme is (taken from https://habr.com/ru/companies/ruvds/articles/580648/):
+
+https://habrastorage.org/webt/gq/kj/ku/gqkjkumxnbuytfchmlash4ksrty.png
+
+
 You can try to determine whether your Linux is currently includes Nftables, using the following methods:
 
 1. Check for `nft` command:
