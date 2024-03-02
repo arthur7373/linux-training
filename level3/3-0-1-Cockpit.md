@@ -47,7 +47,7 @@ ss -nlpt ; grep 9090
 ```
 
 And if so, try access with web browser:
-(you need to ignore security warning since the SSL certificate is self-signed)
+(you need to ignore security warning, since the SSL certificate is self-signed)
 
 `https://[ipaddress]:9090`
 

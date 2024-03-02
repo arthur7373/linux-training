@@ -2,15 +2,43 @@
 
 ## Linux firewall, packet filtering, iptables 
 
-Linux firewall mechanism is implemented in Linux kernel in form of network firewall capabilities to filter packets (called **netfilter**).
+"Firewall" term is generally used for some mechanism to do **network security** and **traffic management** tasks.
 
-But it also involves additional components - tools to configure and manage it.
+**Linux firewall** mechanism is implemented in Linux kernel in form of network firewall capabilities to filter packets (called **Netfilter**).
+
+Initially, Linux firewall was designed as **packet filter**. 
+The goal was to define rules to permit, deny, or modify network traffic 
+based on various criteria such as **source/destination IP addresses**, **ports**, and **protocols**.
+
+So **Netfilter** is a framework within the Linux kernel that provides various functionalities for packet filtering.
+
+But **Linux firewall** term also involves additional components on top of **Netfilter**. 
+These are various tools to configure and manage it.
 Different Linux distributions and versions use different tools.
 Also some tools function on top of others.
 
-* **IPtables/Nftables**
+We can call "**backend tools**" - those that directly interact with Netfilter (part of Linux kernel) to define firewall rules and manipulate network packets.
+
+And "frontend tools" - higher-level tools that work on top of "**backend tools**".
+
+Current "**backend tools**" in Linux firewall system are:
+
+* **IPtables**
+* **Nftables**
+
+Among "**frontend tools**" in Linux firewall system are:
+
 * **Firewalld**
-* **Uncomplicated Firewall (ufw)**
+* **Ufw (Uncomplicated Firewall)**
+
+(there are also others like Shorewall, Ferm, ...)
+
+Above tools offer various levels of complexity and features for configuring firewall. 
+Some provide simple interface for basic firewall configuration, 
+while others offer more advanced capabilities for managing complex firewall scenarios.
+
+Below we mainly discuss `iptables`. Other tools are also mentioned a bit.
+
 
 ### IPtables
 IPtables was basic tool to manage packet filtering, but newer Linux versions
@@ -21,8 +49,9 @@ Some distributions today are already moved to `nftables` and enable it by defaul
 Others still keep enabled `iptables`, but have also already `nftables` present, which you need to enable manually.
 We will shortly talk about 'nftables' later below.
 
-At the same time in modern Linux versions there exist distribution-dependent higher-level tools. 
-For example **CentOS 7/8** come with an alternative service called `firewalld`
+As we said above in modern Linux versions there exist distribution-dependent 
+higher-level "front-end" tools on top of iptables/nftables. 
+For example **RH/CentOS** from version 7 and above come with an alternative service called `firewalld`
 which fulfills this same purpose & **Ubuntu** versions now use `ufw` (Uncomplicated Firewall).
 
 Also CentOS versions may have `iptables` as special package/service, 
@@ -421,19 +450,38 @@ It was created as a better variant than `iptables` and is very similar to it.
 It has some improvements, for example, with `nftables` you can create both IPv4 and IPv6 rules at one place and keep them in sync.
 (in case of `iptables` you had to do separate IPv6 rule config with separate tool `ip6tables`)
 
+> In fact `nftables` replaces not only `iptables` and `ip6tables`, but also 
+> `arptables` (for ARP rules) and `ebtables` (for Ethernet Bridge rules), 
+> that we don't discuss here.
+
 `nftables` has been included in the Linux kernel since 2014, (since Linux kernel 3.13)
+and  it still slowly becomes more popular.
 
-it still slowly becomes more popular.
-Currently you can use both tools as you like.
+You can try to determine whether your Linux is currently includes Nftables, using the following methods:
 
-You can check if `nftables` is running/enabled as as service:
+1. Check for `nft` command:
+```bash
+which nft
+```
+If `nft` is found, it suggests NFtables package is installed (doesn't mean it is used by default)
+
+2. Check for `nftables` config
+```bash
+find /etc -name "nftables*"
+```
+If `nftables.conf` is found, it suggests NFtables package is installed (doesn't mean it is used by default)
+
+3. Check Service Status:
+
+Check if `nftables` is running/enabled as service:
 ```bash
 systemctl is-active nftables ;\
 systemctl is-enabled nftables
 ```
 
-Remember that even if it is disabled as a service you can still use command tools from this package to manage kernel filter.
-The service itself only manages its configuration not the filter itself.
+Remember that even if `nftables` is disabled as a service you can still use 
+command tools from this package to manage kernel filter.
+The service itself only manages its configuration, not the filter itself.
 
 Even more the rules you set with `netfilter` and `iptables` are to some extent managable by another tool.
 
