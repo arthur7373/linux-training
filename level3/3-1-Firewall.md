@@ -113,11 +113,13 @@ Below command will give the list of all current active **chains** & **rules**.
 iptables -nvL
 ```
 
-(taken from: https://jensd.be/343/linux/forward-a-tcp-port-to-another-ip-or-port-using-nat-with-iptables)
 
 ![iptables_chains.png](iptables_chains.png)
 
-Basic chains are:
+
+_(taken from: https://jensd.be/343/linux/forward-a-tcp-port-to-another-ip-or-port-using-nat-with-iptables)_
+
+Basic chains are (plus PREROUTING, POSTROUTING):
 
 * INPUT - for packets coming **into** the network interface from outside.
 
@@ -462,7 +464,7 @@ It has some improvements, for example, with `nftables` you can create both IPv4 
 `nftables` has been included in the Linux kernel since 2014, (since Linux kernel 3.13)
 and  it still slowly becomes more popular.
 
-Nftables scheme is (taken from https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks):
+Nftables scheme is _(taken from https://wiki.nftables.org/wiki-nftables/index.php/Netfilter_hooks)_:
 
 ![nf-hooks.png](nf-hooks.png)
 
