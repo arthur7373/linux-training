@@ -216,12 +216,17 @@ systemctl restart httpd
 
 Create test php script:   
 ```bash
-echo '<?php phpinfo(); ?>' > /var/www/lt01.am/inf.php
+echo '<?php 
+$name = "Linux Student";
+echo "Hi $name. PHP works here !";
+
+?>' > /var/www/lt01.am/phpcheck.php
+
 ```
 
 Check: 
 ```bash
-links http://www.lt01.am/inf.php
+links http://www.lt01.am/phpcheck.php
 ```
 > (PHP configuration can be done in config files: `/etc/php.ini`, `/etc/php.d/`)
 
