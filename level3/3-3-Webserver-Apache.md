@@ -228,6 +228,8 @@ Check:
 ```bash
 links http://www.lt01.am/phpcheck.php
 ```
+
+
 > (PHP configuration can be done in config files: `/etc/php.ini`, `/etc/php.d/`)
 
 Now we can create an PHP index file 
