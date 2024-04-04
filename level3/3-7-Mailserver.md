@@ -16,7 +16,7 @@ and so are logically called SMTP servers (or sometimes "outgoing mail servers").
 
 The recipient's **MTA** then delivers the email to the incoming mail server 
 (called the **MDA**, for Mail Delivery Agent), 
-which stores the email as it waits for the user to retreive it. 
+which stores the email as it waits for the user to retrieve it. 
 **MAA** (Mail Access Agent) is used to retrieve mails from  mailboxes.
 
 There are two main protocols used for retrieving email from MAA: 
