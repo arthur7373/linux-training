@@ -11,5 +11,6 @@
     <orderEntry type="module" module-name="pythonProject" />
     <orderEntry type="module" module-name="linux2" />
     <orderEntry type="module" module-name="linux3" />
+    <orderEntry type="module" module-name="introlinuxshell" />
   </component>
 </module>
