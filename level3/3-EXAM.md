@@ -18,7 +18,7 @@ turn off firewalld & SELinux
 
 ###  Network configuration
 
-Add second network interface to you VM and configure static IP address
+Add second network interface to your VM and configure static IP address
 `10.10.1.1`, `10.10.2.1`, ... (third number should be your group number) 
 
 ###  DNS Server
