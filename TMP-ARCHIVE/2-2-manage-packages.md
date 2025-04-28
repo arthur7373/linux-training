@@ -13,11 +13,11 @@ Source of that packages is called **Repository**.
 
 
 
-![img_1.png](../../linux1/img_1.png)
+![img_1.png](img_1.png)
 <br><br>
-![img_2.png](../../linux1/img_2.png)
+![img_2.png](img_2.png)
 <br><br>
-![img_3.png](../../linux1/img_3.png)
+![img_3.png](img_3.png)
 <br><br>
 
 For AlmaLinux / Rocky / Fedora / RHEL: `.rpm` packages installed by `yum` `dnf` `rpm`
@@ -30,13 +30,13 @@ For Debian / Ubuntu: `.deb` packages installed by `apt` and `dpkg`
 
 
 
-![img_4.png](../../linux1/img_4.png)
+![img_4.png](img_4.png)
 <br><br>
-![img_5.png](../../linux1/img_5.png)
+![img_5.png](img_5.png)
 <br><br>
-![img_6.png](../../linux1/img_6.png)
+![img_6.png](img_6.png)
 <br><br>
-![img_7.png](../../linux1/img_7.png)
+![img_7.png](img_7.png)
 
 
 
