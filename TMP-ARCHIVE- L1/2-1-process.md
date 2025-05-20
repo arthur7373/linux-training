@@ -251,7 +251,7 @@ top
 
 ### Background processes 
 
-![img.png](img.png)
+![img.png](../../linux1/img/img.png)
 
 
 Հրամաններից հետո `&` նշան դնելիս ուղարկում ենք ետին պլան (background) 
