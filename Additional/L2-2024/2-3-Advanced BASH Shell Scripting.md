@@ -159,12 +159,12 @@ In a function, a local variable has meaning only within that function block.
 
 The following table lists some important Bash internal variables that can be redefined:  
 
-![](../../../linux2/images/bash/bash01.jpg)
+![](../../TMP-ARCHIVE-L2/images/bash/bash01.jpg)
 
 
 #### Special Characters 
 The following table lists some important special characters:  
-![](../../../linux2/images/bash/bash02.jpg)
+![](../../TMP-ARCHIVE-L2/images/bash/bash02.jpg)
 
 ### Arrays
 
