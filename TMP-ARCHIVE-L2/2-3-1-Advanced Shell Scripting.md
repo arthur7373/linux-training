@@ -56,7 +56,7 @@ sudo yum -y install cowsay
 
 2. Run it
 ```bash
-cowsay Hi Shell Programming student
+cowsay Hi Linux student
 ```
 
 It can draw different pictures and say the text you provide.
