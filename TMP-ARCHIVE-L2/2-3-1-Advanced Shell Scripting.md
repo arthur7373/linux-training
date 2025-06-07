@@ -1,7 +1,7 @@
 # Linux Administration and Networking Basics (Level 2) <br> Լինուքսի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
 
-## Advanced Shell Scripting
+## Advanced Shell Scripting<br>Ընդլայնված Shell/Bash սկրիպտավորում
 
 Based on initial knowledge from Level 1 course let's now go deeper in shell scripting.
 

@@ -1,6 +1,6 @@
 # Linux Administration and Networking Basics (Level 2) <br> Լինուքսի կառավարում և ցանցային հիմունքներ (փուլ 2)
 
-## Managing Boot Process (SystemD)
+## Managing Boot Process (SystemD)<br> Լինուքսի միացման գործընթացի կառավարում (SystemD)
 
 Booting a Linux operating system on some device involves a sequence of events to complete startup:
 1. **BIOS / POST**
