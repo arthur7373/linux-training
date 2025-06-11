@@ -308,6 +308,45 @@ and replace first item in `/etc/fstab` like: `UUID=182ecbac-dd36-4113-b019-58f18
 
 The advantage of using the UUID is that it is independent from the actual device number the operating system gives your hard disk. 
 
+### fsck - Finding and Repairing Filesystem Corruption.
+
+`fsck` is normally run at system startup. So it gets run automatically if the system was shut down uncleanly
+
+It can also be run manually:  
+```bash
+fsck -y /dev/sdb1
+```
+
+Use `-y` to automatically answer ‘yes’ to any question. Without that option fsck will interactively ask whether to fix each problem as they are found (very annoying).
+Use `-f` to force checking the filesystem, even if fsck thinks it is clean.
+
+**Never run `fsck` on a mounted filesystem (unmount first).**
+
+#### Simulate Disk Corruption and Fix
+
+Unmount & Corrupt Journal
+
+Unmount the partition (if mounted)
+```bash
+umount /dev/sdb1
+```
+
+Simulate a crash by clearing the journal
+```bash
+tune2fs -O ^has_journal /dev/sdX1
+```
+
+This makes ext4 think the filesystem was uncleanly unmounted.
+
+Now run `fsck` 
+
+```bash
+fsck -y /dev/sdb1
+```
+
+
+
+
 
 
 ![](images/Linux-Level-2-2021-2-1-System-Administration-Basics-Manage-Users-Groups-Sudo-LVM_07.jpg)
