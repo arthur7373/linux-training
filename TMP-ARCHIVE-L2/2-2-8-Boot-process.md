@@ -2,59 +2,38 @@
 
 ## Managing Boot Process (SystemD)<br> Լինուքսի միացման գործընթացի կառավարում (SystemD)
 
-Booting a Linux operating system on some device involves a sequence of events to complete startup:
-1. **BIOS / POST**
 
-When the device is powered on instructions stored in its firmware (called BIOS - Basic Input/Output System)
-are first processed. BIOS performs Power On Self Test (POST) to 
-ensure **hardware functionality** (eg: RAM is available). After passing POST, 
-the BIOS searches through its **disk boot order**, loads, and executes 
-the small intermediate program called bootloader.
+Linux Boot Process (Short Intro)
 
-2. **Bootloader**
+When powered on, the system runs firmware in one of two ways: 
+* **BIOS** (Basic Input/Output System) (legacy)
+* **UEFI** (Unified Extensible Firmware Interface) (modern)
 
-Bootloader role is to **load the operating system** (such as Linux kernel). 
-Default bootloader for many modern Linux systems is a very powerful tool - 
- **GRUB** (GNU GRand Unified Bootloader). GRUB can load a variety of operating systems.
+1. Firmware `BIOS`/`UEFI` 
+   1. Performs hardware checks - **POST** (Power-On Self-Test)
+   2. Loads bootloader - **GRUB** (GNU GRand Unified Bootloader)
+      1. **BIOS** → **MBR**
+      2. **UEFI** → **GPT** 
+2. Bootloader `GRUB` → Linux kernel (PID 0).
+3. Linux kernel (PID 0), System Initialization
+   1. Hardware checks on kernel level
+   2. Launch Initialization Process - `SystemD/INIT` (PID 1) 
+4. SystemD (PID 1) 
+   1. Mount filesystems
+   2. Bring system to `default.target` / `default runlevel`
 
-GRUB may display splash screen with menu to select Linux kernel to boot. 
-The splash screen will wait a few seconds to select and option. 
-At this time boot process can be interrupted to enter single user mode (also known as rescue mode), 
-used for recovery tasks such as resetting passwords.
-If no key is pressed, GRUB will load the default kernel into RAM.
-Thus Linux kernel becomes first running proccess (with PID **0**).
-
-Most modern Linux versions are distributed with the GNU GRand Unified Boot 
-loader (GRUB) version 2 boot loader, 
-which allows the user to select an operating system or kernel 
-to be loaded at system boot time.
-Currently **GRUB2** has replaced what was formerly known as GRUB (i.e. version 0.9x),
-which is now known as **GRUB Legacy**.
-
-3. **Kernel**
-
-Once the Linux kernel starts, it checks hardware from operating system point of view (enable needed drivers, etc.) and
-then starts first initialization process (with PID **1**) with the responsibility of 
-doing the rest system initialization (starting services and processes).
-This initialization process runs until the system is shut down.
-
-4. **System Initialization** ( **INIT** / **SystemD** )
 
 Linux system initialization for a long time was handled by the _Unix-inspired SystemV_ **init** 
 process, which ran scripts to start services in a defined and configurable order to reach a 
 series of states, called **runlevels**. 
 
-The **Upstart** initialization system was developed as a replacement to _SystemV_ that would 
-trigger actions based on events, rather than running scripts in a particular order. **Upstart** was 
-backwards compatible with _SystemV_ runlevels, and ran _SystemV_ init scripts.
- 
 Current most popular initialization system for Linux is  **Systemd**. 
 It is more flexible and modular. 
 
-First initialization process (Process No.1) (**init** / **Upstart** / **SystemD**): 
-- manages the system startup process
-- manages the services running (enable/disable, start/stop)
-- shuts the system down
+First initialization process (PID 1) (**INIT** / **SystemD**) manages: 
+* startup process
+* services running (enable/disable, start/stop)
+* shutdown process
 
 **Systemd** uses **targets** instead of **runlevels** to define the state of the system. 
 
@@ -73,9 +52,9 @@ You can check the default target, which determines what services are started dur
 systemctl get-default
 ```
 
-Currently change to text mode
+Let us change to text mode
 ```bash
-sudo systemctl isolate multi-user.target (same as `init 3`)
+systemctl isolate multi-user.target (same as `init 3`)
 ```
 
 Check the default target:
@@ -83,21 +62,21 @@ Check the default target:
 systemctl get-default
 ```
 
-Currently change to graphical mode (same as `init 5`)
+Let us change to graphical mode (same as `init 5`)
 ```bash
-sudo systemctl isolate graphical.target
+systemctl isolate graphical.target
 ```
 
-Permanently set default to text mode (like runlevel 3):
+If we want to permanently set default to text mode (like runlevel 3):
+
 ```bash
-sudo systemctl set-default multi-user.target
-reboot
+systemctl set-default multi-user.target && reboot
 ```
 
 > 
 > Alternative to `reboot` still is `init 6`
 > Alternative to `poweroff` still is `init 0`
-> 
+ 
 
 > Bonus tip:
 > `echo $XDG_SESSION_TYPE`
@@ -108,7 +87,7 @@ reboot
 
 Permanently set default to graphical mode (like runlevel 5):
 ```bash
-sudo systemctl set-default graphical.target
+systemctl set-default graphical.target
 reboot
 ```
 
@@ -150,8 +129,8 @@ It shows current and previous runlevel.
 
 
 
-**Note:** Previous Linux versions, which were distributed with **SystemV init** or **Upstart**,
-used init scripts located in the `/etc/init.d/` directory. 
+**Note:** Previous Linux versions, which were distributed with **SystemV init** ,
+used init scripts located in the `/etc/rc.d/init.d/` directory. 
 These **init** scripts were typically written in Bash, and allowed the system 
 administrator to control the state of services and daemons in their system.
 **Systemd** still can also run old _SystemV_ **init** scripts.
@@ -189,39 +168,70 @@ _HINT:_ You need to run command that shows all processes in **tree-like** manner
 
 #### Service Management:
 
-1. List the running services on your system.
+1. List all services on your system.
+
 ```bash
 systemctl 
+```
+
+2. List the running services on your system.
+
+```bash
 systemctl | grep running
 ```
 
-2. Check to see if the ssh service (daemon) is running on your system. 
+3. Check to see if the service (daemon) is running on your system. 
+
 ```bash
-systemctl | grep ssh
+systemctl | grep cron
 ```
 
-3. Stop, start, and restart the ssh service.
+4. Restart, Stop, Start the service.
+
 ```bash
-systemctl stop sshd
-systemctl start sshd
-systemctl restart sshd
-```
-4. Disabling/Enabling ssh service start automatically at boot time.
-```bash
-systemctl is-enabled sshd
-systemctl disable sshd
-systemctl is-enabled sshd
-systemctl enable sshd
-systemctl is-enabled sshd
+systemctl restart crond
 ```
 
-5. Reboot & shutdown the system
+```bash
+systemctl stop crond
+```
+
+```bash
+systemctl start crond
+```
+
+5. Disable/Enable the service start automatically at boot time.
+
+```bash
+systemctl is-enabled crond
+```
+
+```bash
+systemctl disable crond
+```
+
+```bash
+systemctl is-enabled crond
+```
+
+```bash
+systemctl enable crond
+```
+
+```bash
+systemctl is-enabled crond
+```
+
+6. Reboot & shutdown the system
+
 You can reboot with you can either run
 
 ```bash
 reboot
 ```
+
 or
+
 ```bash
 init 6
 ```
