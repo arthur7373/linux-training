@@ -34,7 +34,7 @@ series of states, called **runlevels**.
 Current most popular initialization system for Linux is  **SystemD**. 
 It is more flexible and modular. 
 
-First initialization process (PID 1) (**INIT** / **SystemD**) manages: 
+First initialization process (PID 1) (**SystemD** / **INIT**) manages: 
 * startup process
 * services running (enable/disable, start/stop)
 * shutdown process
