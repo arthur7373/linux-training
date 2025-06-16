@@ -31,7 +31,7 @@ Linux system initialization for a long time was handled by the _Unix-inspired Sy
 process, which ran scripts to start services in a defined and configurable order to reach a 
 series of states, called **runlevels**. 
 
-Current most popular initialization system for Linux is  **Systemd**. 
+Current most popular initialization system for Linux is  **SystemD**. 
 It is more flexible and modular. 
 
 First initialization process (PID 1) (**INIT** / **SystemD**) manages: 
@@ -39,7 +39,7 @@ First initialization process (PID 1) (**INIT** / **SystemD**) manages:
 * services running (enable/disable, start/stop)
 * shutdown process
 
-**Systemd** uses **targets** instead of **runlevels** to define the state of the system. 
+**SystemD** uses **targets** instead of **runlevels** to define the state of the system. 
 
 Goal of **runlevels**/**targets** is to process system initialization 
 and bring the Linux system to specific state.
@@ -111,9 +111,9 @@ You may see different colors:
 It's a **system** and **service** manager for Linux. More details are below.
 
 
-Table below presents **SystemV runlevel** and **Systemd target** equivalents.
+Table below presents **SystemV runlevel** and **SystemD target** equivalents.
 
-| SystemV Runlevel | Systemd equivalent | Description
+| SystemV Runlevel | SystemD equivalent | Description
 | --- | --- | --- |
 | 0 (HALT)|poweroff.target |Shuts down the system |
 | 1 (SINGLE-USER MODE) | rescue.target | Mode for administrative and system rescue tasks. Only the root user can log in. |
@@ -137,8 +137,8 @@ It shows current and previous runlevel.
 used init scripts located in the `/etc/rc.d/init.d/` directory. 
 These **init** scripts were typically written in Bash, and allowed the system 
 administrator to control the state of services and daemons in their system.
-**Systemd** still can also run old _SystemV_ **init** scripts.
-But **Systemd** driven systems have init scripts replaced with **service units**. 
+**SystemD** still can also run old _SystemV_ **init** scripts.
+But **SystemD** driven systems have init scripts replaced with **service units**. 
 **Service units** end with the **.service** file extension and serve a 
 similar purpose as init scripts.
 
