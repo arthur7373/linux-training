@@ -7,13 +7,13 @@
 
 Linux Boot Process generally include following steps:
 
-1. After "Power ON", the hardware runs the firmware - <br>`BIOS` (Basic Input/Output System) <br>or<br> `UEFI` (Unified Extensible Firmware Interface). 
-<br> `BIOS`/`UEFI` does the following: 
+1. After "Power ON", the hardware runs the firmware - <br>**BIOS** (Basic Input/Output System) <br>or<br> **UEFI** (Unified Extensible Firmware Interface). 
+<br><br> **BIOS**/**UEFI** does the following: 
    1. Performs hardware checks - **POST** (Power-On Self-Test)
    2. Loads bootloader - **GRUB** (GNU GRand Unified Bootloader)
       1. **BIOS** → **MBR**
       2. **UEFI** → **GPT** 
-2. Bootloader `GRUB` does the following:
+2. Bootloader **GRUB** does the following:
    1. Provides menu to select boot system
    2. Loads the system - Linux kernel (PID 0).
 3. Linux kernel (PID 0) does the System Initialization, which includes:
