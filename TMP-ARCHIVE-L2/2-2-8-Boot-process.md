@@ -18,8 +18,8 @@ Linux Boot Process generally include following steps:
    2. Loads the system - Linux kernel (PID 0).
 3. Linux kernel (PID 0) does the System Initialization, which includes:
    1. Hardware checks on kernel level
-   2. Starts the main Initialization Process - `SystemD/INIT` (PID 1) 
-4. The main Initialization Process - `SystemD/INIT` (PID 1) does the following:
+   2. Starts the main Initialization Process - **SystemD**/**INIT** (PID 1) 
+4. The main Initialization Process - **SystemD**/**INIT** (PID 1) does the following:
    1. Bring system to `default.target` / `default runlevel` , which includes:
       1. Mounting the filesystems
       2. Start different services
