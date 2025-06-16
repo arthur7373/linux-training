@@ -3,24 +3,28 @@
 ## Managing Boot Process (SystemD)<br> Լինուքսի միացման գործընթացի կառավարում (SystemD)
 
 
-Linux Boot Process (Short Intro)
+### Linux Boot Process
 
-When powered on, the system runs firmware in one of two ways: 
-* **BIOS** (Basic Input/Output System) (legacy)
-* **UEFI** (Unified Extensible Firmware Interface) (modern)
+Linux Boot Process generally include following steps:
 
-1. Firmware `BIOS`/`UEFI` 
+1. After "Power ON", the hardware runs the firmware - <br>`BIOS` (Basic Input/Output System) <br>or<br> `UEFI` (Unified Extensible Firmware Interface). 
+<br> `BIOS`/`UEFI` does the following: 
    1. Performs hardware checks - **POST** (Power-On Self-Test)
    2. Loads bootloader - **GRUB** (GNU GRand Unified Bootloader)
       1. **BIOS** → **MBR**
       2. **UEFI** → **GPT** 
-2. Bootloader `GRUB` → Linux kernel (PID 0).
-3. Linux kernel (PID 0), System Initialization
+2. Bootloader `GRUB` does the following:
+   1. Provides menu to select boot system
+   2. Loads the system - Linux kernel (PID 0).
+3. Linux kernel (PID 0) does the System Initialization, which includes:
    1. Hardware checks on kernel level
-   2. Launch Initialization Process - `SystemD/INIT` (PID 1) 
-4. SystemD (PID 1) 
-   1. Mount filesystems
-   2. Bring system to `default.target` / `default runlevel`
+   2. Starts the main Initialization Process - `SystemD/INIT` (PID 1) 
+4. The main Initialization Process - `SystemD/INIT` (PID 1) does the following:
+   1. Bring system to `default.target` / `default runlevel` , which includes:
+      1. Mounting the filesystems
+      2. Start different services
+      3. Initialize user sessions
+      ...
 
 
 Linux system initialization for a long time was handled by the _Unix-inspired SystemV_ **init** 
