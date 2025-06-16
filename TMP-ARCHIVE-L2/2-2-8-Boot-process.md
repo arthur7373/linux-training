@@ -51,50 +51,41 @@ By default, there are two main targets:
 **graphical.target** - analogous to **runlevel 5**
 
 
-You can check the default target, which determines what services are started during boot:
+To check the default target, which determines what services are started during boot, we can run:
+
 ```bash
 systemctl get-default
 ```
 
-Let us change to text mode
+To change to text mode we can run (same as `init 3`):
+
 ```bash
-systemctl isolate multi-user.target (same as `init 3`)
+systemctl isolate multi-user.target 
 ```
 
-Check the default target:
-```bash
-systemctl get-default
-```
 
-Let us change to graphical mode (same as `init 5`)
+To change to graphical mode we can run (same as `init 5`):
+
 ```bash
 systemctl isolate graphical.target
 ```
 
-If we want to permanently set default to text mode (like runlevel 3):
+If we want to permanently set default to text mode (to work after reboot) we can run:
 
 ```bash
-systemctl set-default multi-user.target && reboot
+systemctl set-default multi-user.target 
 ```
 
-> 
-> Alternative to `reboot` still is `init 6`
-> Alternative to `poweroff` still is `init 0`
- 
+Now we can reboot:
 
-> Bonus tip:
-> `echo $XDG_SESSION_TYPE`
-> can give idea about type of session
-> if returned `tty` then it is text mode
-> if returned `x11` or `wayland` or something else it is most probably the graphical mode.
-
-
-Permanently set default to graphical mode (like runlevel 5):
 ```bash
-systemctl set-default graphical.target
 reboot
 ```
 
+> 
+> Old alternative to `reboot` is `init 6` and it still works
+> Old alternative to `poweroff` is `init 0` and it still works
+ 
 
 You can also list the dependencies of a target
 (to see which units run and certain target):
@@ -106,6 +97,7 @@ You may see different colors:
 * **Green** - unit is active/running.
 * **White**/**gray** - unit is inactive/not running.
 * **Red** - unit failed to run.
+
 
 `systemctl` is a powerful command-line tool for managing `systemd`-driven Linuxes. 
 It's a **system** and **service** manager for Linux. More details are below.
@@ -135,16 +127,19 @@ It shows current and previous runlevel.
 
 **Note:** Previous Linux versions, which were distributed with **SystemV init** ,
 used init scripts located in the `/etc/rc.d/init.d/` directory. 
+
 These **init** scripts were typically written in Bash, and allowed the system 
 administrator to control the state of services and daemons in their system.
+
 **SystemD** still can also run old _SystemV_ **init** scripts.
+
 But **SystemD** driven systems have init scripts replaced with **service units**. 
 **Service units** end with the **.service** file extension and serve a 
 similar purpose as init scripts.
 
 To view, `start`, `stop`, `restart`, `enable`, or `disable` system services, use the `systemctl` command as described below. 
 
-The `service` and `chkconfig` commands are still available in some versions 
+Old `service` and `chkconfig` commands are still available in some versions 
 and work as expected, but are only included for compatibility reasons 
 and better to be avoided. 
 
@@ -157,7 +152,7 @@ For example:
 
 `systemctl status rsyslog.service`
 
-is same as:
+is the same as:
 
 `systemctl status rsyslog`
 
@@ -239,12 +234,15 @@ or
 ```bash
 init 6
 ```
+
 You can shutdown with either
 
 ```bash
 poweroff
 ```
+
 or
+
 ```bash
 init 0
 ```
@@ -255,6 +253,50 @@ init 0
 > Look at output of `ls -l /usr/sbin/reboot`
 > 
 > Look at output of `ls -l /usr/sbin/poweroff`
+
+#### Service Configuration files
+
+To see configuration of some service we can use `cat` keyword:
+
+```bash
+systemctl cat sshd
+```
+
+```bash
+systemctl cat crond
+```
+
+#### Enable additional terminal configuration
+
+We can immediately start new terminal on F12 with:
+
+```bash
+systemctl start getty@tty12.service
+```
+
+Now try to login from `F12` terminal and after login type `w` or `tty`, to see your terminal name.
+
+
+But the above will not remain after reboot.
+
+We can enable that service
+
+```bash
+systemctl enable getty@tty12.service
+```
+
+Or we can do both at the same time:
+
+```bash
+systemctl enable --now getty@tty12.service
+```
+
+
+Other way is to configure `systemd-logind` process, that manages user logins. 
+If we want more virtual terminals we can edit `/etc/systemd/logind.conf` and add or modify line:
+`NAutoVTs=12`, which will enable terminal to all F1-F12 keys.
+
+
 
 ### PRACTICE
 
@@ -274,7 +316,7 @@ LASTLINE
 
 ```
 
-Check its contents (HINT! you can use `cat` keyword to find config of any service)
+Check its contents 
 
 ```bash
 systemctl cat startuptest
