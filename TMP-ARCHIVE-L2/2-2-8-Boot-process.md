@@ -5,6 +5,45 @@
 
 ### Linux Boot Process
 
+<pre>
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                        LINUX BOOT PROCESS                                    │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                                                                
+┌───────────────┐     ┌───────────────┐     ┌────────────────┐     ┌───────────┐
+│   POWER ON    │ ──> │  FIRMWARE     │ ──> │   BOOTLOADER   │ ──> │  KERNEL   │
+└───────────────┘     └───────────────┘     └────────────────┘     └───────────┘
+    │                   BIOS/UEFI               GRUB                  (PID 0)    
+    │                   ┌───────┐               ┌───────┐             ┌───────┐  
+    │                   │ POST  │               │ Menu  │             │ H/W   │  
+    │                   └───────┘               └───────┘             │ Check │  
+    │                   ┌───────┐               ┌───────┐             └───────┘  
+    └──────────────────>│  MBR  │               │ Load  │             ┌───────┐  
+        (BIOS)          └───────┘               │ Kernel│ ──────────> │ Start │  
+                        ┌───────┐               └───────┘             │ init  │  
+                        │  GPT  │                                     └───────┘  
+        (UEFI)          └───────┘                                                
+                                                                                
+┌───────────────┐                                                                
+│  INIT SYSTEM  │ <─────────────────────────────────────────────────────────────┐
+└───────────────┘                                                              │
+ (SystemD/INIT)                                                                 │
+    PID 1                                                                       │
+┌─────────────────────────────────────────────────────────────────┐            │
+│                      default.target                            │            │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐ │            │
+│  │ Mount Filesystem│  │ Start Services  │  │ User Sessions   │ │            │
+│  └─────────────────┘  └─────────────────┘  └─────────────────┘ │            │
+└─────────────────────────────────────────────────────────────────┘            │
+                                                                              │
+┌─────────────────────────────────────────────────────────────────────────────┘
+│                         SYSTEM READY FOR USE                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+</pre>
+
+
+
+
 Linux Boot Process generally include following steps:
 
 1. After "Power ON", the hardware runs the firmware - <br>**BIOS** (Basic Input/Output System) <br>or<br> **UEFI** (Unified Extensible Firmware Interface). 
@@ -88,7 +127,7 @@ reboot
  
 
 You can also list the dependencies of a target
-(to see which units run and certain target):
+(to see which units run certain target):
 
 ```bash
 systemctl list-dependencies multi-user.target
