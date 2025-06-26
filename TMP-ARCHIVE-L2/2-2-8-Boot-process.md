@@ -7,27 +7,27 @@
 
 <pre>
 ┌─────────────────────────────────────────────────────┐
-│ 1. Power ON → Firmware (BIOS/UEFI)                  │
+│ 1. Power ON / Firmware → Checks, Load Bootloader    │
 └─────────────────────────────────────────────────────┘
 │
-├─ 1.1 Hardware checks - POST (Power-On Self-Test)
-├─ 1.2 Load Bootloader (GRUB) from MBR (BIOS) / GPT (UEFI)
+├─ 1.1 Hardware checks → POST (Power-On Self-Test)
+├─ 1.2 Load Bootloader (GRUB) → MBR(BIOS)/GPT(UEFI)
 │
 ▼
 ┌─────────────────────────────────────────────────────┐
-│ 2. GRUB Bootloader                                  │
+│ 2. GRUB Bootloader → Load Operating System (Kernel) │
 └─────────────────────────────────────────────────────┘
 │
 ├─ 2.1 Provide boot menu
-├─ 2.2 Load Linux kernel (PID 0)
+├─ 2.2 Load Linux Kernel (PID 0)
 │
 ▼
 ┌─────────────────────────────────────────────────────┐
-│ 3. Linux Kernel (PID 0) System Initialization       │
+│ 3. Linux Kernel (PID 0) → System Initialization     │
 └─────────────────────────────────────────────────────┘
 │
 ├─ 3.1 Hardware checks (kernel level)
-├─ 3.2 Start init process (SystemD/INIT - PID 1)
+├─ 3.2 Start Main Process (SystemD/INIT - PID 1)
 │
 ▼
 ┌─────────────────────────────────────────────────────┐
@@ -42,7 +42,7 @@
     │
     ▼
 ┌─────────────────────────────────────────────────────┐
-│                 System Ready for Use                │
+│                System Up and Running                │
 └─────────────────────────────────────────────────────┘
 </pre>
 
