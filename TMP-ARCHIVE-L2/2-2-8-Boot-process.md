@@ -46,8 +46,6 @@
 └─────────────────────────────────────────────────────┘
 </pre>
 
-
-
 Linux Boot Process generally include following steps:
 
 1. After "Power ON", the hardware runs the firmware - <br>**BIOS** (Basic Input/Output System) <br>or<br> **UEFI** (Unified Extensible Firmware Interface). 
@@ -67,14 +65,14 @@ Linux Boot Process generally include following steps:
       1. Mounting the filesystems
       2. Start different services
       3. Initialize user sessions
-      ...
+
 
 
 Linux system initialization for a long time was handled by the _Unix-inspired SystemV_ **init** 
 process, which ran scripts to start services in a defined and configurable order to reach a 
 series of states, called **runlevels**. 
 
-Current most popular initialization system for Linux is  **SystemD**. 
+Current most popular initialization system for Linux is **SystemD**. 
 It is more flexible and modular. 
 
 First initialization process (PID 1) (**SystemD** / **INIT**) manages: 
@@ -89,9 +87,9 @@ and bring the Linux system to specific state.
 
 By default, there are two main targets:
 
-**multi-user.target** - analogous to **runlevel 3**
+**multi-user.target** <-> **runlevel 3**
 
-**graphical.target** - analogous to **runlevel 5**
+**graphical.target** <-> **runlevel 5**
 
 
 To check the default target, which determines what services are started during boot, we can run:
@@ -311,7 +309,11 @@ systemctl cat crond
 
 #### Enable additional terminal configuration
 
-We can immediately start new terminal on F12 with:
+After Linux system boots by default it enables about 6 terminal sessions on F1-F6 keys.
+
+But we can add new terminal sessions.
+
+For example, to immediately start new terminal on F12 run
 
 ```bash
 systemctl start getty@tty12.service
@@ -328,22 +330,23 @@ We can enable that service
 systemctl enable getty@tty12.service
 ```
 
-Or we can do both at the same time:
+Or we can do both at the same time.
+Below will enable and immediately start new terminal on F10 run
 
 ```bash
-systemctl enable --now getty@tty12.service
+systemctl enable --now getty@tty10.service
 ```
 
 
-Other way is to configure `systemd-logind` process, that manages user logins. 
-If we want more virtual terminals we can edit `/etc/systemd/logind.conf` and add or modify line:
-`NAutoVTs=12`, which will enable terminal to all F1-F12 keys.
+> Other way is to configure `systemd-logind` process, that manages user logins. 
+> If we want more virtual terminals we can edit `/etc/systemd/logind.conf` and add or modify line:
+> `NAutoVTs=12`, which will enable terminal to all F1-F12 keys.
 
 
 
 ### PRACTICE
 
-Create you own startup test service
+Create you own startup test service, that will run for `multi-user.target`.
 
 ```bash
 cat  > /etc/systemd/system/startuptest.service  << "LASTLINE"
@@ -451,7 +454,7 @@ power off the system (_no need to reboot, since there is no process which can do
   
 _Same way can be used to do needed maintenance (eg. `fsck /dev/sda1` )_
 
-#### How to Password Protect GRUB2 Boot Loader
+### How to Password Protect GRUB2 Boot Loader
 
 Use `grub2-setpassword` to set a password for the `root` user (_it's not Linux `root`_)
 ```bash
@@ -461,6 +464,11 @@ This creates a file `/boot/grub2/user.cfg` if not already present,
 which contains the hashed GRUB bootloader password. 
 This utility only supports configurations where there is a single root user.
 
+This protection prevents unauthorized users from:
+* Editing boot parameters (pressing 'e')
+* Accessing GRUB command line 
+* Booting into recovery/single-user modes
+
 To remove GRUB password-protect from boot menu, simply delete the file `/boot/grub2/user.cfg`
 
 >
@@ -468,39 +476,65 @@ To remove GRUB password-protect from boot menu, simply delete the file `/boot/gr
 > https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/managing_monitoring_and_updating_the_kernel/assembly_protecting-grub-with-a-password_managing-monitoring-and-updating-the-kernel
 > 
 
-#### Manage the Boot Process (GRUB2)
-GRUB 2 reads its configuration from the /boot/grub2/grub.cfg file on traditional BIOS-based machines and from the /boot/efi/EFI/redhat/grub.cfg file on UEFI machines. 
+### Manage the Boot Process (GRUB2)
 
-This file contains menu information. The GRUB 2 configuration file, grub.cfg, is generated during installation, or by invoking the /usr/sbin/grub2-mkconfig utility, and is automatically updated by special command line tool for configuring GRUB, called grubby, each time a new kernel is installed. 
+GRUB2 (GRand Unified Bootloader 2) is the default bootloader on most modern Linux systems.
 
-When regenerated manually using **grub2-mkconfig**, the file is generated according to the template files located in /etc/grub.d/, and custom settings in the /etc/default/grub file. 
+It controls:
+* Which OS/kernel boots by default 
+* Boot arguments (e.g., enabling rescue mode)
+* Timeout before auto-booting
 
-Edits of **grub.cfg** will be lost any time **grub2-mkconfig** is used to regenerate the file, so care must be taken to reflect any manual changes in /etc/default/grub as well.
+Key files:
 
-The `/etc/default/grub` file is used by the grub2-mkconfig tool.  
-Any manual changes to **/etc/default/grub** require rebuilding the grub.cfg file.
-Menu Entries in **grub.cfg**
+* `/etc/default/grub` – Main settings (timeout, default OS, etc.)
 
-Among various code snippets and directives, the `grub.cfg` configuration file contains one or more `menuentry` blocks,
-each representing a single GRUB 2 boot menu entry. 
-These blocks always start with the `menuentry` keyword followed by a title, 
-list of options, and an opening curly bracket, and end with a closing curly bracket. 
-Anything between the opening and closing bracket should be indented. 
+* `/etc/grub.d/` – Scripts generating boot entries
 
-Each `menuentry` block that represents an installed Linux kernel contains linux on 64-bit IBM POWER Series, linux16 on x86_64 BIOS-based systems, and linuxefi on UEFI-based systems. Then the initrd directives followed by the path to the kernel and the initramfs image respectively. If a separate /boot partition was created, the paths to the kernel and the initramfs image are relative to /boot. In the example above, the initrd /initramfs-3.8.0-0.40.el7.x86_64.imgline means that the initramfs image is actually located at /boot/initramfs-3.8.0-0.40.el7.x86_64.img when the root file system is mounted, and likewise for the kernel path.
+* `/boot/grub2/grub.cfg` – Final config (automatically generated, **do not edit directly**!)
 
 
-The GRUB 2 package contain commands for installing a bootloader and for creating a bootloader configuration file. 
 
-grub2-install will install the bootloader - usually in the **MBR**, in free **unpartioned** space, and as files in /boot. 
-The bootloader is installed with something like: 
-`grub2-install /dev/sda`
+#### Simple Example: Changing Boot Timeout
 
-grub2-mkconfig will create a new configuration based on the currently running system, what is found in /boot, what is set in /etc/default/grub, and the customizable scripts in /etc/grub.d/ . A new configuration file is created with: 
+Goal: Reduce the boot menu timeout from `5s` to `2s`.
 
-`grub2-mkconfig -o /boot/grub2/grub.cfg`
-The configuration format has evolved over time, and a new configuration file might be slightly incompatible with the old bootloader.  It is thus often/always a good idea to run grub2-install before grub2-mkconfig for some reason is run. The RedHat installer, anaconda, will run these grub2 commands and there is usually no reason to run them manually. 
-It is generally safe to directly edit /boot/grub2/grub.cfg in RedHat. Other distributions, in particular Debian/Ubuntu provide an update-grub command for activating your changes. Some customizations can be placed in /etc/grub.d/40_custom. 
+Step 1: Edit /etc/default/grub
 
-More info at: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/ch-working_with_the_grub_2_boot_loader
+Open `/etc/default/grub`
+```bash
+nano /etc/default/grub
+```
+
+Change `GRUB_TIMEOUT=5` to `GRUB_TIMEOUT=2` and save the file.
+
+
+Step 2: Regenerate grub.cfg
+
+```bash
+grub2-mkconfig -o /boot/grub2/grub.cfg
+```
+
+Step 3: Verify Changes
+
+We now search in newly generated config if our changes applied:
+
+```bash
+grep "timeout" /boot/grub2/grub.cfg
+```
+
+If you see `set timeout=2`, then it is ok.
+We can reboot to see the effect
+
+```bash
+reboot
+```
+
+Important Notes:
+
+* Never edit `/boot/grub2/grub.cfg` directly – Changes will be lost on update!
+
+* Test changes before rebooting (use grep as shown above).
+
+* For kernel arguments, modify `GRUB_CMDLINE_LINUX` in `/etc/default/grub`.
 
