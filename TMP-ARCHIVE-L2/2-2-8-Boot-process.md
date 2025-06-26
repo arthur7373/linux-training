@@ -11,9 +11,6 @@
 └─────────────────────────────────────────────────────┘
 │
 ├─ 1.1 Hardware checks - POST (Power-On Self-Test)
-│
-▼
-│
 ├─ 1.2 Load Bootloader (GRUB) from MBR (BIOS) / GPT (UEFI)
 │
 ▼
@@ -41,12 +38,12 @@
     │
     ├─ 4.1.1 Mount filesystems
     ├─ 4.1.2 Start services
-    └─ 4.1.3 Initialize user sessions
+    ├─ 4.1.3 Initialize user sessions
     │
     ▼
-    ┌─────────────────────────────────────────────┐
-    │          System Ready for Use               │
-    └─────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│                 System Ready for Use                │
+└─────────────────────────────────────────────────────┘
 </pre>
 
 
