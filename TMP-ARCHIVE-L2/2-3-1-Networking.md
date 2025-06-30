@@ -173,34 +173,43 @@ Now we need to apply changes.
 
 We can just run
 
-`netplan apply`
+```bash
+netplan apply
+```
 
 but it might be more useful to track the changes:
 
-`netplan --debug apply` 
+```bash
+netplan --debug apply
+```
 
-Next we can check the the configuration:
+Next we can check the configuration:
 
-`ip a`
+```bash
+ip a
+```
 
 #### Managing Ubuntu network config via Network Manager
 
 Although it's not default config, it's possible to manage Ubuntu network config via Network Manager
 In order to do that we need first install Network Manager
 
-`apt install network-manager`
+```bash
+apt install network-manager
+```
 
 Next we need to tell Netplan that we wan to manage config via Network Manager. 
 This can be done by adding 
-```bash
-renderer: NetworkManager
-```
+
+`renderer: NetworkManager`
+
 line to .yaml config after `network:`
 
 (Default renderer is `renderer: networkd` but it can be omited as default)
 
 
 Resulting file should look like:
+
 ```bash
 network:
   renderer: NetworkManager
@@ -215,7 +224,9 @@ network:
 
 Next we apply changes:
 
-`netplan --debug apply` 
+```bash
+netplan --debug apply
+```
 
 And we can now use `nmtui` to manage interfaces
 
@@ -223,6 +234,7 @@ And we can now use `nmtui` to manage interfaces
 ### ARP Table
 `arp` command allows to see current ARP table (`arp –an`)  
 It is old command and the new equivalent is: <br>
+
 `ip n[eigh]`
 
 ### Important Network Files.
