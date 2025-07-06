@@ -9,7 +9,7 @@ SSH Clients are included in almost all Linux versions out of the box (mostly as 
 
 > Read more on "How does the SSH protocol work" here: _https://www.ssh.com/academy/ssh/protocol#how-does-the-ssh-protocol-work_
 > 
-> It's important to understand that _assymetric_ keys are **not used for traffic encryption/decrytion**. 
+> It's important to understand that _asymmetric_ keys are **not used for traffic encryption/decryption**. 
 > Key-based access is used to generate _symmetric_ one-time keys used for current session.
 
 SSH allows:
@@ -18,6 +18,7 @@ SSH allows:
 
 
 Examples:<br>
+
 * `ssh student@10.1.10.1`
 * `ssh -l student 10.1.10.1 date`
 * `ssh student@10.1.10.1 ' echo "Hello Linux" > /tmp/hello' `
@@ -46,20 +47,20 @@ Some free SSH/SFTP/SCP clients for Windows are:
 > * If OK then it trusts that Client. SSH Server generates symmetric key and securely sends it to the Client.
 > * This key can also be regenerated during a session upon mutual agreement.
 
-> Remember again that assymetric keys are **not used for traffic encryption/decrytion**. 
+> Remember again that asymmetric keys are **not used for traffic encryption/decryption**. 
 > Key-based access is used to generate symmetric one-time key used for current session
 
 
 Use `ssh-keygen` on your local system to generate public and private keys 
 in SSH config directory: `~/.ssh`
 
-* `ssh-keygen -b 4096`
+```bash
+ssh-keygen
+```
 
 Generally you can go forward with _Enter_'s. You may add security by specifying the passphrase, 
 but it has to be entered every time the key is used for authentication.
 
-
-> _Here we create keys of 4096 bits strength, which is stronger than the default 2048 bits._<br>
 > _As a result we will get two new keys:_ 
 > * `~/.ssh/id_rsa`
 > * `~/.ssh/id_rsa.pub`<br><br>
@@ -74,25 +75,15 @@ Now securely copy your public key the `~/.ssh/id_rsa.pub` file to the
 
 You can copy it in various ways like:
 
-1.Using `ssh-copy-id`:<br>
+1. Using `ssh-copy-id`:<br>
 * `ssh-copy-id user@host`
 
-The above can be also done manually, like for the older SSH version cases, where `ssh-copy-id` is not present:
-
-2.`cat ~/.ssh/id_rsa.pub | ssh user@host 'cat >> ~/.ssh/authorized_keys'`
-
-Since you do it manually, ensure that .ssh exists and has proper permissions:
-
-`ssh user@host  mkdir ~/.ssh`<br>
-`ssh user@host chown -R user:user ~/.ssh/`<br>
-`ssh user@host chmod 700 ~/.ssh`<br>
-
-Also ensure that authorized_keys file has proper permissions: <br>
-`ssh user@host chmod 600 ~/.ssh/authorized_keys`
+2. Or manually, like for the older SSH version cases, where `ssh-copy-id` is not present:
+`cat ~/.ssh/id_rsa.pub | ssh user@host 'mkdir ~/.ssh ; chmod 700 ~/.ssh; cat >> ~/.ssh/authorized_keys ; chmod 600 ~/.ssh/authorized_keys'`
 
 Now you should be able to connect to the remote system via ssh without being prompted for a password.
 This means you can run `ssh` to either get a remote shell or just run a single command remotely. 
-Also you can use `scp` commands as well - all that without password.
+Also, you can use `scp` commands as well - all that without password.
 
 ```bash
 ssh  10.1.10.1
@@ -105,18 +96,16 @@ scp  student@10.1.10.1:/bin/ls  ./
 1. Create keypair on one system and copy to another. 
 Then try connecting without password.
 
-2. Connect from Windows to Linux using Windows client (NOTE! Here we create keys with not-default names).
+2. Connect from Windows to Linux using Windows client.
 
 Enter Windows `PowerShell`. 
 Generate keypair and transfer to Linux to connect without password.
-* `mkdir c:\Users\[username]\.ssh`
-* `ssh-keygen -t rsa -b 4096 -f c:\Users\[username]/.ssh/id_myserver`
-* `cd .ssh`
-* `cat id_myserver.pub | ssh [user]@[host] 'cat >> ~/.ssh/authorized_keys'`
+* `ssh-keygen -t rsa`
+* `cat ~/.ssh/id_rsa.pub | ssh user@host 'mkdir ~/.ssh ; chmod 700 ~/.ssh; cat >> ~/.ssh/authorized_keys ; chmod 600 ~/.ssh/authorized_keys'`
 
 Try connecting:
 
-`ssh -i c:\Users\[username]/.ssh/id_myserver [user]@[host]`
+`ssh user@host`
 
 
 ### SSH HardeningTips
@@ -132,6 +121,7 @@ One of the effective measures is **changing the SSH port**.
 
 > NOTE: If firewall (`firewalld`/`ufw`) is active, then its settings 
 > need to be adjusted for the new SSH port too.
+
 
 ```bash
 #Port 22
@@ -185,7 +175,7 @@ Check the port to ensure IPv6 is off now:<br>
 
 Now SSH is listening new port. 
 You can try to connect:<br>
-`ssh -p 5022 user@IP`
+`ssh -p 5022 user@host`
 
 Changing the port mostly brings the number of SSH brute-force attacks to zero.
 

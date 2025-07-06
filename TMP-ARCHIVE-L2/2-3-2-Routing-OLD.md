@@ -223,40 +223,21 @@ ping 127.7.8.9 > /dev/null &
 iftop -i lo
 ```
 
-Now let's filter some traffic
-type `f` and then `dst host 127.7.8.9`
-You will need to wait for few seconds and then filter will work.
-
-On another terminal run
-```bash
-telnet 127.7.8.9 22
-```
-Now you can see that session too.
-
-
-
-The same can be done with command line option 
-```bash
-iftop -i lo -f dst host 127.7.8.9
-```
-
-
-Disable resolving hostnames (-n) and port numbers (-N):
+You can only filter some traffic
 
 ```bash
-iftop -nN -i enp0s8
+iftop -i lo -f 'dst host 127.7.8.9'
 ```
 
-Use text interface:
+You can also disable resolving hostnames (-n), port numbers (-N) and show bandwidth bytes/sec instead of bits/sec:
 
-`iftop -t`
-
-Display bandwidth rates in bytes/sec instead of bits/sec
-
-`iftop -B`
+```bash
+iftop -i lo -n -N -B 
+```
 
 Show traffic for specific subnet
 
-`iftop -F 10.1.10.0/24`
+`iftop -i lo -F 127.1.2.0/24`
 
 More info about `iftop` can be found in `man iftop`
+
