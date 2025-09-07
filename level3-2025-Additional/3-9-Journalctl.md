@@ -71,13 +71,65 @@ journalctl -u sshd.service -p err --since "30 min ago"
 Show specific error message related to the `sshd` process from yesterday
 
 ```bash
-journalctl --no-pager -t sshd -S yesterday -g "Failed password"
+journalctl --no-pager -t sshd -S yesterday -g 
+```
+
+Show failed SSH logins since yesterday
+```bash
+journalctl -t sshd -S yesterday -g "failed|invalid"
+```
+
+
+Quick overview of system state since the last boot
+
+* `-p 3..0` - from err (3) up to emerg (0) (reverse order puts most severe first)
+* `-b`  - Show messages from current boot.
+
+```bash
+journalctl -p 3..0 -b --no-pager
 ```
 
 
 #### PRACTICE
 
-Now run `journalctl` to: 
+1. Run `journalctl` to: 
 * show only `err` log messages from process `sshd` 
-* to follow logs in real-time for live debugging 
+* from yesterday
+* no pager to be used
+
+2. Modify command to show  specific error message "Failed password"
+
+3. Modify command to count number of messages
+
+4. Modify command to follow new messages in real-time for live debugging 
+
+
+### Maintenance and Persistence
+
+The journal is stored in `/var/log/journal/`
+
+Keep an eye on its size.
+
+```bash
+journalctl --disk-usage
+```
+
+Enable Persistence. 
+By default, some distributions don't persist journals across reboots.
+
+Check
+
+```bash
+journalctl -p 3..0 -b -1 --no-pager
+```
+(you may get `no persistent journal was found`)
+
+```bash
+ls -l /var/log/journal
+```
+(you may get `No such file or directory`)
+
+
+
+
 
