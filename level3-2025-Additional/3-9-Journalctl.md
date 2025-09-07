@@ -21,6 +21,8 @@ Options:
 * `-f` follow logs in real-time (the same as `tail -f`) - live debugging.
 * `-n` number of lines to show
 * `-p` show only messages matching log priorities (as documented in `syslog`, i.e.  "emerg","alert","crit","err","warning","notice","info","debug").
+* `-u` show only messages matching some systemd **unit** (such as a _service_ unit)
+* `-g` use `grep` to filter messages
 
 Examples:
 
@@ -54,5 +56,28 @@ Specify time range (if no date is specified, today is assumed)
 journalctl --no-pager -t sshd -t sudo -p err --since "2025-09-23 19:00" --until "19:10"
 ```
 
+Show logs from the last 1 minute (`-S` is the same as `--since` )
 
+```bash
+journalctl -S -1m
+```
+
+Show `sshd.service` error logs from the last 30 minutes
+
+```bash
+journalctl -u sshd.service -p err --since "30 min ago"
+```
+
+Show specific error message related to the `sshd` process from yesterday
+
+```bash
+journalctl --no-pager -t sshd -S yesterday -g "Failed password"
+```
+
+
+#### PRACTICE
+
+Now run `journalctl` to: 
+* show only `err` log messages from process `sshd` 
+* to follow logs in real-time for live debugging 
 
