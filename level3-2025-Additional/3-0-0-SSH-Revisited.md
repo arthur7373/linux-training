@@ -1,9 +1,94 @@
 # Linux Network Server (level 3) <br /> Լինուքս ցանցային սերվեր (փուլ 3)
 
-## SSH Advanced
+## SSH Revisited
+
+This is to revisit SSH and learn more advanced things about it.
+
+
+### Student account's @trainer Linux (TO BE DONE BY TRAINER ONLY)
+
+According to the number in student participant list trainer will create accounts for all students (student1, student2, ...)
+
+Create accounts for each student & assign password (123456)
+
+```bash
+for i in {1..15}; do useradd -m student$i && echo "student$i:123456" | chpasswd; done
+```
+
+Check
+
+```bash
+tail -5 /etc/passwd ; tail -5 /etc/shadow
+```
+
+### Trainer account @student Linux (TO BE DONE BY STUDENTS ONLY)
+
+```bash
+useradd trainer && echo "trainer:123456" | chpasswd
+```
+
+
+### Generate SSH key pair
+
+Each student can use `ssh-keygen` on his local system to generate public and private key pair.
+
+```bash
+ssh-keygen
+```
+
+Just go forward with _Enter_' <br>
+(you may add security by specifying the passphrase, but it has to be entered every time the key is used for authentication).
+
+> _As a result we will get two new keys:_ 
+> * `~/.ssh/id_rsa`
+> * `~/.ssh/id_rsa.pub`<br><br>
+>_KEEP IN SECRET `~/.ssh/id_rsa`_<br> 
+>_it is your **private key**_<br>
+>_`~/.ssh/id_rsa.pub` is your **public key**_ <br>
+>_It could be copied to the location you want access without password._
+
+
+Now securely copy your public key the `~/.ssh/id_rsa.pub` file to the
+`~/.ssh` directory on the remote system (trainer's linux system), using `ssh-copy-id`:
+
+
+Student's should do
+
+>Before running change `{1-15}` to your number in the participant list
+
+Run below command as `student`
+
+Enter password last time. After that you should be able to login without password
+
+```bash
+ssh-copy-id student{1-15}@[trainer IP]
+```
+
+Now try to login - you should be able to login without password
+
+```bash
+ssh student{1-15}@[trainer IP]
+```
+
+
+Trainer should do
+
+```bash
+ssh-copy-id trainer@[each student IP]
+```
+
+After that trainer should be able to login without password
+
+```bash
+ssh trainer@[each student IP]
+```
+
 
 
 ### Restricting key-based SSH access to particular IP addresses
+
+Each student now has access to trainer system.
+
 
 Rather than just storing the public keys of connecting users 
 `~/.ssh/authorized_keys` file also allows to 
