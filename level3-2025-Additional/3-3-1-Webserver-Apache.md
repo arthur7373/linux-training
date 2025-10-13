@@ -13,33 +13,46 @@ Ensure you have proper hostname set
 > everywhere change the number `x` 
 > to his/her number assigned by teacher.
 
+Check that hostname is correct:
 ```bash
-hostnamectl set-hostname lt0x.am
-```
-
-Check:
-```bash
-hostnamectl ;\
-hostname 
+hostname
 ```
 
 Install Apache and related stuff: 
 
 > IMPORTANT !<br>
-> For **CentOS 8** first run this: <br>
-> `dnf config-manager --set-enabled powertools`
+> Before packages install we need to enable additional repository for AlmaLinux 9 - **CRB** (CodeReady Builder).
+> CRB repository contains essential development packages and dependencies that are required for us here 
+> (in RHEL/CentOS/AlmaLinux 8 it was called **powertools** ).
+
+```bash
+dnf config-manager --set-enabled crb
+```
+
+Now install needed packages and tools
 
 ```bash
 yum -y install httpd mod_ssl openssl elinks lynx curl
 ```
 
-Enable & start: 
+
+Enable & start Apache web server: 
+
 ```bash
 systemctl enable --now httpd 
 ```
 
+Check
+```bash
+ps ax | grep httpd
+```
+
+```bash
+ss -4nlpt | grep httpd
+```
+
 #### PRACTICE
-* Now when you have running Apache webserver, set current IP address of your Linux server to `www.lt0x.am` record in the BIND DNS server and restart BIND.<br><br>
+* Now when you have running Apache webserver, set current IP address (`10.10.x.1`) of your Linux server to `www.lt0x.am` record in the BIND DNS server and restart BIND.<br><br>
 * If you did everything correct you should be able to open it locally, with `links www.lt0x.am`<br><br>
 * Now try also `links lt0x.am`. Did it open? Why? How to fix it?
 
@@ -79,9 +92,7 @@ ErrorLog /var/log/httpd/lt0x.am-error.log
 
 > REMEMBER to change `x` in every `lt0x.am` with your number.<br>
 > You can do that with commands like<br>
-> `sed -i 's/lt0x/lt00/g' /etc/httpd/conf.d/lt0x.am.conf`<br>
-> or<br>
-> `perl -pi -e "s/lt0x/lt00/" /etc/httpd/conf.d/lt0x.am.conf `<br>
+> `sed -i.bkp 's/lt0x/lt00/g' /etc/httpd/conf.d/lt0x.am.conf`<br>
 > But change `lt00` to your number before running it
 
 
@@ -95,6 +106,7 @@ mkdir /var/www/lt0x.am
 Put some text there as ‘index.html’ to be displayed as main page.
 Create file `/var/www/lt0x.am/index.html`
 with text:
+
 ```bash
 HI this is APACHE page
 ```
@@ -106,9 +118,13 @@ systemctl restart httpd
 
 Check
 
-`links lt0x.am`
+```bash
+links lt0x.am
+```
 
-`curl -s http://lt0x.am/ | grep APACHE`
+```bash
+curl -s http://lt0x.am/ | grep APACHE
+```
 
 
 ### Access Control with .htaccess (http://www.htaccess-guide.com/)
