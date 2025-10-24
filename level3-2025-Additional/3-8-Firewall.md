@@ -783,8 +783,7 @@ Or
 * run `firewall-cmd <RULE>...` (without `--permanent`) instantly to activate the rule in runtime configuration
 * then run `firewall-cmd --runtime-to-permanent` to make runtime configuration permanent
 
-
-##### PRACTICE
+#### Basic commands
 
 See the **default zone**
 
@@ -794,25 +793,29 @@ Almost always it will be `public` zone.
 firewall-cmd --get-default-zone
 ```
 
-See all zones and what interfaces they are assigned to
+See all active zones and what interfaces are assigned to them
 
 ```bash
 firewall-cmd --get-active-zones
 ```
 
-List everything (zones, services, active rules)
+List everything for active zones (services, active rules)
 
 ```bash
 firewall-cmd --list-all
 ```
 
-Check what services are currently allowed in the default zone (public)
+If we want to see for some **not active zone**, we can add `--zone=` option
 
 ```bash
-firewall-cmd --list-services
+firewall-cmd --list-all --zone=block
 ```
 
-Permanently allow the HTTP service
+```bash
+firewall-cmd --list-all --zone=drop
+```
+
+Now let us permanently allow the HTTP service
 
 ```bash
 firewall-cmd --permanent --add-service=http
@@ -823,17 +826,54 @@ firewall-cmd --reload
 > However, rules with `--permanent` are **NOT** active immediately.
 > That is why we give the second `reload` to activate the permanent rule
 
-# Now verify the service was added
+Now verify the service was added
+
 ```bash
-firewall-cmd --list-services
+firewall-cmd --list-all
 ```
+
+Now let us allow the HTTPS service, but in another way.
+First add it in runtime configuration
+
+```bash
+firewall-cmd --add-service=https
+```
+
+Check that it is there
+
+```bash
+firewall-cmd --list-all
+```
+
+Check that it IS NOT in the permanent configuration
+
+```bash
+firewall-cmd --list-all --permanent
+```
+
+Now add it to permanent config too
+
+```bash
+firewall-cmd --runtime-to-permanent
+```
+
+Check
+
+```bash
+firewall-cmd --list-all --permanent
+```
+
 
 Open a custom port (e.g., 8080/TCP)
 
 ```bash
-firewall-cmd --permanent --add-port=8080/tcp
-firewall-cmd --reload
-firewall-cmd --list-services
+firewall-cmd --add-port=8080/tcp
+```
+
+Check
+
+```bash
+firewall-cmd --list-all
 ```
 
 
@@ -841,10 +881,38 @@ firewall-cmd --list-services
 ```bash
 firewall-cmd --permanent --remove-port=8080/tcp
 firewall-cmd --reload
-firewall-cmd --list-services
 ```
 
-> 
+
+Adding with **port** is less effective, because **firewalld** has more useful configuration for many **services**.
+And if we add **service** instead **port**, we can for example at once enable `TCP` and `UDP` and other important config.
+
+To see what **services** are configured in **firewalld** you can run 
+
+```bash
+firewall-cmd --get-services
+```
+
+That config files are located here:
+
+```bash
+ls /usr/lib/firewalld/services/
+```
+
+Details for service configuration can be found with command:
+
+```bash
+firewall-cmd --info-service=dns
+```
+
+#### PRACTICE
+
+Add service `dns` to default public zone and make that config permanent.
+
+> Remember you can do it in any of 2 ways.
+
+Show that your changes are both in **runtime** and **permanent** configurations.
+
 
 #### More on Firewalld at:
 
