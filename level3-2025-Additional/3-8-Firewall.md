@@ -569,84 +569,254 @@ More info:
 
 ### Firewalld
 
-For Red Hat-based systems (including AlmaLinux, Rocky Linux), 
-the recommended and simplest tool is **firewalld**, which manages the firewalld service.
+For **Red Hat**-based systems (including **AlmaLinux**, **Rocky Linux**), 
+the default firewall tool is **firewalld**.
 
 **firewalld** is a dynamic firewall manager that uses either `iptables` or `nftables` as its backend. 
 
 It provides a higher-level, more user-friendly interface 
-with concepts like **Zones** and **Services**.
+with concepts like **Zones**, **Services**, **Ports**, ...
+
+You can start and enable it with:
+
+```bash
+systemctl enable --now firewalld
+```
+
+Check the status with `firewall-cmd`, which is **firewalld** main command.
+
+```bash
+firewall-cmd --state
+```
+
+> Remember that behind **firewalld** there is still `iptables`, <br>
+> so if firewalld is running you can also check the rules with
+> `iptables -nvL`
 
 
-#### Understanding the Basics: Zones
+#### Understanding the Basics
 
 **firewalld** uses **Zones** to manage the trust level of your network connections. 
 Think of a zone as a **security profile**.
 
-* public: The default zone for new connections. Untrusted. Other computers on the network are not trusted. Perfect for a server.
-* internal: For the internal network. Other computers are generally trusted.
-* trusted: All network connections are accepted. (Use sparingly!)
+In default configuration there are 10 zones:
+`block`, `dmz`,  `drop`,  `external`,  `home`,  `internal`, `nm-shared`, `public`, `trusted`, `work`
 
-A network interface (like `enp0s3` or `ens192`) is assigned to a zone.
+```bash
+firewall-cmd --get-zones
+```
 
-#### Understanding the Basics: Services
+EXAMPLE - imagine 
+* **FIREWALLD** is OFFICE BUILDING 
+* **ZONES** are Floors
+* **SERVICES**/**PORTS** are Rooms
+* **NETWORK INTERFACES** are Doors
 
-Instead of remembering port numbers, firewalld uses **Services**. 
-A service is a **predefined set of ports and protocols**.
+Not all zones are **active** - working
 
-Examples:
+**ACTIVE ZONE** has network interface activated/assigned (so real traffic/packets flow is managed by that zone),
+i.e. there is a **DOOR** at to enter that **FLOOR**
 
-* ssh: Port 22 (for remote administration)
-* http: Port 80 (for unencrypted web traffic)
-* https: Port 443 (for encrypted web traffic)
-* cockpit: Port 9090 (for the web-based management tool)
+By default only one **FLOOR** - `public` zone has **DOORS** - network interfaces
+
+So you don't need to remember all at once, only the first floor !
+
+Following diagram shows the **FIREWALLD** structure:
+
+<pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                     FIREWALLD "OFFICE BUILDING"                 │
+│            Trust level decreases from top to bottom             │
+└─────────────────────────────────────────────────────────────────┘
+
+ 10th Floor ┌─────────────────────────────────────────────────────┐
+    🛡️      │ TRUSTED ZONE: "Full Access"                         │
+   trusted  │ target: ACCEPT (Everything allowed)                 │
+            │                                                     │
+            │  🚪 ALL DOORS OPEN - NO RESTRICTIONS                 │
+            │  Services: * (all services automatically allowed)   │
+            │  Ports: * (all ports automatically open)            │
+            │                                                     │
+            │  CEO Office - complete freedom                      │
+            └─────────────────────────────────────────────────────┘
+
+ 9th Floor  ┌─────────────────────────────────────────────────────┐
+   🔒       │ BLOCK ZONE: "Hard Block"                            │
+   block    │ target: %%REJECT%% (Everything rejected)            │
+            │                                                     │
+            │  🚫 ALL DOORS LOCKED - "ACCESS DENIED"              │
+            │  Services: (none)                                   │
+            │  Ports: (none)                                      │
+            │                                                     │
+            │  Server Room - strictly forbidden                   │
+            └─────────────────────────────────────────────────────┘
+
+ 8th Floor  ┌─────────────────────────────────────────────────────┐
+   🚫       │ DROP ZONE: "Complete Ignore"                        │
+   drop     │ target: DROP (Packets disappear)                    │
+            │                                                     │
+            │  🚫 INVISIBLE DOORS - NO RESPONSE                   │
+            │  Services: (none)                                   │
+            │  Ports: (none)                                      │
+            │                                                     │
+            │  Archive - silent treatment                         │
+            └─────────────────────────────────────────────────────┘
+
+ 7th Floor  ┌─────────────────────────────────────────────────────┐
+   🏢       │ WORK ZONE: "Work Network"                           │
+   work     │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ ssh         (remote access)                     │
+            │  ├─ dhcpv6-client (auto-config)                     │
+            │  ├─ samba-client (file sharing)                     │
+            │  └─ cockpit      (management)                       │
+            │                                                     │
+            │  Development Department - work essentials           │
+            └─────────────────────────────────────────────────────┘
+
+ 6th Floor  ┌─────────────────────────────────────────────────────┐
+   🏠       │ HOME ZONE: "Home Network"                           │
+   home     │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ ssh         (remote access)                     │
+            │  ├─ mdns        (service discovery)                 │
+            │  ├─ samba-client (file sharing)                     │
+            │  ├─ dhcpv6-client (auto-config)                     │
+            │  ├─ ipp-client  (printing)                          │
+            │  └─ cockpit      (management)                       │
+            │                                                     │
+            │  Break Room - home services available               │
+            └─────────────────────────────────────────────────────┘
+
+ 5th Floor  ┌─────────────────────────────────────────────────────┐
+   🏢       │ INTERNAL ZONE: "Internal Network"                   │
+   internal │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ ssh         (remote access)                     │
+            │  ├─ mdns        (service discovery)                 │
+            │  ├─ samba-client (file sharing)                     │
+            │  ├─ dhcpv6-client (auto-config)                     │
+            │  ├─ cockpit      (management)                       │
+            │  └─ mysql        (database)                         │
+            │                                                     │
+            │  Internal services - corporate network              │
+            └─────────────────────────────────────────────────────┘
+
+ 4th Floor  ┌─────────────────────────────────────────────────────┐
+   🌐       │ EXTERNAL ZONE: "External Network"                   │
+   external │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ ssh         (remote access)                     │
+            │                                                     │
+            │  🛡️ MASQUERADE ENABLED (IP hiding)                  │
+            │                                                     │
+            │  External Relations - minimal exposure              │
+            └─────────────────────────────────────────────────────┘
+
+ 3rd Floor  ┌─────────────────────────────────────────────────────┐
+   🛡️       │ DMZ ZONE: "Demilitarized Zone"                      │
+   dmz      │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ http        (web service)                       │
+            │  ├─ https       (secure web)                        │
+            │  └─ ssh         (limited remote access)             │
+            │                                                     │
+            │  Public servers - restricted services               │
+            └─────────────────────────────────────────────────────┘
+
+ 2nd Floor  ┌─────────────────────────────────────────────────────┐
+   📱       │ NM-SHARED ZONE: "Shared Network"                    │
+ nm-shared  │ target: default                                     │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ ssh         (remote access)                     │
+            │  ├─ dhcpv6-client (auto-config)                     │
+            │  ├─ dns         (name resolution)                   │
+            │  └─ ipp-client  (printing)                          │
+            │                                                     │
+            │  Guest Wi-Fi - basic connectivity                   │
+            └─────────────────────────────────────────────────────┘
+
+ 1st Floor  ┌─────────────────────────────────────────────────────┐
+   🌍       │ PUBLIC ZONE: "Public Access" ← ACTIVE ZONE          │
+   public   │ target: default                                     │
+            │                                                     │
+            │  TWO DOORS:                                         │
+            │  🚪 enp0s3 (main DOOR)                               │
+            │  🚪 enp0s8 (backup DOOR)                             │
+            │                                                     │
+            │  🚪 AVAILABLE ROOMS:                                 │
+            │  ┌─ cockpit - port 9090 (web-based management tool) │
+            │  ├─ dns   - port 53  (domain name system)           │
+            │  ├─ http  - port 80  (unencrypted web traffic)      │
+            │  ├─ https - port 443 (encrypted web traffic)        │
+            │  └─ ssh   - port 22  (for remote administration)    │
+            │                                                     │
+            │  Everything else is locked!                         │
+            └─────────────────────────────────────────────────────┘
+
+
+</pre>
+
+In the diagram above `target:` means general rule for the entire "FLOOR". 
+`target: default` means **everything that is not permitted is not allowed**
+
+
+#### Configuration Runtime vs Permanent
+
+**firewalld** configuration is of two types:
+* Runtime - current working configuration
+* Permanent -  what will be applied after reboot
+
+If you want to make the change permanent, you can either run 
+
+* run `firewall-cmd --permanent <RULE>...` to make that rule permanent
+* then run `firewall-cmd --reload` to activate it in runtime configuration
+
+Or
+
+* run `firewall-cmd <RULE>...` (without `--permanent`) instantly to activate the rule in runtime configuration
+* then run `firewall-cmd --runtime-to-permanent` to make runtime configuration permanent
 
 
 ##### PRACTICE
 
-Main command is `firewall-cmd`
+See the **default zone**
 
-Examples:
-
-Check the status:
+Almost always it will be `public` zone.
 
 ```bash
-sudo firewall-cmd --state
-```
-
-> This should simply return 'running'. 
-> If it doesn't, start it with:
-> `sudo systemctl start firewalld`
-
-List everything (zones, services, active rules)
-
-```bash
-sudo firewall-cmd --list-all
-```
-
-See the **default zone** and which interfaces are using it
-
-```bash
-sudo firewall-cmd --get-default-zone
+firewall-cmd --get-default-zone
 ```
 
 See all zones and what interfaces they are assigned to
 
 ```bash
-sudo firewall-cmd --get-active-zones
+firewall-cmd --get-active-zones
+```
+
+List everything (zones, services, active rules)
+
+```bash
+firewall-cmd --list-all
 ```
 
 Check what services are currently allowed in the default zone (public)
 
 ```bash
-sudo firewall-cmd --list-services
+firewall-cmd --list-services
 ```
 
 Permanently allow the HTTP service
 
 ```bash
-sudo firewall-cmd --permanent --add-service=http
-sudo firewall-cmd --reload
+firewall-cmd --permanent --add-service=http
+firewall-cmd --reload
 ```
 
 > The  `--permanent` flag means the rule survives a reboot.
@@ -655,25 +825,26 @@ sudo firewall-cmd --reload
 
 # Now verify the service was added
 ```bash
-sudo firewall-cmd --list-services
+firewall-cmd --list-services
 ```
 
 Open a custom port (e.g., 8080/TCP)
 
 ```bash
-sudo firewall-cmd --permanent --add-port=8080/tcp
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-services
+firewall-cmd --permanent --add-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-services
 ```
 
 
 # Remove the port rule
 ```bash
-sudo firewall-cmd --permanent --remove-port=8080/tcp
-sudo firewall-cmd --reload
-sudo firewall-cmd --list-services
+firewall-cmd --permanent --remove-port=8080/tcp
+firewall-cmd --reload
+firewall-cmd --list-services
 ```
 
+> 
 
 #### More on Firewalld at:
 
