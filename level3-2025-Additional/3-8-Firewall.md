@@ -958,12 +958,16 @@ Add service `dns` to default public zone and make that config permanent.
 Show that your changes are both in **runtime** and **permanent** configurations.
 
 
-#### More on Firewalld at:
+#### Some useful Firewalld docs
 
 * https://www.redhat.com/sysadmin/beginners-guide-firewalld
+
 * https://access.redhat.com/documentation/ru-ru/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/using-and-configuring-firewalld_configuring-and-managing-networking
+
 * https://www.server-world.info/en/note?os=CentOS_Stream_8&p=firewalld&f=1
+
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-8
+
 * https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-8-ru
 
 
