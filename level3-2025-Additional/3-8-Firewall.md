@@ -864,7 +864,7 @@ firewall-cmd --list-all --permanent
 ```
 
 
-Open a custom port (e.g., 8080/TCP)
+Open a custom port (8080/TCP)
 
 ```bash
 firewall-cmd --add-port=8080/tcp
@@ -876,16 +876,60 @@ Check
 firewall-cmd --list-all
 ```
 
+Check that it IS NOT in the permanent configuration
 
-# Remove the port rule
 ```bash
-firewall-cmd --permanent --remove-port=8080/tcp
-firewall-cmd --reload
+firewall-cmd --list-all --permanent
+```
+
+Now add it to permanent config too
+
+```bash
+firewall-cmd --runtime-to-permanent
+```
+
+Check again. It should be there.
+
+```bash
+firewall-cmd --list-all --permanent
 ```
 
 
-Adding with **port** is less effective, because **firewalld** has more useful configuration for many **services**.
-And if we add **service** instead **port**, we can for example at once enable `TCP` and `UDP` and other important config.
+Now, let us remove the port rule
+
+```bash
+firewall-cmd --permanent --remove-port=8080/tcp
+```
+
+Check it is removed from **permanent** config
+
+```bash
+firewall-cmd --list-all --permanent
+```
+
+But it is still in **runtime** config
+
+```bash
+firewall-cmd --list-all
+```
+
+Reload **runtime** config
+
+```bash
+firewall-cmd --reload
+```
+
+Check
+
+```bash
+firewall-cmd --list-all
+```
+
+> RECOMMENDATION:
+> Adding with **port** is less effective, because **firewalld** has more useful configuration for many **services**.
+> And if we add **service** instead **port**, we can for example at once enable `TCP` and `UDP` and other important config.
+> So it is recommended to use **service** where possible and use **port**, if there is a need to configure some custom port.
+
 
 To see what **services** are configured in **firewalld** you can run 
 
