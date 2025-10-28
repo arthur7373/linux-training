@@ -949,6 +949,55 @@ Details for service configuration can be found with command:
 firewall-cmd --info-service=dns
 ```
 
+```bash
+firewall-cmd --info-service=smtp
+```
+
+```bash
+firewall-cmd --info-service=smtps
+```
+
+```bash
+firewall-cmd --info-service=imap
+```
+
+```bash
+firewall-cmd --info-service=imaps
+```
+
+Enable Mail-related service ports
+
+```bash
+firewall-cmd --add-service={smtp,smtps,pop3,pop3s,imap,imaps}
+```
+
+Check if that ports are now in the current run-time config:
+
+```bash
+firewall-cmd --list-all
+```
+
+Check if they are also in the permanent config:
+
+```bash
+firewall-cmd --list-all --permanent
+```
+
+> WHY NOT ?
+
+Now add it to permanent config too
+
+```bash
+firewall-cmd --runtime-to-permanent
+```
+
+Check again
+
+```bash
+firewall-cmd --list-all --permanent
+```
+
+
 #### PRACTICE
 
 Add service `dns` to default public zone and make that config permanent.
