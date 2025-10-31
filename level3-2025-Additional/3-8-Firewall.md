@@ -28,8 +28,8 @@ Current "**backend tools**" in Linux firewall system are:
 
 Among "**frontend tools**" in Linux firewall system are:
 
-* **Firewalld**
-* **Ufw (Uncomplicated Firewall)**
+* **FirewallD**
+* **UFW (Uncomplicated Firewall)**
 
 (there are also others like Shorewall, Ferm, ...)
 
@@ -37,8 +37,7 @@ Above tools offer various levels of complexity and features for configuring fire
 Some provide simple interface for basic firewall configuration, 
 while others offer more advanced capabilities for managing complex firewall scenarios.
 
-Below we mainly discuss `iptables`. Other tools are also mentioned a bit.
-
+Below we discuss `iptables` & `nftables`,  then `FirewallD`.
 
 ### IPtables
 IPtables was basic tool to manage packet filtering, but newer Linux versions
@@ -84,19 +83,6 @@ Disable/Stop it if needed:
 systemctl --now disable firewalld ;\
 systemctl is-active firewalld ;\
 systemctl is-enabled firewalld
-```
-
-And in case of Ubuntu we can do the same with `ufw`
-
-```bash
-systemctl is-active ufw ;\
-systemctl is-enabled ufw
-```
-Disable/Stop it if needed:
-```bash
-systemctl --now disable ufw ;\
-systemctl is-active ufw ;\
-systemctl is-enabled ufw
 ```
 
 Now we should have a clean initial configuration to start learning.
@@ -567,12 +553,12 @@ More info:
 * https://www.server-world.info/en/note?os=Ubuntu_22.04&p=nftables&f=2
 
 
-### Firewalld
+### FirewallD
 
 For **Red Hat**-based systems (including **AlmaLinux**, **Rocky Linux**), 
 the default firewall tool is **firewalld**.
 
-**firewalld** is a dynamic firewall manager that uses either `iptables` or `nftables` as its backend. 
+**FirewallD** is a dynamic firewall manager that uses either `iptables` or `nftables` as its backend. 
 
 It provides a higher-level, more user-friendly interface 
 with concepts like **Zones**, **Services**, **Ports**, ...
@@ -583,20 +569,20 @@ You can start and enable it with:
 systemctl enable --now firewalld
 ```
 
-Check the status with `firewall-cmd`, which is **firewalld** main command.
+Check the status with `firewall-cmd`, which is **FirewallD** main command.
 
 ```bash
 firewall-cmd --state
 ```
 
-> Remember that behind **firewalld** there is still `iptables`, <br>
+> Remember that behind **FirewallD** there is still `iptables`, <br>
 > so if firewalld is running you can also check the rules with
 > `iptables -nvL`
 
 
 #### Understanding the Basics
 
-**firewalld** uses **Zones** to manage the trust level of your network connections. 
+**FirewallD** uses **Zones** to manage the trust level of your network connections. 
 Think of a zone as a **security profile**.
 
 In default configuration there are 10 zones:
@@ -767,9 +753,9 @@ In the diagram above `target:` means general rule for the entire "FLOOR".
 `target: default` means **everything that is not permitted is not allowed**
 
 
-#### Configuration Runtime vs Permanent
+#### FirewallD Configuration Runtime vs Permanent
 
-**firewalld** configuration is of two types:
+**FirewallD** configuration is of two types:
 * Runtime - current working configuration
 * Permanent -  what will be applied after reboot
 
@@ -1007,7 +993,7 @@ Add service `dns` to default public zone and make that config permanent.
 Show that your changes are both in **runtime** and **permanent** configurations.
 
 
-#### Some useful Firewalld docs
+#### Some useful FirewallD docs
 
 * https://www.redhat.com/sysadmin/beginners-guide-firewalld
 
