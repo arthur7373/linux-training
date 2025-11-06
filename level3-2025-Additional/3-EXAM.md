@@ -19,7 +19,7 @@ turn off firewalld & SELinux
 
 
 3. Network configuration
-Use 'nmtui' to assign static IPs to second interface `enp0s8`
+Use "**nmtui**" to assign static IPs to second interface `enp0s8`
 
 * `10.10.x.1/24`
 * `10.10.x.100/32`
@@ -31,9 +31,9 @@ Use 'nmtui' to assign static IPs to second interface `enp0s8`
 
 1. Install and configure chrooted BIND DNS Server
 2. Configure bind-chroot to 
-   1. listen-on port 53 `any` IP addresses
-   2. allow-query to `any` IP addresses 
-3. Create zone for you group domain name `l3exam0x.am`, ... 
+   * listen-on port 53 `any` IP addresses
+   * allow-query to `any` IP addresses 
+3. Create zone for your group domain name `l3exam0x.am`, ... 
      with following records
    * `l3exam0x.am` NS ns.l3exam0x.am
    * `l3exam0x.am` MX 0 mail
@@ -85,10 +85,10 @@ curl -v  http://apache.l3exam0x.am/ | grep APACHE >> /tmp/l3exam0x-apache.out
    * Create separate virtual host for `l3exam0x.am` website 
    * Put some index page there with word `NGINX`
 
-`2. Prepare exam output
+2. Prepare exam output
 
 ```bash
-curl -v  http://nginx.l3exam0x.am/ | grep NGINX >> /tmp/l3exam0x-nginx.out
+curl -v http://nginx.l3exam0x.am/ | grep NGINX >> /tmp/l3exam0x-nginx.out
 
 ```
 `
