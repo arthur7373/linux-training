@@ -17,7 +17,6 @@ turn off firewalld & SELinux
    
    Set proper VM **hostname** according to your group domain.
 
-
 3. Network configuration
 Use "**nmtui**" to assign static IPs to second interface `enp0s8`
 
@@ -30,9 +29,11 @@ Use "**nmtui**" to assign static IPs to second interface `enp0s8`
 ### Install and configure DNS Server
 
 1. Install and configure chrooted BIND DNS Server
+
 2. Configure bind-chroot to 
    * listen-on port 53 `any` IP addresses
    * allow-query to `any` IP addresses 
+   
 3. Create zone for your group domain name `l3exam0x.am`, ... 
      with following records
    * `l3exam0x.am` NS ns.l3exam0x.am
@@ -44,9 +45,7 @@ Use "**nmtui**" to assign static IPs to second interface `enp0s8`
    * `nginx.l3exam0x.am` A 10.10.x.200
    * `ha.l3exam0x.am` A 10.10.x.10
    
-
 4. Configure static resolver to 127.0.0.1
-
    * Configure your `/etc/resolv.conf` to refer `nameserver 127.0.0.1`. 
    * Make it `immutable` and not changeable by NetworkManager
 
@@ -75,7 +74,6 @@ host -t a mail.l3exam0x.am  >> /tmp/l3exam0x-dns.out
 
 ```bash
 curl -v  http://apache.l3exam0x.am/ | grep APACHE >> /tmp/l3exam0x-apache.out
-
 ```
 
 ### Install and configure NGINX Web Server
@@ -102,7 +100,7 @@ curl -v http://nginx.l3exam0x.am/ | grep NGINX >> /tmp/l3exam0x-nginx.out
         |10.10.x.10:80        |10.10.x.100:80        |10.10.x.200:80
 +-------+--------+   +--------+---------+   +--------+---------+
 | [ ha.l3exam0x.am ] |   | [apache.l3exam0x.am] |   | [ nginx.l3exam0x.am] |
-|     HAProxy    |   | Apache Server #1 |   |  Nginx Server#2  |
+|     HAProxy    |   | Apache Server #1 |   |  Nginx Server #2  |
 +----------------+   +------------------+   +------------------+
 
 ```
@@ -112,25 +110,12 @@ curl -v http://nginx.l3exam0x.am/ | grep NGINX >> /tmp/l3exam0x-nginx.out
 
 ```bash
 netstat -nlpt | grep -E '(haproxy|http|nginx)' >> /tmp/l3exam0x-webservers.out
-
 ```
 
 ```bash
 curl -s http://ha.l3exam0x.am/ | grep -E '(APACHE|NGINX)' >> /tmp/l3exam0x-haproxy.out ; \
 curl -s http://ha.l3exam0x.am/ | grep -E '(APACHE|NGINX)' >> /tmp/l3exam0x-haproxy.out ; \
 curl -s http://ha.l3exam0x.am/ | grep -E '(APACHE|NGINX)' >> /tmp/l3exam0x-haproxy.out
-
-```
-
-### Install and configure Squid 
-
-1. Install Squid
-2. Hide HTTP headers that reveal you are behind the proxy
-3. Prepare exam output
-
-```bash
-curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" ;\
-curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" >> /tmp/l3exam0x-squid.out
 
 ```
 
@@ -150,15 +135,24 @@ curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php 
 ```bash
 /usr/sbin/pflogsumm -d today -e /var/log/postfix.log >> /tmp/l3exam0x-mail.out ;\
 cat /tmp/l3exam0x-mail.out
-
 ```
 
+### Install and configure Squid 
 
-### After you finish
+1. Install Squid
+2. Hide HTTP headers that reveal you are behind the proxy
+3. Prepare exam output
+
+```bash
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" ;\
+curl -s -x http://127.0.0.1:3128 http://all-nettools.com/toolbox/proxy-test.php | grep "not detected" >> /tmp/l3exam0x-squid.out
+```
+
+### Prepare and submit the results 
 
 Present your results 
+
 ```bash
 tar zcvf l3exam0x.tgz /tmp/l3exam0x*
-
 ```
 
